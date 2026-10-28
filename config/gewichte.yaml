@@ -1,0 +1,41 @@
+# Gewichte für Algorithmus B (Wichtigkeit, PLAN.md 6B). Startwerte, werden in der Werkbank eingestellt.
+#
+# Wichtigkeit = (breite·Quellenbreite + lager·Lagerbreite + tempo·Tempo
+#                + aufmerksamkeit·Aufmerksamkeit + platzierung·Platzierung)
+#               × Mitreden-Faktor × Frische
+
+gewichte:
+  breite: 1.0
+  lager: 0.6
+  tempo: 0.5
+  aufmerksamkeit: 1.2
+  platzierung: 0.6
+
+# Live-Aufmerksamkeit (PLAN.md 4.2): wird zum Mitreden-Faktor addiert (Aufmerksamkeit × live_faktor, höchstens live_maximum).
+live_faktor: 0.4
+live_maximum: 1.0
+
+# Frische: Halbwertszeit in Stunden seit der neuesten Meldung der Geschichte.
+frische_halbwertszeit_h: 18
+frische_minimum: 0.2
+
+# Tempo: Meldungen in den letzten Stunden.
+tempo_fenster_h: 6
+
+# Platzierung: Steht die Geschichte bei diesen Medien oben im Feed?
+leitmedien: [tagesschau, spiegel, zeit, faz, sz, welt, bild, bbc_world, guardian_world, npr, ap]
+platzierung_bis: 10
+
+# Formate (PLAN.md 4.1). Keine feste Obergrenze an Karten.
+top_anzahl: 7          # die besten (5–8) werden Top-Story, wenn sie über der Kartenschwelle liegen
+schwelle_karte: 3.0    # Schwelle 1
+schwelle_kurz: 1.5     # Schwelle 2, darunter fällt es weg
+
+# Dubletten (Algorithmus A), siehe pipeline/cluster.py für die Bedeutung.
+dubletten:
+  zeitfenster_h: 36
+  sicher: 0.88
+  zusammen: 0.72
+  sprachuebergreifend: 0.72
+  grauzone: 0.55
+  gruppe: 0.62

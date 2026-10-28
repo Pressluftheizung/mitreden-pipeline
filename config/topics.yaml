@@ -1,0 +1,118 @@
+# Themen und Mitreden-Faktor (PLAN.md 4.2 und 4.3).
+# Grundwerte: hoch = 1.0, mittel = 0.7, niedrig = 0.4 (Startwerte, werden in der Werkbank nachgestellt).
+#
+# Einordnung in Phase 1 ohne KI: Schlüsselwörter in Titel und Teaser plus die Quelle
+# (ein kicker-Artikel ist fast immer Sport). Ab Phase 2 ordnet die KI ein, diese Liste bleibt als Rückfall.
+# Schlüsselwörter: kleingeschrieben; ein Eintrag passt auf jedes Wort, das damit beginnt.
+
+themen:
+  politik:
+    name: Politik
+    farbe: "#E5484D"
+    unterthemen:
+      bundespolitik:  { faktor: 1.0, woerter: [bundestag, bundesregierung, bundeskanzler, kanzler, merz, koalition, minister, cdu, csu, spd, grüne, afd, linke, bsw, fdp, bundesrat, gesetzentwurf, wehrdienst, wehrpflicht, haushalt] }
+      wahlen_de:      { faktor: 1.0, woerter: [landtagswahl, bundestagswahl, kommunalwahl, umfrage, sonntagsfrage] }
+      usa:            { faktor: 1.0, woerter: [trump, white house, weißes haus, congress, kongress, senate, senat, supreme court, republican, republikaner, democrat, demokraten, shutdown, vance] }
+      krieg_europa:   { faktor: 1.0, woerter: [ukraine, russland, russia, putin, selenskyj, zelensky, kyiv, kiew, nato, waffenruhe, ceasefire, front] }
+      migration:      { faktor: 1.0, woerter: [migration, asyl, flüchtling, abschiebung, migrant, grenzkontrolle] }
+      eu:             { faktor: 0.7, woerter: [eu-, europäische union, european union, brüssel, brussels, kommission, commission, von der leyen, europaparlament, parliament] }
+      nachbarlaender: { faktor: 0.7, woerter: [frankreich, macron, polen, österreich, schweiz, niederlande, dänemark, tschechien, belgien, france, poland] }
+      gerichte:       { faktor: 0.7, woerter: [bundesverfassungsgericht, bverfg, eugh, karlsruhe, urteil, gericht] }
+      welt:           { faktor: 0.4, woerter: [wahl, election, israel, gaza, iran, china, präsident, president, regierung, government, putsch, coup] }
+  geld:
+    name: Geld & Arbeit
+    farbe: "#30A46C"
+    unterthemen:
+      preise:         { faktor: 1.0, woerter: [inflation, preise, teurer, mieten, miete, wohnung, energiepreis, strompreis, gaspreis, steuer, rente, bürgergeld, mindestlohn, streik, warnstreik, stellenabbau, jobabbau, entlassung] }
+      boerse:         { faktor: 0.7, woerter: [leitzins, ezb, fed, notenbank, börse, dax, aktie, etf, bitcoin, krypto, crypto, stocks, wall street] }
+      unternehmen:    { faktor: 0.4, woerter: [quartalszahlen, umsatz, gewinn, konzern, übernahme, börsengang, ipo, earnings, revenue] }
+  tech:
+    name: Tech & Produkte
+    farbe: "#3E63DD"
+    unterthemen:
+      smartphones_ki: { faktor: 1.0, woerter: [iphone, pixel, galaxy, smartphone, apple, samsung, openai, chatgpt, anthropic, claude, gemini, künstliche intelligenz, ki-, artificial intelligence] }
+      gaming_social:  { faktor: 0.7, woerter: [playstation, xbox, nintendo, switch, videospiel, videogame, gaming, tiktok, instagram, whatsapp, facebook, meta, störung, ausfall, outage, hack, datenleck, betrug, phishing] }
+      gadgets:        { faktor: 0.4, woerter: [smartwatch, wearable, test, kopfhörer, laptop, tablet] }
+  mobilitaet:
+    name: Auto & Mobilität
+    farbe: "#F76B15"
+    unterthemen:
+      bahn:           { faktor: 1.0, woerter: [deutsche bahn, bahn, ice-, deutschlandticket, zugausfall, gdl, evg] }
+      auto:           { faktor: 0.7, woerter: [spritpreis, benzin, diesel, e-auto, elektroauto, autoindustrie, vw, volkswagen, audi, bmw, mercedes, tesla, verbrenner, tempolimit] }
+  reisen:
+    name: Reisen
+    farbe: "#12A594"
+    unterthemen:
+      reisewarnung:   { faktor: 1.0, woerter: [reisewarnung, flughafen, lufthansa, airline, flugausfall, pilotenstreik, urlaub, einreise] }
+  panorama:
+    name: Panorama & Gesellschaft
+    farbe: "#8E4EC6"
+    unterthemen:
+      unglueck:       { faktor: 1.0, woerter: [unwetter, sturm, sturmtief, orkan, hochwasser, überschwemmung, anschlag, attentat, unglück, zugunglück, absturz, explosion, erdbeben, tote, killed, dead] }
+      gesellschaft:   { faktor: 0.7, woerter: [schule, schüler, studenten, bafög, universität, gendern, debatte, protest, demonstration, rückruf, verbraucher, was ändert sich] }
+      kriminalitaet:  { faktor: 0.4, woerter: [polizei, festnahme, mord, prozess, angeklagt, police, arrested] }
+  wissen:
+    name: Wissen & Gesundheit
+    farbe: "#0090FF"
+    unterthemen:
+      gesundheit:     { faktor: 1.0, woerter: [grippe, corona, covid, virus, pandemie, krankenhaus, medikament, lieferengpass, impfung, rki] }
+      alltag_klima:   { faktor: 0.7, woerter: [schlaf, ernährung, psyche, depression, studie, klima, klimawandel, hitze, durchbruch, forscher, wissenschaft] }
+      raumfahrt_natur: { faktor: 0.4, woerter: [nasa, esa, rakete, raumfahrt, weltall, mond, mars, tier, natur] }
+  popkultur:
+    name: Popkultur
+    farbe: "#D6409F"
+    unterthemen:
+      tod_prominenz:  { faktor: 1.0, woerter: [gestorben, ist tot, verstorben, trauer um, died, dies at] }
+      serien_musik:   { faktor: 0.7, woerter: [serie, film, kino, netflix, streaming, album, tour, konzert, tickets, esc, eurovision, tatort, oscar, grammy, show] }
+      promis:         { faktor: 0.4, woerter: [promi, influencer, skandal, royal, könig, king, prinz] }
+  sport:
+    name: Sport
+    farbe: "#FFC53D"
+    unterthemen:
+      fussball:       { faktor: 1.0, woerter: [bundesliga, dfb, pokal, champions league, nationalmannschaft, fc bayern, bayern, bvb, dortmund, leverkusen, transfer, trainer, premier league, la liga] }
+      handball:       { faktor: 0.7, woerter: [handball] }
+      wintersport:    { faktor: 0.7, woerter: [skispringen, biathlon, ski alpin, vierschanzentournee] }
+      tennis:         { faktor: 0.7, woerter: [tennis, wimbledon, us open, french open, australian open, zverev] }
+      motorsport:     { faktor: 0.6, woerter: [formel 1, formula 1, f1, grand prix, verstappen, hamilton, motogp] }
+      nfl:            { faktor: 0.6, woerter: [nfl, super bowl, touchdown] }
+      sonstiger_sport: { faktor: 0.4, woerter: [leichtathletik, schwimmen, radsport, tour de france, darts, basketball, nba, eishockey, nhl, boxen, frauenfußball] }
+
+# Quellen, deren Artikel fast immer zu einem Thema gehören (Hinweis, kein Zwang).
+quelle_thema:
+  kicker: sport
+  sportschau: sport
+  espn: sport
+  motorsport: sport
+  heise: tech
+  golem: tech
+  t3n: tech
+  verge: tech
+  ars: tech
+  hn: tech
+  gamestar: tech
+  handelsblatt: geld
+  tagesschau_wirt: geld
+  cnbc: geld
+  coindesk: geld
+  dwdl: popkultur
+  politico_eu: politik
+  politico_us: politik
+  euractiv: politik
+  thehill: politik
+  foxnews: politik
+
+# Ereignisgröße (PLAN.md 4.2). Startwerte bewusst kleiner als im Plan (3 bzw. 4),
+# weil die Erkennung über Wörter noch ungenau ist. In der Werkbank nachstellen.
+ereignis:
+  finale:   { faktor: 1.5, woerter: [finale, endspiel, weltmeister, titelgewinn, meistertitel] }
+  endrunde: { faktor: 1.5, woerter: [weltmeisterschaft, europameisterschaft, olympia, olympische spiele] }
+
+# Deutschland-Bezug ×1.5 (PLAN.md 4.2), wenn genug Meldungen der Geschichte eines dieser Wörter enthalten.
+deutschland:
+  faktor: 1.5
+  anteil: 0.2
+  woerter: [deutschland, deutsche, deutscher, deutschen, bundes, berlin, german, germany, merz, bundestag, bundesliga, dax, dfb]
+
+regionen:
+  usa: [trump, usa, us-, amerika, american, washington, congress, kongress, senate, senat, white house, weißes haus]
+  europa: [eu-, europäische union, european union, brüssel, brussels, europa, europe]

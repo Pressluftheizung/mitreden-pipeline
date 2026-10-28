@@ -14,11 +14,26 @@ Dieses Repo ist öffentlich und enthält **nur Code, Prompts und Konfiguration**
 
 Geplant: `bauen` (dreimal täglich Karten bauen und prüfen).
 
+## Werkbank (Phase 1)
+
+Bündelt die gesammelten Meldungen zu Geschichten (Algorithmus A: Dubletten), berechnet ihre Wichtigkeit
+(Algorithmus B) und schreibt eine Rangliste mit Begründung sowie die Abdeckung gegenüber Google News Top.
+
+```bash
+.venv/Scripts/python -m pipeline.werkbank --daten <checkout von rohdaten> --ausgabe <ordner außerhalb des repos>
+```
+
+Für die Ähnlichkeit nutzt sie das mehrsprachige Modell `paraphrase-multilingual-MiniLM-L12-v2` (lokal, ~220 MB,
+wird beim ersten Lauf geladen). Schwellen und Gewichte stehen in `config/gewichte.yaml`, Themen und
+Mitreden-Faktor in `config/topics.yaml`.
+
 ## Aufbau
 
 ```
 config/sources.yaml   Quellen, Lager-Einordnung (Vorschlag, wird geprüft), Erkennungsregeln
-pipeline/             Python-Code (collect.py = Sammellauf)
+config/topics.yaml    Themen, Mitreden-Faktor, Schlüsselwörter
+config/gewichte.yaml  Gewichte und Schwellen für Dubletten und Wichtigkeit
+pipeline/             Python-Code (collect.py = Sammeln, cluster.py = Dubletten, score.py = Wichtigkeit, werkbank.py)
 tests/                Tests mit selbst geschriebenen Beispieldaten
 tools/pruefe_repo.py  Schutzprüfung für dieses öffentliche Repo
 .githooks/            Prüfung vor jedem Commit
