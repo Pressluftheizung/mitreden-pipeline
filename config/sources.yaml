@@ -70,6 +70,26 @@ quellen:
       sprache: de, region: deutschland, lager: rechts, art: magazin,
       volltext_erlaubt: false, bezahlschranke: teilweise }
 
+  # ---------- Regional (neu 28.10.2026: Eilmeldungen aus den Ländern; Lager-Vorschlag ungeprüft) ----------
+  - { id: ndr, name: NDR, url: "https://www.ndr.de/home/index-rss.xml",
+      sprache: de, region: deutschland, lager: mitte, art: oeffentlich_rechtlich,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: wdr, name: WDR, url: "https://www1.wdr.de/uebersicht-100.feed",
+      sprache: de, region: deutschland, lager: mitte, art: oeffentlich_rechtlich,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: mdr, name: MDR, url: "https://www.mdr.de/nachrichten/index-rss.xml",
+      sprache: de, region: deutschland, lager: mitte, art: oeffentlich_rechtlich,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: swr, name: SWR, url: "https://www.swr.de/~rss/index.xml",
+      sprache: de, region: deutschland, lager: mitte, art: oeffentlich_rechtlich,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: rbb, name: rbb24, url: "https://www.rbb24.de/aktuell/index.xml/feed=rss.xml",
+      sprache: de, region: deutschland, lager: mitte, art: oeffentlich_rechtlich,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: hr, name: hessenschau, url: "https://www.hessenschau.de/index.rss",
+      sprache: de, region: deutschland, lager: mitte, art: oeffentlich_rechtlich,
+      volltext_erlaubt: false, bezahlschranke: nein }
+
   # ---------- Europa ----------
   - { id: politico_eu, name: Politico Europe, url: "https://www.politico.eu/feed/",
       sprache: en, region: europa, lager: international, art: zeitung,
@@ -139,6 +159,9 @@ quellen:
   - { id: hn, name: Hacker News, url: "https://hnrss.org/frontpage",
       sprache: en, region: welt, lager: international, art: aggregator,
       volltext_erlaubt: false, bezahlschranke: nein, gewicht: 0.5 }
+  - { id: borncity, name: Borns IT- und Windows-Blog, url: "https://www.borncity.com/blog/feed/",
+      sprache: de, region: deutschland, lager: mitte, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: nein }
   # GameStar sperrt die Server von GitHub (HTTP 403), deshalb über die Google-News-Suche (wie AP).
   - { id: gamestar, name: GameStar, url: "https://news.google.com/rss/search?q=when:1d+site:gamestar.de&hl=de&gl=DE&ceid=DE:de",
       sprache: de, region: deutschland, lager: mitte, art: fachmedium,
@@ -163,6 +186,24 @@ quellen:
   - { id: dwdl, name: DWDL, url: "https://www.dwdl.de/rss/allethemen.xml",
       sprache: de, region: deutschland, lager: mitte, art: fachmedium,
       volltext_erlaubt: false, bezahlschranke: nein }
+
+  # ---------- Promis, Gesundheit, Verbraucher (neu 28.10.2026; Lager-Vorschlag ungeprüft) ----------
+  - { id: rtl, name: RTL, url: "https://www.rtl.de/rss/feed/news",
+      sprache: de, region: deutschland, lager: mitte, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  # Bunte, Apotheken Umschau und Stiftung Warentest haben keinen (funktionierenden) Feed: Google-News-Suche.
+  - { id: bunte, name: Bunte, url: "https://news.google.com/rss/search?q=when:1d+site:bunte.de&hl=de&gl=DE&ceid=DE:de",
+      sprache: de, region: deutschland, lager: mitte_rechts, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: aerzteblatt, name: Ärzteblatt, url: "https://www.aerzteblatt.de/rss/news.asp",
+      sprache: de, region: deutschland, lager: mitte, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: apotheken_umschau, name: Apotheken Umschau, url: "https://news.google.com/rss/search?q=when:2d+site:apotheken-umschau.de&hl=de&gl=DE&ceid=DE:de",
+      sprache: de, region: deutschland, lager: mitte, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: warentest, name: Stiftung Warentest, url: "https://news.google.com/rss/search?q=when:2d+site:test.de&hl=de&gl=DE&ceid=DE:de",
+      sprache: de, region: deutschland, lager: mitte, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: teilweise }
 
 # Aufmerksamkeits-Signale (PLAN.md 5.2): nur Titel, Rang und bei Google News die verwandten Schlagzeilen, keine Texte.
 # Wikipedia-Aufrufe kommen einmal täglich im Baulauf dazu.

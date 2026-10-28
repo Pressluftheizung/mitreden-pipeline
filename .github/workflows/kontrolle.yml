@@ -1,0 +1,62 @@
+# Dreimal täglich prüfen, ob die Pipeline alles Relevante aufnimmt (pipeline/kontrolle.py).
+# Ergebnis nur ins PRIVATE Repo (metriken/), denn es enthält Titel. In dieses öffentliche Repo schreibt der Ablauf nichts.
+name: kontrolle
+
+on:
+  schedule:
+    - cron: "37 7,14,19 * * *" # nach dem Sammeln um :07; 8:37, 15:37, 20:37 Uhr deutscher Winterzeit
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rohdaten # schreibt wie Sammeln in "rohdaten", nie gleichzeitig
+  cancel-in-progress: false
+
+jobs:
+  kontrolle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Code holen
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Rohdaten aus dem privaten Repo holen
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: Pressluftheizung/mitreden-app
+          ref: rohdaten
+          token: ${{ secrets.APP_REPO_TOKEN }}
+          path: daten
+          fetch-depth: 1
+
+      - name: Python einrichten
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Pakete installieren
+        run: pip install -r requirements.txt
+
+      - name: Kontrolle
+        run: python -m pipeline.kontrolle --daten daten
+
+      - name: Ergebnis ins private Repo speichern
+        working-directory: daten
+        run: |
+          git config user.name "mitreden-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A metriken
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -q -m "Kontrolle $(date -u +%Y-%m-%dT%H:%MZ)"
+          for versuch in 1 2 3; do
+            git push -q origin HEAD:rohdaten && exit 0
+            git pull -q --rebase origin rohdaten
+          done
+          exit 1

@@ -14,23 +14,39 @@ import argparse
 import html
 import json
 import sys
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
+import numpy as np
 import yaml
 
 from .abgleich import GoogleTreffer, gleiche_ab, google_titel
-from .cluster import Schwellen, baue_meldungen, bette_ein, finde_geschichten
+from .cluster import Ergebnis, Meldung, Schwellen, baue_meldungen, bette_ein, finde_geschichten
 from .collect import lade_teaser
 from .quellen import lade_konfiguration
-from .score import Bewerter, Signale, jetzt_utc
+from .score import Bewerter, Bewertung, Signale, jetzt_utc
 from .text import Seltenheit
 
 FORMAT_NAME = {"top": "Top-Story", "karte": "Karte", "kurz": "Kurz & knapp", "weg": "fällt weg"}
 
 
-def rangliste(daten: Path, config: Path, jetzt: datetime) -> dict:
+@dataclass
+class Stand:
+    """Alles, was ein Lauf über die gesammelten Meldungen ausrechnet (für Rangliste und Kontrolle)."""
+
+    meldungen: list[Meldung]
+    vektoren: np.ndarray
+    titel_vektoren: np.ndarray
+    ergebnis: Ergebnis
+    in_reihenfolge: list[Bewertung]  # Index wie in ergebnis.geschichten
+    sortiert: list[Bewertung]  # nach Wichtigkeit, mit Format
+    google: list[GoogleTreffer]
+    gewichte: dict
+    letzter_lauf: datetime
+
+
+def berechne(daten: Path, config: Path, jetzt: datetime) -> Stand:
     konfig = lade_konfiguration(config / "sources.yaml")
     quellen = {q.id: q for q in konfig.quellen}
     gewichte = yaml.safe_load((config / "gewichte.yaml").read_text(encoding="utf-8"))
@@ -42,10 +58,10 @@ def rangliste(daten: Path, config: Path, jetzt: datetime) -> dict:
 
     bewerter = Bewerter(config / "gewichte.yaml", config / "topics.yaml")
     signale = Signale.aus_dateien(daten / "signale")
+    titel_vektoren = bette_ein([m.titel for m in meldungen])
     google: list[GoogleTreffer] = []
     if signale.news:
         formulierungen = bette_ein([t for n in signale.news for t in google_titel(n)])
-        titel_vektoren = bette_ein([m.titel for m in meldungen])
         google = gleiche_ab(signale.news, formulierungen, meldungen, vektoren, titel_vektoren,
                             ergebnis.geschichten, gewichte["google_news"])
     seltenheit = Seltenheit([m.woerter for m in meldungen])
@@ -56,8 +72,13 @@ def rangliste(daten: Path, config: Path, jetzt: datetime) -> dict:
                    for n, g in enumerate(ergebnis.geschichten)]
     in_reihenfolge = list(bewertungen)  # Index wie in ergebnis.geschichten, vor dem Sortieren
     bewerter.formate_vergeben(bewertungen)
+    return Stand(meldungen, vektoren, titel_vektoren, ergebnis, in_reihenfolge, bewertungen, google, gewichte, stand)
 
-    abdeckung = abdeckung_pruefen(google, in_reihenfolge, bewertungen, gewichte["google_news"])
+
+def rangliste(daten: Path, config: Path, jetzt: datetime) -> dict:
+    st = berechne(daten, config, jetzt)
+    meldungen, ergebnis, bewertungen = st.meldungen, st.ergebnis, st.sortiert
+    abdeckung = abdeckung_pruefen(st.google, st.in_reihenfolge, bewertungen, st.gewichte["google_news"])
     geschichte_von = {i: n for n, g in enumerate(ergebnis.geschichten) for i in g}
     grauzone = [p for p in ergebnis.grauzone if geschichte_von[p.a] != geschichte_von[p.b]]
     grauzone.sort(key=lambda p: -p.wertung)
