@@ -1,7 +1,10 @@
 #!/bin/sh
 # Vor jedem Commit: Schutzprüfung (erlaubte Pfade, keine Schlüssel).
 # Einmalig einschalten: git config core.hooksPath .githooks
-python tools/pruefe_repo.py --staged || exit 1
+for py in .venv/Scripts/python .venv/bin/python python3 python; do
+  if command -v "$py" >/dev/null 2>&1 || [ -x "$py" ]; then break; fi
+done
+"$py" tools/pruefe_repo.py --staged || exit 1
 # gitleaks zusätzlich, falls auf dem PC installiert (läuft sonst ohnehin bei GitHub).
 if command -v gitleaks >/dev/null 2>&1; then
   gitleaks git --staged --no-banner --redact || exit 1

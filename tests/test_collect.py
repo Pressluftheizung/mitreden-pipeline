@@ -81,10 +81,22 @@ class Speichern(unittest.TestCase):
     def test_nach_48_stunden_geloescht(self):
         with tempfile.TemporaryDirectory() as ordner:
             alle = {t["id"]: t for t in lies_feed(FEED, QUELLE, KONFIG, JETZT)}
+            for t in alle.values():
+                t["veroeffentlicht"] = "2026-10-27T08:00:00Z"
             self.assertEqual(speichere_teaser(Path(ordner), alle, JETZT + timedelta(hours=47)), 0)
             self.assertTrue((Path(ordner) / "2026-10-27.jsonl").exists())
             self.assertEqual(speichere_teaser(Path(ordner), alle, JETZT + timedelta(hours=49)), 4)
             self.assertFalse((Path(ordner) / "2026-10-27.jsonl").exists())
+
+    def test_alte_artikel_trotz_feed_geloescht(self):
+        # Manche Feeds führen Artikel tagelang weiter: nach 48 Std seit Veröffentlichung fliegen sie trotzdem raus.
+        with tempfile.TemporaryDirectory() as ordner:
+            alle = {t["id"]: t for t in lies_feed(FEED, QUELLE, KONFIG, JETZT)}
+            alt = next(iter(alle.values()))
+            alt["veroeffentlicht"] = "2026-10-24T08:00:00Z"
+            for t in alle.values():
+                t["zuletzt_gesehen"] = "2026-10-27T09:00:00Z"
+            self.assertEqual(speichere_teaser(Path(ordner), alle, JETZT), 1)
 
     def test_ganzer_lauf_aus_dateien(self):
         konfig = replace(KONFIG, quellen=[QUELLE], signale=[])

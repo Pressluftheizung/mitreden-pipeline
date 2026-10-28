@@ -12,10 +12,11 @@ from pathlib import Path
 
 import numpy as np
 
+from pipeline.abgleich import GoogleTreffer
 from pipeline.cluster import Schwellen, baue_meldungen, bewerte_paare, bilde_geschichten
 from pipeline.quellen import Quelle
-from pipeline.score import Bewerter, Signale
-from pipeline.text import produkte, produkte_widersprechen
+from pipeline.score import Bewerter, Signale, Themen
+from pipeline.text import Seltenheit, inhaltswoerter, produkte, produkte_widersprechen, woerter
 
 CONFIG = Path(__file__).parent.parent / "config"
 JETZT = datetime(2026, 10, 28, 12, 0, tzinfo=timezone.utc)
@@ -56,6 +57,31 @@ class Produkte(unittest.TestCase):
     def test_gleiches_modell_kein_widerspruch(self):
         self.assertFalse(produkte_widersprechen(produkte("Pixel 10 im Test"), produkte("Pixel 10 Pro im Test")))
         self.assertFalse(produkte_widersprechen(produkte("Pixel 10 Pro"), set()))
+
+    def test_andere_modellnummer_widerspricht(self):
+        self.assertTrue(produkte_widersprechen(produkte("Pixel 9 im Test"), produkte("Pixel 9a im Test")))
+        self.assertTrue(produkte_widersprechen(produkte("Tesla Model 3"), produkte("Model Y")))
+        self.assertTrue(produkte_widersprechen(produkte("Neue PS5"), produkte("Sony zeigt PS6")))
+
+    def test_schreibweisen(self):
+        self.assertEqual(produkte("Pixel-10-Pro und GPT-5"), {"pixel 10 pro", "gpt 5"})
+        self.assertEqual(produkte("Google gives Gemini a new voice"), set())  # "a" ist hier ein Artikel
+
+
+class Themenwoerter(unittest.TestCase):
+    def test_wortanfang(self):
+        self.assertEqual(Themen.treffer(["ice-"], woerter("Zimbabwe's vice-president freed")), 0)
+        self.assertEqual(Themen.treffer(["ice-"], woerter("Neue ICE-Strecke eröffnet")), 1)
+        self.assertEqual(Themen.treffer(["us-"], woerter("Virus-Welle und Bus-Streik")), 0)
+
+    def test_ganzes_wort_und_wortfolgen(self):
+        self.assertEqual(Themen.treffer(["=fed"], woerter("Federer gewinnt")), 0)
+        self.assertEqual(Themen.treffer(["=fed"], woerter("Fed senkt Zinsen")), 1)
+        self.assertEqual(Themen.treffer(["trauer um"], woerter("Stars trauern um Tänzer")), 1)
+        self.assertEqual(Themen.treffer(["frontstadt"], woerter("EU-Grenzbehörde Frontex")), 0)
+
+    def test_bindestrich_teile_zaehlen_einzeln(self):
+        self.assertTrue({"steinmeier", "nachfolge"} <= inhaltswoerter("Steinmeier-Nachfolge offen"))
 
 
 class Dubletten(unittest.TestCase):
@@ -126,6 +152,33 @@ class Wichtigkeit(unittest.TestCase):
         v = vektoren()
         self.assertGreater(self.bewerter.bewerte([0], neu, v, self.leer, JETZT).wichtigkeit,
                            self.bewerter.bewerte([0], alt, v, self.leer, JETZT).wichtigkeit)
+
+    def test_google_rubrik_zaehlt_fast_voll(self):
+        # Google sortiert nach Rubriken: Platz 25 ist "Unterhaltung", nicht "unwichtig".
+        m = baue_meldungen([teaser(1, "alpha", "Sängerin sagt Tour ab")], QUELLEN)
+        treffer = GoogleTreffer("google_news_top_de", 25, "Sängerin sagt Tour ab", 0, 0, 1.3, 1.0)
+        b = self.bewerter.bewerte([0], m, vektoren(), self.leer, JETZT, [treffer])
+        self.assertAlmostEqual(b.teile["aufmerksamkeit"], 1.5 * 0.7)
+        self.assertIn("Google News DE Platz 25 (Rubrik)", b.begruendung)
+
+    def test_allgemeiner_trend_zaehlt_nur_im_titel(self):
+        m = baue_meldungen([teaser(1, "alpha", "Neue Studie zu Krebs", "Forscher über cancer research")], QUELLEN)
+        trend = {"signal": "google_trends_us", "titel": "cancer", "suchmenge": "200+"}
+        b = self.bewerter.bewerte([0], m, vektoren(), Signale([], [trend]), JETZT, seltenheit=Seltenheit([x.woerter for x in m]))
+        self.assertEqual(b.teile["aufmerksamkeit"], 0)
+
+    def test_platzierung_nur_aus_dem_letzten_lauf(self):
+        alt = teaser(1, "tagesschau", "Gipfel in Genf", position=1)
+        alt["zuletzt_gesehen"] = (JETZT - timedelta(hours=20)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        m = baue_meldungen([alt], {"tagesschau": quelle("tagesschau")})
+        self.assertEqual(self.bewerter.bewerte([0], m, vektoren(), self.leer, JETZT, stand=JETZT).teile["platzierung"], 0)
+
+    def test_feeds_eines_hauses_zaehlen_einmal(self):
+        ard = {q: replace(quelle(q), haus="ard") for q in ("tagesschau", "sportschau")}
+        m = baue_meldungen([teaser(1, "tagesschau", "Gipfel in Genf endet"),
+                            teaser(2, "sportschau", "Genfer Gipfel ohne Ergebnis")], ard)
+        b = self.bewerter.bewerte([0, 1], m, vektoren(0.9), self.leer, JETZT)
+        self.assertAlmostEqual(b.teile["breite"], 1.0)
 
     def test_formate(self):
         m = baue_meldungen([teaser(i, "alpha", f"Meldung {i}") for i in range(3)], QUELLEN)

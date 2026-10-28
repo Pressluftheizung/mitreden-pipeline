@@ -25,10 +25,15 @@ was we were what when where which while who why will with would year years you y
 # Produktnamen für die Pixel-Regel (PLAN.md 6A): unterschiedliche Modelle = getrennte Geschichten.
 MARKEN = (
     "iphone|ipad|macbook|imac|airpods|apple watch|vision pro|pixel|galaxy|xperia|oneplus|redmi|xiaomi|nothing phone|"
-    "surface|thinkpad|playstation|ps5|ps6|xbox|switch|steam deck|kindle|echo|fire tv|gopro|tesla model|model [0-9sxy]|"
+    "surface|thinkpad|playstation|xbox|switch|steam deck|kindle|echo|fire tv|gopro|"
     "geforce|radeon|rtx|ryzen|core ultra|snapdragon|tensor|gemini|gpt|claude|llama|grok"
 )
-PRODUKT = re.compile(rf"\b(?:{MARKEN})(?:\s+(?:[0-9][0-9a-z]*|pro|max|plus|ultra|mini|air|fold|flip|watch|buds|tab|lite|se|xl|a))+\b", re.I)
+# Marke plus mindestens ein Modellteil ("Pixel 10 Pro", "GPT-5"); Konsolen und Automodelle auch allein ("PS5", "Model Y").
+PRODUKT = re.compile(
+    rf"\b(?:(?:{MARKEN})(?:[\s-]+(?:[0-9][0-9a-z]*|pro|max|plus|ultra|mini|air|fold|flip|watch|buds|tab|lite|se|xl))+"
+    r"|ps[3-6](?:[\s-]+(?:pro|slim|portal))?|(?:tesla[\s-]+)?model[\s-]+[3sxy])\b",
+    re.I,
+)
 
 
 def woerter(text: str) -> list[str]:
@@ -36,20 +41,28 @@ def woerter(text: str) -> list[str]:
 
 
 def inhaltswoerter(text: str) -> set[str]:
-    return {w for w in woerter(text) if len(w) >= 3 and w not in STOPPWOERTER and not w.isdigit()}
+    """Wörter mit Aussage. Bindestrich-Wörter zählen ganz und in Teilen ("steinmeier-nachfolge" auch als
+    "steinmeier" und "nachfolge"), damit sie zu Meldungen passen, die die Teile einzeln nennen."""
+    ergebnis = set()
+    for w in woerter(text):
+        for teil in (w, *re.split(r"[-'’]", w)) if "-" in w else (w,):
+            if len(teil) >= 3 and teil not in STOPPWOERTER and not teil.isdigit():
+                ergebnis.add(teil)
+    return ergebnis
 
 
 def produkte(text: str) -> set[str]:
-    """Erkannte Produktbezeichnungen, normalisiert ("Pixel 10 Pro" → "pixel 10 pro")."""
-    return {re.sub(r"\s+", " ", m.group(0).lower()) for m in PRODUKT.finditer(text)}
+    """Erkannte Produktbezeichnungen, normalisiert ("Pixel-10-Pro" → "pixel 10 pro", "Tesla Model Y" → "model y")."""
+    return {re.sub(r"[\s-]+", " ", m.group(0).lower()).removeprefix("tesla ") for m in PRODUKT.finditer(text)}
 
 
 def produkte_widersprechen(a: set[str], b: set[str]) -> bool:
     """Beide nennen Produkte, aber keines stimmt überein, z. B. Pixel 10 Pro gegen Pixel Watch 4."""
     if not a or not b or a & b:
         return False
-    # "pixel 10" und "pixel 10 pro" gelten nicht als Widerspruch (eins ist im anderen enthalten)
-    return not any(x in y or y in x for x in a for y in b)
+    # "pixel 10" und "pixel 10 pro" widersprechen sich nicht (alle Wörter des einen stecken im anderen),
+    # "pixel 9" und "pixel 9a" schon.
+    return not any(set(x.split()) <= set(y.split()) or set(y.split()) <= set(x.split()) for x in a for y in b)
 
 
 def bereinige_titel(titel: str, quellname: str | None = None) -> str:
@@ -70,7 +83,7 @@ class Seltenheit:
         return math.log((self.n + 1) / (self.zaehler.get(wort, 0) + 1))
 
     def gemeinsam(self, a: set[str], b: set[str], max_haeufig: float = 0.02) -> tuple[float, list[str]]:
-        """Summe der Seltenheit gemeinsamer, seltener Wörter (in höchstens 2 % der Meldungen)."""
+        """Summe der Seltenheit gemeinsamer Wörter, die in höchstens max_haeufig aller Meldungen stehen."""
         grenze = max(2, self.n * max_haeufig)
         treffer = [w for w in a & b if self.zaehler.get(w, 0) <= grenze]
         return sum(self.gewicht(w) for w in treffer), sorted(treffer, key=self.gewicht, reverse=True)

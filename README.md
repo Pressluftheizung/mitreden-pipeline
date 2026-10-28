@@ -17,7 +17,8 @@ Geplant: `bauen` (dreimal täglich Karten bauen und prüfen).
 ## Werkbank (Phase 1)
 
 Bündelt die gesammelten Meldungen zu Geschichten (Algorithmus A: Dubletten), berechnet ihre Wichtigkeit
-(Algorithmus B) und schreibt eine Rangliste mit Begründung sowie die Abdeckung gegenüber Google News Top.
+(Algorithmus B) und schreibt eine Rangliste mit Begründung sowie die Abdeckung gegenüber Google News Top
+(je fehlender Meldung mit Grund: aussortiert, unsicher oder fehlt).
 
 ```bash
 .venv/Scripts/python -m pipeline.werkbank --daten <checkout von rohdaten> --ausgabe <ordner außerhalb des repos>
@@ -33,7 +34,8 @@ Mitreden-Faktor in `config/topics.yaml`.
 config/sources.yaml   Quellen, Lager-Einordnung (Vorschlag, wird geprüft), Erkennungsregeln
 config/topics.yaml    Themen, Mitreden-Faktor, Schlüsselwörter
 config/gewichte.yaml  Gewichte und Schwellen für Dubletten und Wichtigkeit
-pipeline/             Python-Code (collect.py = Sammeln, cluster.py = Dubletten, score.py = Wichtigkeit, werkbank.py)
+pipeline/             Python-Code (collect.py = Sammeln, cluster.py = Dubletten, abgleich.py = Google News Top,
+                      score.py = Wichtigkeit, werkbank.py)
 tests/                Tests mit selbst geschriebenen Beispieldaten
 tools/pruefe_repo.py  Schutzprüfung für dieses öffentliche Repo
 .githooks/            Prüfung vor jedem Commit

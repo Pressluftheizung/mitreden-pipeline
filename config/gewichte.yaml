@@ -23,8 +23,29 @@ frische_minimum: 0.2
 tempo_fenster_h: 6
 
 # Platzierung: Steht die Geschichte bei diesen Medien oben im Feed?
-leitmedien: [tagesschau, spiegel, zeit, faz, sz, welt, bild, bbc_world, guardian_world, npr, ap]
+# (ap kommt über eine Google-News-Suche, deren Reihenfolge keine Startseite ist, deshalb nicht dabei.)
+leitmedien: [tagesschau, spiegel, zeit, faz, sz, welt, bild, bbc_world, guardian_world, npr]
 platzierung_bis: 10
+
+# Google News Top (pipeline/abgleich.py): Wann gehört ein Google-Eintrag zu einer unserer Geschichten?
+# Wert = Ähnlichkeit (bester Wert über alle Schlagzeilen des Eintrags) + Bonus für seltene gemeinsame Wörter.
+# Je Google-Eintrag zählt die Hauptschlagzeile allein oder mindestens zwei verwandte Schlagzeilen (siehe abgleich.py).
+# Geeicht am 28.10.2026 an 144 von Hand bewerteten Einträgen (zwei Stände): 96 von 99 echten Treffern gefunden,
+# 2 falsch zugeordnet.
+google_news:
+  treffer: 0.85              # Ähnlichkeit + Wortbonus ab hier: gehört sicher zur Geschichte
+  unsicher: 0.70             # nur für die Messung: darüber "unsicher" statt "fehlt"
+  sicher_allein: 0.80        # so ähnlich, dass es ohne gemeinsame Wörter reicht
+  mindest_aehnlichkeit: 0.5  # darunter hilft auch kein gemeinsames Wort
+  woerter_bonus: 0.3
+  woerter_voll: 12
+  max_haeufig: 0.02          # Wörter in höchstens 2 % der Meldungen gelten als selten
+  schlagzeilen_bis: 10       # Plätze 1–10 sind Googles Schlagzeilen, danach folgen Rubriken
+  rubrik_anteil: 0.7         # so viel zählt ein Eintrag aus einer Rubrik im Vergleich zur Schlagzeile
+  land: { DE: 1.5, US: 1.0 }
+
+# Google Trends: höchstens so viel Aufmerksamkeit insgesamt.
+trends_maximum: 1.5
 
 # Formate (PLAN.md 4.1). Keine feste Obergrenze an Karten.
 top_anzahl: 7          # die besten (5–8) werden Top-Story, wenn sie über der Kartenschwelle liegen
@@ -39,3 +60,4 @@ dubletten:
   sprachuebergreifend: 0.72
   grauzone: 0.55
   gruppe: 0.62
+  selten: 0.05

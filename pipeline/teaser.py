@@ -17,7 +17,7 @@ from .quellen import Konfiguration, Quelle
 
 MAX_TEASER = 500
 # Parameter, die nur der Reichweitenmessung dienen. Sie machen aus einem Artikel sonst mehrere Adressen.
-TRACKING = re.compile(r"^(utm_|wt_|at_|mc_|fbclid$|gclid$|traffic_source$|ref$|cmpid$|ns_|xtor$|icid$)", re.I)
+TRACKING = re.compile(r"^(utm_|wt_|at_|mc_|fbclid$|gclid$|traffic_source$|ref$|cmpid$|ns_|xtor$|icid$|maca$)", re.I)
 TAG = re.compile(r"<[^>]+>")
 LEERRAUM = re.compile(r"\s+")
 
@@ -123,7 +123,7 @@ def lies_feed(daten: bytes, quelle: Quelle, konfig: Konfiguration, jetzt: dateti
         ergebnis.append({
             "id": tid,
             "quelle": quelle.id,
-            "url": url,
+            "url": normalisiere_url(url),
             "titel": titel,
             "teaser": kuerze(reiner_text(eintrag.get("summary"))),
             "veroeffentlicht": zeitpunkt(eintrag),
@@ -138,20 +138,51 @@ def lies_feed(daten: bytes, quelle: Quelle, konfig: Konfiguration, jetzt: dateti
     return ergebnis
 
 
+def ohne_quellname(titel: str, quellname: str | None) -> str:
+    """Entfernt angehängte Redaktionsnamen wie " - n-tv.de" (auch doppelt: " - SZ.de - SZ.de")."""
+    if quellname:
+        endung = f" - {quellname}"
+        while titel.endswith(endung):
+            titel = titel[: -len(endung)]
+    return titel.strip()
+
+
+VERWANDT = re.compile(r"<a [^>]*>(.*?)</a>(?:\s|&nbsp;|\xa0)*(?:<font[^>]*>(.*?)</font>)?", re.S)
+
+
+def verwandte_titel(summary: str | None, titel: str, anzahl: int = 5) -> list[str]:
+    """Google News bündelt je Eintrag mehrere Schlagzeilen anderer Redaktionen zum selben Ereignis.
+
+    Die verschiedenen Formulierungen machen den Abgleich mit unseren Geschichten viel sicherer.
+    """
+    ergebnis = []
+    for a, quelle in VERWANDT.findall(summary or ""):
+        t = ohne_quellname(reiner_text(a), reiner_text(quelle))
+        if t and t != titel and t not in ergebnis:
+            ergebnis.append(t)
+    return ergebnis[:anzahl]
+
+
 def lies_signal(daten: bytes, signal_id: str, jetzt: datetime) -> list[dict]:
-    """Google Trends / Google News Top: nur Titel, Rang und (bei Trends) die ungefähre Suchmenge."""
+    """Google Trends / Google News Top: nur Titel, Rang, Redaktion, verwandte Schlagzeilen und (bei Trends)
+    die ungefähre Suchmenge. Keine Artikeltexte."""
     feed = feedparser.parse(daten)
     ergebnis = []
     for rang, eintrag in enumerate(feed.entries, start=1):
         titel = reiner_text(eintrag.get("title"))
         if not titel:
             continue
-        ergebnis.append({
+        quelle = reiner_text((eintrag.get("source") or {}).get("title")) or None
+        zeile = {
             "signal": signal_id,
             "zeit": iso(jetzt),
             "rang": rang,
             "titel": titel,
             "url": eintrag.get("link"),
             "suchmenge": eintrag.get("ht_approx_traffic"),
-        })
+        }
+        if signal_id.startswith("google_news"):
+            zeile["quelle"] = quelle
+            zeile["verwandt"] = verwandte_titel(eintrag.get("summary"), ohne_quellname(titel, quelle))
+        ergebnis.append(zeile)
     return ergebnis

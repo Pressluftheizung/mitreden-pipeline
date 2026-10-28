@@ -10,6 +10,7 @@
 #   teilweise + Erkennungsregel (bezahl_muster / bezahl_stichwoerter / bezahl_feld):
 #   Treffer = Bezahlartikel, sonst "unbekannt" (bei bezahl_markiert: true "frei").
 # meinung_muster: zusätzlich zu den Standard-Mustern unten (B1, Teil des Bias-Reviews).
+# haus:           optional; Feeds desselben Hauses zählen bei der Quellenbreite als eine Redaktion.
 
 standard:
   meinung_muster: ["/meinung/", "/meinungen/", "/kommentar/", "/kommentare/", "/kolumne", "/debatte/",
@@ -22,10 +23,10 @@ standard:
 
 quellen:
   # ---------- Deutschland ----------
-  - { id: tagesschau, name: Tagesschau, url: "https://www.tagesschau.de/index~rss2.xml",
+  - { id: tagesschau, name: Tagesschau, url: "https://www.tagesschau.de/index~rss2.xml", haus: ard,
       sprache: de, region: deutschland, lager: mitte, art: oeffentlich_rechtlich,
       volltext_erlaubt: true, bezahlschranke: nein }
-  - { id: tagesschau_wirt, name: Tagesschau Wirtschaft, url: "https://www.tagesschau.de/wirtschaft/index~rss2.xml",
+  - { id: tagesschau_wirt, name: Tagesschau Wirtschaft, url: "https://www.tagesschau.de/wirtschaft/index~rss2.xml", haus: ard,
       sprache: de, region: deutschland, lager: mitte, art: oeffentlich_rechtlich,
       volltext_erlaubt: true, bezahlschranke: nein }
   - { id: dlf, name: Deutschlandfunk, url: "https://www.deutschlandfunk.de/nachrichten-100.rss",
@@ -147,7 +148,7 @@ quellen:
   - { id: kicker, name: kicker, url: "https://newsfeed.kicker.de/news/aktuell",
       sprache: de, region: deutschland, lager: mitte, art: fachmedium,
       volltext_erlaubt: false, bezahlschranke: teilweise }
-  - { id: sportschau, name: Sportschau, url: "https://www.sportschau.de/index~rss2.xml",
+  - { id: sportschau, name: Sportschau, url: "https://www.sportschau.de/index~rss2.xml", haus: ard,
       sprache: de, region: deutschland, lager: mitte, art: oeffentlich_rechtlich,
       volltext_erlaubt: true, bezahlschranke: nein }
   # ESPN liefert den Servern von GitHub einen leeren Feed, deshalb über die Google-News-Suche.
@@ -163,7 +164,7 @@ quellen:
       sprache: de, region: deutschland, lager: mitte, art: fachmedium,
       volltext_erlaubt: false, bezahlschranke: nein }
 
-# Aufmerksamkeits-Signale (PLAN.md 5.2): nur Titel und Rang, keine Texte.
+# Aufmerksamkeits-Signale (PLAN.md 5.2): nur Titel, Rang und bei Google News die verwandten Schlagzeilen, keine Texte.
 # Wikipedia-Aufrufe kommen einmal täglich im Baulauf dazu.
 signale:
   - { id: google_trends_de, url: "https://trends.google.com/trending/rss?geo=DE" }

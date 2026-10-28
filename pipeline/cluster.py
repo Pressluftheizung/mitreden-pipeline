@@ -31,6 +31,7 @@ class Schwellen:
     kandidat: float = 0.45        # darunter wird ein Paar gar nicht erst betrachtet
     woerter_bonus: float = 0.25   # wie stark gemeinsame seltene Wörter die Ähnlichkeit erhöhen
     woerter_voll: float = 12.0    # ab dieser Seltenheitssumme zählt der volle Bonus
+    selten: float = 0.05          # ein Wort gilt beim Vergleich als selten, wenn es in höchstens 5 % der Meldungen steht
 
 
 @dataclass
@@ -125,7 +126,7 @@ def bewerte_paare(meldungen: list[Meldung], vektoren: np.ndarray, s: Schwellen) 
         if abs((ma.zeit - mb.zeit).total_seconds()) > s.zeitfenster_h * 3600:
             continue
         sim = float(aehnlich[a, b])
-        summe, gemeinsam = seltenheit.gemeinsam(ma.woerter, mb.woerter)
+        summe, gemeinsam = seltenheit.gemeinsam(ma.woerter, mb.woerter, s.selten)
         wertung = sim + s.woerter_bonus * min(1.0, summe / s.woerter_voll)
         if produkte_widersprechen(ma.produkte, mb.produkte):
             urteil = "getrennt: Produkt"

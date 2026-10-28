@@ -13,14 +13,15 @@ des Bias-Reviews durch den Nutzer (PLAN.md 8). Bis zur Freigabe dient die Rangli
 import math
 import re
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import numpy as np
 import yaml
 
-from .cluster import Meldung, bette_ein
-from .text import inhaltswoerter, woerter
+from .abgleich import GoogleTreffer
+from .cluster import Meldung
+from .text import Seltenheit, inhaltswoerter, woerter
 
 LAGERGRUPPE = {"links": "links", "mitte_links": "links", "mitte": "mitte",
                "mitte_rechts": "rechts", "rechts": "rechts", "international": "international"}
@@ -48,24 +49,29 @@ class Themen:
         self.k = yaml.safe_load(pfad.read_text(encoding="utf-8"))
 
     @staticmethod
-    def treffer(begriffe: list[str], text: str, wortliste: list[str]) -> int:
+    def treffer(begriffe: list[str], wortliste: list[str]) -> int:
+        """Zählt Treffer am Wortanfang: "ice-" passt auf "ice-strecke", nicht auf "vice-president".
+
+        Ein "=" vorne verlangt das ganze Wort ("=fed" passt nicht auf "federer"). Mehrere Wörter
+        müssen aufeinander folgen, jedes am Wortanfang ("trauer um" passt auf "trauern um").
+        """
+        def passt(wort: str, teil: str) -> bool:
+            return wort == teil[1:] if teil.startswith("=") else wort.startswith(teil)
+
         n = 0
         for b in begriffe:
-            if " " in b or b.endswith("-"):
-                n += text.count(b)
-            else:
-                n += sum(1 for w in wortliste if w.startswith(b))
+            teile = b.split()
+            n += sum(1 for i in range(len(wortliste) - len(teile) + 1)
+                     if all(passt(wortliste[i + j], t) for j, t in enumerate(teile)))
         return n
 
     def einordnen(self, meldungen: list[Meldung]) -> tuple[str, str | None, float, list[str]]:
         punkte: dict[tuple[str, str], float] = {}
         for m in meldungen:
-            titel = m.titel.lower()
-            text = m.text.lower()
-            titelwoerter, textwoerter = woerter(titel), woerter(text)
+            titelwoerter, textwoerter = woerter(m.titel), woerter(m.text)
             for thema, t in self.k["themen"].items():
                 for unter, u in t["unterthemen"].items():
-                    n = 2 * self.treffer(u["woerter"], titel, titelwoerter) + self.treffer(u["woerter"], text, textwoerter)
+                    n = 2 * self.treffer(u["woerter"], titelwoerter) + self.treffer(u["woerter"], textwoerter)
                     if n:
                         punkte[(thema, unter)] = punkte.get((thema, unter), 0) + n
             hinweis = self.k["quelle_thema"].get(m.quelle.id)
@@ -79,21 +85,21 @@ class Themen:
         return thema, unter, faktor, [f"Thema {self.k['themen'][thema]['name']} / {unter} (Grundwert {faktor:.1f})"]
 
     def zusatzfaktoren(self, meldungen: list[Meldung]) -> tuple[float, list[str], str]:
-        texte = [m.text.lower() for m in meldungen]
+        listen = [woerter(m.text) for m in meldungen]
         faktor, gruende = 1.0, []
         for name, e in self.k["ereignis"].items():
-            if sum(1 for t in texte if self.treffer(e["woerter"], t, woerter(t))) >= max(1, len(texte) * 0.3):
+            if sum(1 for w in listen if self.treffer(e["woerter"], w)) >= max(1, len(listen) * 0.3):
                 faktor *= e["faktor"]
                 gruende.append(f"Ereignis „{name}“ ×{e['faktor']}")
         d = self.k["deutschland"]
-        mit_bezug = sum(1 for t in texte if self.treffer(d["woerter"], t, woerter(t)))
-        if mit_bezug >= max(1, len(texte) * d["anteil"]):
+        mit_bezug = sum(1 for w in listen if self.treffer(d["woerter"], w))
+        if mit_bezug >= max(1, len(listen) * d["anteil"]):
             faktor *= d["faktor"]
             gruende.append(f"Deutschland-Bezug ×{d['faktor']}")
-        region = "deutschland" if mit_bezug >= max(1, len(texte) * d["anteil"]) else "welt"
+        region = "deutschland" if mit_bezug >= max(1, len(listen) * d["anteil"]) else "welt"
         if region == "welt":
             for r, begriffe in self.k["regionen"].items():
-                if sum(1 for t in texte if self.treffer(begriffe, t, woerter(t))) >= max(1, len(texte) * 0.3):
+                if sum(1 for w in listen if self.treffer(begriffe, w)) >= max(1, len(listen) * 0.3):
                     region = r
                     break
         return faktor, gruende, region
@@ -101,29 +107,22 @@ class Themen:
 
 @dataclass
 class Signale:
-    """Aufmerksamkeit: Google News Top (Rang) und Google Trends (Suchbegriff und Suchmenge)."""
+    """Aufmerksamkeit: Google News Top (Rang, Schlagzeilen) und Google Trends (Suchbegriff und Suchmenge)."""
 
     news: list[dict]
     trends: list[dict]
-    news_vektoren: np.ndarray | None = None
 
     @classmethod
     def aus_dateien(cls, ordner: Path) -> "Signale":
         import json
 
         zeilen = [json.loads(z) for d in sorted(ordner.glob("*.jsonl")) for z in d.read_text(encoding="utf-8").splitlines() if z]
-        if not zeilen:
-            return cls([], [])
         neueste = {}
         for z in zeilen:  # je Signal nur der letzte Lauf zählt
             neueste[z["signal"]] = max(neueste.get(z["signal"], ""), z["zeit"])
         aktuell = [z for z in zeilen if z["zeit"] == neueste[z["signal"]]]
-        news = [z for z in aktuell if z["signal"].startswith("google_news")]
-        trends = [z for z in aktuell if z["signal"].startswith("google_trends")]
-        s = cls(news, trends)
-        if news:
-            s.news_vektoren = bette_ein([re.sub(r"\s+-\s+[^-]+$", "", n["titel"]) for n in news])
-        return s
+        return cls([z for z in aktuell if z["signal"].startswith("google_news")],
+                   [z for z in aktuell if z["signal"].startswith("google_trends")])
 
 
 def suchmenge(text: str | None) -> float:
@@ -136,27 +135,34 @@ class Bewerter:
         self.g = yaml.safe_load(gewichte_pfad.read_text(encoding="utf-8"))
         self.themen = Themen(themen_pfad)
 
-    def bewerte(self, geschichte: list[int], meldungen: list[Meldung], vektoren: np.ndarray,
-                signale: Signale, jetzt: datetime) -> Bewertung:
+    def bewerte(self, geschichte: list[int], meldungen: list[Meldung], vektoren: np.ndarray, signale: Signale,
+                jetzt: datetime, google: list[GoogleTreffer] = (), seltenheit: Seltenheit | None = None,
+                stand: datetime | None = None) -> Bewertung:
+        """google: die Google-News-Einträge, die zu dieser Geschichte gehören (aus abgleich.gleiche_ab).
+        stand: Zeit des letzten Sammellaufs; nur was da noch im Feed stand, zählt für die Platzierung."""
         ms = [meldungen[i] for i in geschichte]
         g = self.g
         begruendung: list[str] = []
 
         # Quellenbreite: unabhängige Redaktionen; fast gleiche Titel (kopierte Agenturtexte) zählen halb.
+        # Mehrere Feeds derselben Redaktion (tagesschau und tagesschau Wirtschaft) zählen einmal.
         quellen = sorted({m.quelle.id for m in ms})
         erste_titel: dict[str, set[str]] = {}
         for m in ms:
-            erste_titel.setdefault(m.quelle.id, inhaltswoerter(m.titel))
+            erste_titel.setdefault(m.quelle.redaktion, inhaltswoerter(m.titel))
         breite_eff, kopien = 0.0, 0
         gezaehlt: list[set[str]] = []
-        for q in quellen:
-            w = erste_titel[q]
+        for r in sorted(erste_titel):
+            w = erste_titel[r]
             kopie = any(w and len(w & x) / len(w | x) >= 0.8 for x in gezaehlt)
             breite_eff += 0.5 if kopie else 1.0
             kopien += kopie
             gezaehlt.append(w)
         breite = math.log2(1 + breite_eff)
-        begruendung.append(f"{len(quellen)} Quellen" + (f" ({kopien} fast gleiche Titel halb gezählt)" if kopien else ""))
+        zusatz = f" ({kopien} fast gleiche Titel halb gezählt)" if kopien else ""
+        if len(erste_titel) < len(quellen):
+            zusatz += f" ({len(erste_titel)} Redaktionen)"
+        begruendung.append(f"{len(quellen)} Quellen{zusatz}")
 
         # Lagerbreite: links, Mitte, rechts, international (Vorschlag, Teil des Bias-Reviews)
         gruppen = sorted({LAGERGRUPPE[m.quelle.lager] for m in ms})
@@ -170,35 +176,47 @@ class Bewerter:
         if neu:
             begruendung.append(f"{neu} Meldungen in den letzten {g['tempo_fenster_h']} Std")
 
-        # Aufmerksamkeit: Google News Top und Google Trends
+        # Aufmerksamkeit: Google News Top. Google sortiert die Liste nach Rubriken (erst Schlagzeilen,
+        # dann Wirtschaft, Tech, Unterhaltung, Sport, Gesundheit). Ein Platz weiter unten heißt also nicht
+        # "unwichtig", nur "andere Rubrik". Deshalb zählt: Schlagzeile voll, sonst ein fester Anteil.
+        gn = g["google_news"]
         aufmerksamkeit = 0.0
-        if signale.news and signale.news_vektoren is not None:
-            mitte = vektoren[geschichte].mean(axis=0)
-            mitte /= np.linalg.norm(mitte)
-            treffer = signale.news_vektoren @ mitte
-            beste: dict[str, int] = {}
-            for n, wert in zip(signale.news, treffer):
-                if wert >= 0.7:
-                    beste[n["signal"]] = min(beste.get(n["signal"], 999), n["rang"])
-            for signal, rang in beste.items():
-                land = signal.rsplit("_", 1)[-1].upper()
-                anteil = max(0.0, 1 - (rang - 1) / 30)
-                aufmerksamkeit += (1.5 if land == "DE" else 1.0) * anteil
-                begruendung.append(f"Google News Top {land} Platz {rang}")
+        beste: dict[str, GoogleTreffer] = {}
+        for t in google:
+            if t.signal not in beste or t.rang < beste[t.signal].rang:
+                beste[t.signal] = t
+        for t in beste.values():
+            schlagzeile = t.rang <= gn["schlagzeilen_bis"]
+            aufmerksamkeit += gn["land"].get(t.land, 1.0) * (1.0 if schlagzeile else gn["rubrik_anteil"])
+            begruendung.append(f"Google News {t.land} Platz {t.rang}" + ("" if schlagzeile else " (Rubrik)"))
+
+        # Google Trends: Suchbegriff muss in der Geschichte vorkommen. Einzelne Wörter zählen nur,
+        # wenn sie selten sind und in einem Titel stehen ("cancer" im Teaser reicht nicht).
+        titelwoerter = set().union(*(inhaltswoerter(m.titel) for m in ms))
         alle_woerter = set().union(*(m.woerter for m in ms))
+        trends = 0.0
         for t in signale.trends:
             begriff = inhaltswoerter(t["titel"])
-            if begriff and begriff <= alle_woerter:
-                land = t["signal"].rsplit("_", 1)[-1].upper()
-                menge = suchmenge(t.get("suchmenge"))
-                aufmerksamkeit += (1.0 if land == "DE" else 0.6) * min(1.0, math.log10(1 + menge) / 5)
-                begruendung.append(f"Google Trends {land}: „{t['titel']}“ ({t.get('suchmenge') or '?'})")
+            if not begriff or not begriff <= alle_woerter:
+                continue
+            if len(begriff) == 1:
+                (wort,) = begriff
+                selten = seltenheit is None or seltenheit.zaehler.get(wort, 0) <= seltenheit.n * 0.02
+                if wort not in titelwoerter or not selten:
+                    continue
+            land = t["signal"].rsplit("_", 1)[-1].upper()
+            menge = suchmenge(t.get("suchmenge"))
+            trends += (1.0 if land == "DE" else 0.6) * min(1.0, math.log10(1 + menge) / 5)
+            begruendung.append(f"Google Trends {land}: „{t['titel']}“ ({t.get('suchmenge') or '?'})")
+        aufmerksamkeit += min(g["trends_maximum"], trends)
 
-        # Platzierung: weit oben bei Leitmedien
+        # Platzierung: weit oben bei Leitmedien, und zwar im letzten Sammellauf (nicht vor einem Tag).
         bis = g["platzierung_bis"]
+        aktuell_ab = (stand or jetzt) - timedelta(hours=2)
         plaetze: dict[str, int] = {}
         for m in ms:
-            if m.quelle.id in g["leitmedien"]:
+            gesehen = datetime.strptime(m.teaser["zuletzt_gesehen"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+            if m.quelle.id in g["leitmedien"] and gesehen >= aktuell_ab:
                 plaetze[m.quelle.id] = min(plaetze.get(m.quelle.id, 999), m.teaser["position_im_feed"])
         oben = {q: p for q, p in plaetze.items() if p <= bis}
         platzierung = min(3.0, sum((bis + 1 - p) / bis for p in oben.values()))
@@ -245,10 +263,11 @@ class Bewerter:
 
 
 def repraesentativ(ms: list[Meldung], vektoren: np.ndarray) -> str:
-    """Der Titel, der am besten für die ganze Geschichte steht (nah an der Mitte, deutsch bevorzugt)."""
+    """Der Titel, der am besten für die ganze Geschichte steht: Bericht vor Meinung, deutsch bevorzugt,
+    nah an der Mitte."""
     mitte = vektoren.mean(axis=0)
     werte = vektoren @ mitte
-    beste = max(range(len(ms)), key=lambda i: (ms[i].quelle.sprache == "de", werte[i]))
+    beste = max(range(len(ms)), key=lambda i: (not ms[i].teaser["ist_meinung"], ms[i].quelle.sprache == "de", werte[i]))
     return ms[beste].titel
 
 

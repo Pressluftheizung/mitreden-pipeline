@@ -3,7 +3,8 @@
 #
 # Einordnung in Phase 1 ohne KI: Schlüsselwörter in Titel und Teaser plus die Quelle
 # (ein kicker-Artikel ist fast immer Sport). Ab Phase 2 ordnet die KI ein, diese Liste bleibt als Rückfall.
-# Schlüsselwörter: kleingeschrieben; ein Eintrag passt auf jedes Wort, das damit beginnt.
+# Schlüsselwörter: kleingeschrieben; ein Eintrag passt auf jedes Wort, das damit beginnt ("ice-" auf "ice-strecke").
+# "=" vorne verlangt das ganze Wort ("=fed" passt nicht auf "federer"). Mehrere Wörter müssen aufeinander folgen.
 
 themen:
   politik:
@@ -13,7 +14,7 @@ themen:
       bundespolitik:  { faktor: 1.0, woerter: [bundestag, bundesregierung, bundeskanzler, kanzler, merz, koalition, minister, cdu, csu, spd, grüne, afd, linke, bsw, fdp, bundesrat, gesetzentwurf, wehrdienst, wehrpflicht, haushalt] }
       wahlen_de:      { faktor: 1.0, woerter: [landtagswahl, bundestagswahl, kommunalwahl, umfrage, sonntagsfrage] }
       usa:            { faktor: 1.0, woerter: [trump, white house, weißes haus, congress, kongress, senate, senat, supreme court, republican, republikaner, democrat, demokraten, shutdown, vance] }
-      krieg_europa:   { faktor: 1.0, woerter: [ukraine, russland, russia, putin, selenskyj, zelensky, kyiv, kiew, nato, waffenruhe, ceasefire, front] }
+      krieg_europa:   { faktor: 1.0, woerter: [ukraine, russland, russia, putin, selenskyj, zelensky, kyiv, kiew, nato, waffenruhe, ceasefire, frontstadt, frontlinie, frontabschnitt] }
       migration:      { faktor: 1.0, woerter: [migration, asyl, flüchtling, abschiebung, migrant, grenzkontrolle] }
       eu:             { faktor: 0.7, woerter: [eu-, europäische union, european union, brüssel, brussels, kommission, commission, von der leyen, europaparlament, parliament] }
       nachbarlaender: { faktor: 0.7, woerter: [frankreich, macron, polen, österreich, schweiz, niederlande, dänemark, tschechien, belgien, france, poland] }
@@ -24,15 +25,15 @@ themen:
     farbe: "#30A46C"
     unterthemen:
       preise:         { faktor: 1.0, woerter: [inflation, preise, teurer, mieten, miete, wohnung, energiepreis, strompreis, gaspreis, steuer, rente, bürgergeld, mindestlohn, streik, warnstreik, stellenabbau, jobabbau, entlassung] }
-      boerse:         { faktor: 0.7, woerter: [leitzins, ezb, fed, notenbank, börse, dax, aktie, etf, bitcoin, krypto, crypto, stocks, wall street] }
+      boerse:         { faktor: 0.7, woerter: [leitzins, ezb, =fed, notenbank, börse, dax, aktie, etf, bitcoin, krypto, crypto, stocks, wall street] }
       unternehmen:    { faktor: 0.4, woerter: [quartalszahlen, umsatz, gewinn, konzern, übernahme, börsengang, ipo, earnings, revenue] }
   tech:
     name: Tech & Produkte
     farbe: "#3E63DD"
     unterthemen:
       smartphones_ki: { faktor: 1.0, woerter: [iphone, pixel, galaxy, smartphone, apple, samsung, openai, chatgpt, anthropic, claude, gemini, künstliche intelligenz, ki-, artificial intelligence] }
-      gaming_social:  { faktor: 0.7, woerter: [playstation, xbox, nintendo, switch, videospiel, videogame, gaming, tiktok, instagram, whatsapp, facebook, meta, störung, ausfall, outage, hack, datenleck, betrug, phishing] }
-      gadgets:        { faktor: 0.4, woerter: [smartwatch, wearable, test, kopfhörer, laptop, tablet] }
+      gaming_social:  { faktor: 0.7, woerter: [playstation, xbox, nintendo, switch, videospiel, videogame, gaming, tiktok, instagram, whatsapp, facebook, =meta, störung, ausfall, outage, hack, datenleck, betrug, phishing] }
+      gadgets:        { faktor: 0.4, woerter: [smartwatch, wearable, =test, im test, kopfhörer, laptop, tablet] }
   mobilitaet:
     name: Auto & Mobilität
     farbe: "#F76B15"
@@ -48,7 +49,7 @@ themen:
     name: Panorama & Gesellschaft
     farbe: "#8E4EC6"
     unterthemen:
-      unglueck:       { faktor: 1.0, woerter: [unwetter, sturm, sturmtief, orkan, hochwasser, überschwemmung, anschlag, attentat, unglück, zugunglück, absturz, explosion, erdbeben, tote, killed, dead] }
+      unglueck:       { faktor: 1.0, woerter: [unwetter, sturm, sturmtief, orkan, hochwasser, überschwemmung, anschlag, attentat, unglück, zugunglück, absturz, explosion, erdbeben, tote, killed, =dead] }
       gesellschaft:   { faktor: 0.7, woerter: [schule, schüler, studenten, bafög, universität, gendern, debatte, protest, demonstration, rückruf, verbraucher, was ändert sich] }
       kriminalitaet:  { faktor: 0.4, woerter: [polizei, festnahme, mord, prozess, angeklagt, police, arrested] }
   wissen:
@@ -57,14 +58,14 @@ themen:
     unterthemen:
       gesundheit:     { faktor: 1.0, woerter: [grippe, corona, covid, virus, pandemie, krankenhaus, medikament, lieferengpass, impfung, rki] }
       alltag_klima:   { faktor: 0.7, woerter: [schlaf, ernährung, psyche, depression, studie, klima, klimawandel, hitze, durchbruch, forscher, wissenschaft] }
-      raumfahrt_natur: { faktor: 0.4, woerter: [nasa, esa, rakete, raumfahrt, weltall, mond, mars, tier, natur] }
+      raumfahrt_natur: { faktor: 0.4, woerter: [nasa, =esa, rakete, raumfahrt, weltall, =mond, =mars, tier, natur] }
   popkultur:
     name: Popkultur
     farbe: "#D6409F"
     unterthemen:
-      tod_prominenz:  { faktor: 1.0, woerter: [gestorben, ist tot, verstorben, trauer um, died, dies at] }
-      serien_musik:   { faktor: 0.7, woerter: [serie, film, kino, netflix, streaming, album, tour, konzert, tickets, esc, eurovision, tatort, oscar, grammy, show] }
-      promis:         { faktor: 0.4, woerter: [promi, influencer, skandal, royal, könig, king, prinz] }
+      tod_prominenz:  { faktor: 1.0, woerter: [gestorben, =ist =tot, verstorben, trauer um, trauert um, died, dies at] }
+      serien_musik:   { faktor: 0.7, woerter: [serie, film, kino, netflix, streaming, album, =tour, tournee, konzert, tickets, =esc, eurovision, tatort, oscar, grammy, show] }
+      promis:         { faktor: 0.4, woerter: [promi, influencer, skandal, royal, könig, =king, =prinz, prinzessin] }
   sport:
     name: Sport
     farbe: "#FFC53D"

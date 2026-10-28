@@ -5,8 +5,8 @@ Schreibt in den Datenordner (im Ablauf: Branch "rohdaten" des privaten Repos):
   signale/JJJJ-MM-TT.jsonl   Google Trends und Google News Top, eine Zeile pro Eintrag und Lauf
   sammeln/zustand.json       ETag/Last-Modified und letzter Status je Feed
 
-Aufbewahrung: Teaser, die 48 Stunden nicht mehr im Feed standen, und Signale älter als 48 Stunden
-werden gelöscht. Volltexte werden hier nie geladen.
+Aufbewahrung: Teaser, die 48 Stunden nicht mehr im Feed standen oder vor mehr als 48 Stunden veröffentlicht
+wurden, und Signale älter als 48 Stunden werden gelöscht. Volltexte werden hier nie geladen.
 
 Aufruf:
   python -m pipeline.collect --daten <ordner>                         echte Feeds laden
@@ -119,7 +119,9 @@ def speichere_teaser(ordner: Path, alle: dict[str, dict], jetzt: datetime) -> in
     nach_tag: dict[str, list[dict]] = {}
     geloescht = 0
     for t in alle.values():
-        if zeit(t["zuletzt_gesehen"]) < grenze:
+        # Weg, wenn 48 Std nicht mehr im Feed oder vor mehr als 48 Std veröffentlicht
+        # (manche Feeds führen alte Artikel tagelang weiter).
+        if zeit(t["zuletzt_gesehen"]) < grenze or (t.get("veroeffentlicht") and zeit(t["veroeffentlicht"]) < grenze):
             geloescht += 1
             continue
         nach_tag.setdefault(t["gesammelt"][:10], []).append(t)

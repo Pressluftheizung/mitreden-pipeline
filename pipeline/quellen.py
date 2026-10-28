@@ -27,6 +27,12 @@ class Quelle:
     bezahl_feld: str | None = None
     # True: Der Feed kennzeichnet Bezahlartikel zuverlässig, ohne Kennzeichen ist der Artikel frei.
     bezahl_markiert: bool = False
+    # Mehrere Feeds desselben Hauses (z. B. tagesschau und tagesschau Wirtschaft) zählen als eine Redaktion.
+    haus: str | None = None
+
+    @property
+    def redaktion(self) -> str:
+        return self.haus or self.id
 
 
 @dataclass(frozen=True)

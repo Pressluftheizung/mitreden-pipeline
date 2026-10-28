@@ -18,12 +18,16 @@ from pathlib import PurePosixPath
 
 ERLAUBTE_ORDNER = (
     ".github/", ".githooks/", "config/", "pipeline/", "prompts/", "templates/",
-    "schemas/", "tests/", "tools/", "werkbank/",
+    "schemas/", "tests/", "tools/",
 )
 ERLAUBTE_DATEIEN = {
     "README.md", "STATUS.md", "LICENSE", ".gitignore", ".gitattributes", ".env.example", "requirements.txt",
+    "requirements-sammeln.txt",
 }
-VERBOTENE_ENDUNGEN = {".jsonl", ".env", ".pem", ".key", ".p12", ".sqlite", ".db"}
+VERBOTENE_ENDUNGEN = {".jsonl", ".pem", ".key", ".p12", ".sqlite", ".db"}
+# Datendateien (z. B. eine Rangliste aus der Werkbank) nur dort, wo selbst geschriebene Vorlagen liegen.
+DATEN_ENDUNGEN = {".json", ".html", ".csv"}
+DATEN_ORDNER = ("config/", "schemas/", "templates/", "tests/fixtures/")
 MAX_GROESSE = 300_000  # Bytes; größere Dateien sind fast immer Daten
 FIXTURE_KENNZEICHEN = "SELBST GESCHRIEBEN"
 
@@ -54,13 +58,20 @@ def inhalt(pfad: str, nur_staged: bool) -> bytes:
     return git("show", f":{pfad}") if nur_staged else open(pfad, "rb").read()
 
 
+def ist_env(name: str) -> bool:
+    # ".env" hat für pathlib keine Endung, deshalb eigens prüfen.
+    return (name == ".env" or name.startswith(".env.")) and name != ".env.example"
+
+
 def pruefe(pfad: str, daten: bytes) -> list[str]:
     probleme = []
     p = PurePosixPath(pfad)
     if pfad not in ERLAUBTE_DATEIEN and not pfad.startswith(ERLAUBTE_ORDNER):
         probleme.append("Pfad nicht erlaubt (Daten gehören ins private Repo)")
-    if p.suffix.lower() in VERBOTENE_ENDUNGEN or p.name.startswith(".env.") and p.name != ".env.example":
+    if p.suffix.lower() in VERBOTENE_ENDUNGEN or ist_env(p.name):
         probleme.append(f"Dateityp {p.suffix or p.name} ist verboten")
+    if p.suffix.lower() in DATEN_ENDUNGEN and not pfad.startswith(DATEN_ORDNER):
+        probleme.append(f"{p.suffix}-Datei außerhalb von {', '.join(DATEN_ORDNER)} (vermutlich Daten)")
     if len(daten) > MAX_GROESSE:
         probleme.append(f"zu groß ({len(daten) // 1000} kB), vermutlich Daten")
     text = daten.decode("utf-8", errors="ignore")

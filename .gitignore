@@ -7,7 +7,16 @@
 data/
 daten/
 teaser/
+signale/
+sammeln/
+stories/
 cards/
+metriken/
+fehler/
+sicherung/
+werkbank-ausgabe/
+rangliste.json
+werkbank.html
 *.jsonl
 
 # Python
