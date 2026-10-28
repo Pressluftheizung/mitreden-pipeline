@@ -1,0 +1,63 @@
+# Stündlich alle Feeds sammeln (ohne KI) und die Teaser ins PRIVATE Repo schreiben.
+# In dieses öffentliche Repo schreibt der Ablauf nichts.
+name: sammeln
+
+on:
+  schedule:
+    - cron: "7 * * * *" # jede Stunde um :07 (nicht zur vollen Stunde, da sind GitHubs Runner voll)
+  workflow_dispatch: # von Hand starten: Actions → sammeln → Run workflow
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rohdaten # Sammeln und Bauen schreiben beide in "rohdaten", nie gleichzeitig
+  cancel-in-progress: false
+
+jobs:
+  sammeln:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Code holen
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Rohdaten aus dem privaten Repo holen
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: Pressluftheizung/mitreden-app
+          ref: rohdaten
+          token: ${{ secrets.APP_REPO_TOKEN }}
+          path: daten
+          fetch-depth: 1
+
+      - name: Python einrichten
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Pakete installieren
+        run: pip install -r requirements.txt
+
+      - name: Feeds sammeln
+        run: python -m pipeline.collect --daten daten
+
+      - name: Ins private Repo speichern
+        working-directory: daten
+        run: |
+          git config user.name "mitreden-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A teaser signale sammeln
+          if git diff --cached --quiet; then
+            echo "Nichts Neues."
+            exit 0
+          fi
+          git commit -q -m "Sammeln $(date -u +%Y-%m-%dT%H:%MZ)"
+          for versuch in 1 2 3; do
+            git push -q origin HEAD:rohdaten && exit 0
+            git pull -q --rebase origin rohdaten
+          done
+          exit 1

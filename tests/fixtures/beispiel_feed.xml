@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SELBST GESCHRIEBEN: ausgedachte Testdaten, keine echten Artikel. -->
+<rss version="2.0">
+  <channel>
+    <title>Beispielzeitung</title>
+    <item>
+      <title>Bundestag stimmt über Testgesetz ab</title>
+      <link>https://beispiel.example/politik/testgesetz-123.html?utm_source=rss&amp;wt_mc=feed</link>
+      <description>&lt;p&gt;Der Bundestag   entscheidet am Freitag über ein &amp;quot;Testgesetz&amp;quot;.&lt;/p&gt;</description>
+      <pubDate>Tue, 27 Oct 2026 08:30:00 +0100</pubDate>
+      <category>Politik</category>
+    </item>
+    <item>
+      <title>Kommentar: Das Testgesetz kommt zu spät</title>
+      <link>https://beispiel.example/politik/testgesetz-kommentar-124.html</link>
+      <description>Eine Meinung zum Testgesetz.</description>
+      <pubDate>Tue, 27 Oct 2026 09:00:00 +0100</pubDate>
+    </item>
+    <item>
+      <title>Warum Beispiele wichtig sind</title>
+      <link>https://beispiel.example/meinung/beispiele-125.html</link>
+      <description>Eine Kolumne über Beispiele.</description>
+    </item>
+    <item>
+      <title>Neues Sparangebot [Promoted Content]</title>
+      <link>https://beispiel.example/anzeige-126.html</link>
+      <description>Werbung.</description>
+    </item>
+    <item>
+      <title>Exklusive Recherche zum Testgesetz</title>
+      <link>https://beispiel.example/politik/plus1a2b3c/recherche-127.html</link>
+      <description>Nur für Abonnenten.</description>
+    </item>
+    <item>
+      <title>Bundestag stimmt über Testgesetz ab</title>
+      <link>https://BEISPIEL.example/politik/testgesetz-123.html</link>
+      <description>Derselbe Artikel noch einmal, nur andere Schreibweise der Adresse.</description>
+    </item>
+  </channel>
+</rss>

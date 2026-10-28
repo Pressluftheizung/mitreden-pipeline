@@ -1,0 +1,170 @@
+# Quellen der Mitreden-Pipeline (PLAN.md 5.3, Format: docs/DATENFLUSS.md Abschnitt 7).
+#
+# ⚠ Die Spalte "lager" ist ein VORSCHLAG nach PLAN.md 8 (B2) und wird vom Nutzer reviewt.
+#   Bis zur Freigabe wird sie nur gespeichert, aber nicht für Auswahl oder Gewichtung genutzt.
+#
+# lager:          links | mitte_links | mitte | mitte_rechts | rechts | international
+#                 "international" = Auslandsmedien ohne Einordnung auf der deutschen/US-Skala.
+# art:            agentur | oeffentlich_rechtlich | zeitung | magazin | fachmedium | aggregator
+# bezahlschranke: nein | teilweise | ja
+#   teilweise + Erkennungsregel (bezahl_muster / bezahl_stichwoerter / bezahl_feld):
+#   Treffer = Bezahlartikel, sonst "unbekannt" (bei bezahl_markiert: true "frei").
+# meinung_muster: zusätzlich zu den Standard-Mustern unten (B1, Teil des Bias-Reviews).
+
+standard:
+  meinung_muster: ["/meinung/", "/meinungen/", "/kommentar/", "/kommentare/", "/kolumne", "/debatte/",
+                   "/debatten/", "/opinion/", "/opinions/", "/essay/", "/leitartikel/", "/gastbeitrag"]
+  meinung_titel: ["Kommentar", "Meinung", "Kolumne", "Leitartikel", "Essay", "Gastbeitrag",
+                  "Gastkommentar", "Opinion"]
+  meinung_stichwoerter: ["Meinung", "Kommentar", "Kolumne", "Opinion", "Opinions"]
+  # Bezahlte Werbetexte im Feed werden gar nicht gespeichert.
+  werbung_titel: ["[Promoted Content]", "[Sponsored]", "Sponsored:", "Anzeige:", "[Anzeige]", "Advertorial"]
+
+quellen:
+  # ---------- Deutschland ----------
+  - { id: tagesschau, name: Tagesschau, url: "https://www.tagesschau.de/index~rss2.xml",
+      sprache: de, region: deutschland, lager: mitte, art: oeffentlich_rechtlich,
+      volltext_erlaubt: true, bezahlschranke: nein }
+  - { id: tagesschau_wirt, name: Tagesschau Wirtschaft, url: "https://www.tagesschau.de/wirtschaft/index~rss2.xml",
+      sprache: de, region: deutschland, lager: mitte, art: oeffentlich_rechtlich,
+      volltext_erlaubt: true, bezahlschranke: nein }
+  - { id: dlf, name: Deutschlandfunk, url: "https://www.deutschlandfunk.de/nachrichten-100.rss",
+      sprache: de, region: deutschland, lager: mitte, art: oeffentlich_rechtlich,
+      volltext_erlaubt: true, bezahlschranke: nein }
+  - { id: zeit, name: ZEIT, url: "https://newsfeed.zeit.de/index",
+      sprache: de, region: deutschland, lager: mitte_links, art: zeitung,
+      volltext_erlaubt: false, bezahlschranke: teilweise }
+  - { id: ntv, name: n-tv, url: "https://www.n-tv.de/rss",
+      sprache: de, region: deutschland, lager: mitte, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: t-online, name: t-online, url: "https://www.t-online.de/feed.rss",
+      sprache: de, region: deutschland, lager: mitte, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: stern, name: stern, url: "https://www.stern.de/feed/standard/alle-nachrichten/",
+      sprache: de, region: deutschland, lager: mitte_links, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: teilweise }
+  - { id: tagesspiegel, name: Tagesspiegel, url: "https://www.tagesspiegel.de/contentexport/feed/home",
+      sprache: de, region: deutschland, lager: mitte, art: zeitung,
+      volltext_erlaubt: false, bezahlschranke: teilweise }
+  - { id: taz, name: taz, url: "https://taz.de/!p4608;rss/",
+      sprache: de, region: deutschland, lager: links, art: zeitung,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: sz, name: Süddeutsche Zeitung, url: "https://rss.sueddeutsche.de/rss/Topthemen",
+      sprache: de, region: deutschland, lager: mitte_links, art: zeitung,
+      volltext_erlaubt: false, bezahlschranke: teilweise }
+  - { id: spiegel, name: Spiegel, url: "https://www.spiegel.de/schlagzeilen/index.rss",
+      sprache: de, region: deutschland, lager: mitte_links, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: teilweise }
+  - { id: faz, name: FAZ, url: "https://www.faz.net/rss/aktuell/",
+      sprache: de, region: deutschland, lager: mitte_rechts, art: zeitung,
+      volltext_erlaubt: false, bezahlschranke: teilweise, bezahl_muster: ["/premium/"],
+      meinung_muster: ["/feuilleton/debatten/"] }
+  - { id: welt, name: Welt, url: "https://www.welt.de/feeds/topnews.rss",
+      sprache: de, region: deutschland, lager: rechts, art: zeitung,
+      volltext_erlaubt: false, bezahlschranke: teilweise, bezahl_muster: ["/plus[0-9a-f]"], bezahl_markiert: true }
+  - { id: bild, name: Bild, url: "https://www.bild.de/feed/alles.xml",
+      sprache: de, region: deutschland, lager: rechts, art: zeitung,
+      volltext_erlaubt: false, bezahlschranke: teilweise, bezahl_feld: bild_premium }
+  - { id: cicero, name: Cicero, url: "https://www.cicero.de/rss.xml",
+      sprache: de, region: deutschland, lager: rechts, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: teilweise }
+
+  # ---------- Europa ----------
+  - { id: politico_eu, name: Politico Europe, url: "https://www.politico.eu/feed/",
+      sprache: en, region: europa, lager: international, art: zeitung,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: euractiv, name: Euractiv, url: "https://www.euractiv.com/feed/",
+      sprache: en, region: europa, lager: international, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: dw, name: DW, url: "https://rss.dw.com/rdf/rss-de-all",
+      sprache: de, region: europa, lager: mitte, art: oeffentlich_rechtlich,
+      volltext_erlaubt: false, bezahlschranke: nein }
+
+  # ---------- USA ----------
+  - { id: ap, name: AP, url: "https://news.google.com/rss/search?q=when:1d+site:apnews.com&hl=en-US&gl=US&ceid=US:en",
+      sprache: en, region: usa, lager: mitte, art: agentur,
+      volltext_erlaubt: true, bezahlschranke: nein }
+  - { id: npr, name: NPR, url: "https://feeds.npr.org/1001/rss.xml",
+      sprache: en, region: usa, lager: mitte_links, art: oeffentlich_rechtlich,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: politico_us, name: Politico, url: "https://rss.politico.com/politics-news.xml",
+      sprache: en, region: usa, lager: mitte, art: zeitung,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: thehill, name: The Hill, url: "https://thehill.com/feed/",
+      sprache: en, region: usa, lager: mitte, art: zeitung,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: foxnews, name: Fox News, url: "https://moxie.foxnews.com/google-publisher/politics.xml",
+      sprache: en, region: usa, lager: rechts, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+
+  # ---------- Welt ----------
+  - { id: bbc_world, name: BBC, url: "https://feeds.bbci.co.uk/news/world/rss.xml",
+      sprache: en, region: welt, lager: international, art: oeffentlich_rechtlich,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: guardian_world, name: Guardian, url: "https://www.theguardian.com/world/rss",
+      sprache: en, region: welt, lager: mitte_links, art: zeitung,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: aljazeera, name: Al Jazeera, url: "https://www.aljazeera.com/xml/rss/all.xml",
+      sprache: en, region: welt, lager: international, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+
+  # ---------- Geld ----------
+  - { id: handelsblatt, name: Handelsblatt, url: "https://www.handelsblatt.com/contentexport/feed/top-themen",
+      sprache: de, region: deutschland, lager: mitte_rechts, art: zeitung,
+      volltext_erlaubt: false, bezahlschranke: teilweise, bezahl_stichwoerter: ["H_PLUS"], bezahl_markiert: true }
+  - { id: cnbc, name: CNBC, url: "https://www.cnbc.com/id/100003114/device/rss/rss.html",
+      sprache: en, region: usa, lager: international, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: coindesk, name: CoinDesk, url: "https://www.coindesk.com/arc/outboundfeeds/rss/",
+      sprache: en, region: welt, lager: international, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: nein }
+
+  # ---------- Tech & Gaming ----------
+  - { id: heise, name: heise online, url: "https://www.heise.de/rss/heise-atom.xml",
+      sprache: de, region: deutschland, lager: mitte, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: teilweise, bezahl_muster: ["beitrag_plus"], bezahl_markiert: true }
+  - { id: golem, name: Golem, url: "https://rss.golem.de/rss.php?feed=RSS2.0",
+      sprache: de, region: deutschland, lager: mitte, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: teilweise }
+  - { id: t3n, name: t3n, url: "https://t3n.de/rss.xml",
+      sprache: de, region: deutschland, lager: mitte, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: teilweise }
+  - { id: verge, name: The Verge, url: "https://www.theverge.com/rss/index.xml",
+      sprache: en, region: usa, lager: international, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: ars, name: Ars Technica, url: "https://feeds.arstechnica.com/arstechnica/index",
+      sprache: en, region: usa, lager: international, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: hn, name: Hacker News, url: "https://hnrss.org/frontpage",
+      sprache: en, region: welt, lager: international, art: aggregator,
+      volltext_erlaubt: false, bezahlschranke: nein, gewicht: 0.5 }
+  - { id: gamestar, name: GameStar, url: "https://www.gamestar.de/news/rss/news.rss",
+      sprache: de, region: deutschland, lager: mitte, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: teilweise }
+
+  # ---------- Sport ----------
+  - { id: kicker, name: kicker, url: "https://newsfeed.kicker.de/news/aktuell",
+      sprache: de, region: deutschland, lager: mitte, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: teilweise }
+  - { id: sportschau, name: Sportschau, url: "https://www.sportschau.de/index~rss2.xml",
+      sprache: de, region: deutschland, lager: mitte, art: oeffentlich_rechtlich,
+      volltext_erlaubt: true, bezahlschranke: nein }
+  - { id: espn, name: ESPN, url: "https://www.espn.com/espn/rss/news",
+      sprache: en, region: usa, lager: international, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: motorsport, name: Motorsport-Total, url: "https://www.motorsport-total.com/rss/rss_formel-1.xml",
+      sprache: de, region: deutschland, lager: mitte, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: nein }
+
+  # ---------- Popkultur ----------
+  - { id: dwdl, name: DWDL, url: "https://www.dwdl.de/rss/allethemen.xml",
+      sprache: de, region: deutschland, lager: mitte, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: nein }
+
+# Aufmerksamkeits-Signale (PLAN.md 5.2): nur Titel und Rang, keine Texte.
+# Wikipedia-Aufrufe kommen einmal täglich im Baulauf dazu.
+signale:
+  - { id: google_trends_de, url: "https://trends.google.com/trending/rss?geo=DE" }
+  - { id: google_trends_us, url: "https://trends.google.com/trending/rss?geo=US" }
+  - { id: google_news_top_de, url: "https://news.google.com/rss?hl=de&gl=DE&ceid=DE:de" }
+  - { id: google_news_top_us, url: "https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en" }

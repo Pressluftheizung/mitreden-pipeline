@@ -1,0 +1,38 @@
+# GitHub pausiert geplante Abläufe in öffentlichen Repos nach 60 Tagen ohne Aktivität.
+# Die Sammel- und Bauläufe schreiben nur ins private Repo und zählen deshalb nicht.
+# Dieser Ablauf aktualisiert einmal im Monat STATUS.md (nur Datum, keine Daten) und hält das Repo aktiv.
+name: status
+
+on:
+  schedule:
+    - cron: "17 4 1 * *" # am 1. jedes Monats, 04:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write # nur dieser Ablauf darf ins öffentliche Repo schreiben, und nur STATUS.md
+
+concurrency:
+  group: status
+  cancel-in-progress: false
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: STATUS.md aktualisieren
+        run: |
+          {
+            echo "# Status"
+            echo
+            echo "Letzte Aktivitätsprüfung: $(date -u +%Y-%m-%d)"
+            echo
+            echo "Diese Datei hält das Repo aktiv, damit GitHub die geplanten Abläufe nicht pausiert. Sie enthält keine Daten."
+          } > STATUS.md
+          git config user.name "mitreden-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add STATUS.md
+          git commit -q -m "Status $(date -u +%Y-%m-%d)"
+          git push -q

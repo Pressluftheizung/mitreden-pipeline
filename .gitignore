@@ -1,0 +1,21 @@
+# Schlüssel nie committen
+.env
+.env.*
+!.env.example
+
+# Daten gehören nur ins private Repo (mitreden-app), nie hierher
+data/
+daten/
+teaser/
+cards/
+*.jsonl
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Editor
+.vscode/
+.idea/
