@@ -17,7 +17,7 @@ import sys
 from pathlib import PurePosixPath
 
 ERLAUBTE_ORDNER = (
-    ".github/", ".githooks/", "config/", "pipeline/", "prompts/", "templates/",
+    ".github/", ".githooks/", "cloudflare/", "config/", "pipeline/", "prompts/", "templates/",
     "schemas/", "tests/", "tools/",
 )
 ERLAUBTE_DATEIEN = {
