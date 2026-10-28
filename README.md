@@ -29,14 +29,24 @@ Für die Ähnlichkeit nutzt sie das mehrsprachige Modell `paraphrase-multilingua
 wird beim ersten Lauf geladen). Schwellen und Gewichte stehen in `config/gewichte.yaml`, Themen und
 Mitreden-Faktor in `config/topics.yaml`.
 
+## Nichts soll fehlen: Google News als Maßstab und Netz
+
+Der Sammellauf speichert stündlich die ersten 15 Einträge von 18 Google-News-Listen (Schlagzeilen und Rubriken
+für Deutschland und die USA, Schlagzeilen UK), je mit den verwandten Schlagzeilen anderer Redaktionen.
+
+- **Aufmerksamkeit:** Steht eine Geschichte dort, steigt ihre Wichtigkeit, und sie fällt nie weg (mindestens Kurz & knapp).
+- **Netz:** Findet sich zu einem Google-Eintrag keine eigene Geschichte, wird der Eintrag selbst zur Geschichte
+  (nur Schlagzeilen und Link, deshalb höchstens Kurz & knapp).
+- **Maßstab:** Die Kontrolle misst daran, ob alles drin ist und wie viel davon aus eigenen Quellen kommt.
+
 ## Kontrolle
 
-Prüft, ob die Pipeline alles Relevante aufnimmt, und zeigt eine Ampel:
+Prüft dreimal täglich, ob die Pipeline alles Relevante aufnimmt, und zeigt eine Ampel:
 
-- **Sammeln:** letzter Lauf frisch? Feeds ausgefallen oder ohne neue Meldungen?
-- **Abdeckung:** Google-News-Schlagzeilen und die ersten 10 jeder deutschen Rubrik, frisch geladen. Für jede
-  Meldung: abgedeckt, aussortiert, unsicher oder fehlt. Ziel über 95 % bei den Kern-Listen
-  (Schlagzeilen, Deutschland, Welt, Wirtschaft).
+- **Sammeln:** letzter Lauf frisch? Feeds oder Google-Listen ausgefallen? Quellen ohne neue Meldungen?
+- **Abdeckung:** die ersten 10 jeder Google-Liste, je Gruppe (kern = Deutschland, rubrik = deutsche Rubriken,
+  global = USA und UK). Für jede Meldung: abgedeckt (eigene Quellen), nur über Google, aussortiert, unsicher, fehlt.
+  Ziel über 95 %; in den Deutschland-Listen sollen mindestens 90 % aus eigenen Quellen kommen.
 - **Abgleich:** handbewertete Prüfsets (im privaten Repo unter `pruefset/`) fangen Rückschritte ab.
 
 ```bash

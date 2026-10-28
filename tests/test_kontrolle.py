@@ -12,7 +12,7 @@ K = yaml.safe_load((Path(__file__).parent.parent / "config" / "kontrolle.yaml").
 
 def bericht(quote: float, alter_h: float = 0.5, falsch: int = 0) -> dict:
     return {"sammeln": {"alter_h": alter_h, "ausgefallen": [], "ohne_neue_meldungen": []},
-            "abdeckung": {"quote": quote}, "referenzen_fehler": [],
+            "abdeckung": {"kern": {"quote": quote}},
             "pruefsets": {"richtig": 96, "falsch_zugeordnet": falsch, "uebersehen": 2}}
 
 

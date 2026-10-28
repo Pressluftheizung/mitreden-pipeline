@@ -148,6 +148,9 @@ def ohne_quellname(titel: str, quellname: str | None) -> str:
 
 
 VERWANDT = re.compile(r"<a [^>]*>(.*?)</a>(?:\s|&nbsp;|\xa0)*(?:<font[^>]*>(.*?)</font>)?", re.S)
+# Googles Link "alle Schlagzeilen zum Thema" ist keine Schlagzeile.
+KEINE_SCHLAGZEILE = re.compile(r"^(?:See more headlines|View Full Coverage|Mehr Schlagzeilen|Weitere Schlagzeilen|"
+                               r"Vollständige Berichterstattung|Alle Artikel)", re.I)
 
 
 def verwandte_titel(summary: str | None, titel: str, anzahl: int = 5) -> list[str]:
@@ -158,7 +161,7 @@ def verwandte_titel(summary: str | None, titel: str, anzahl: int = 5) -> list[st
     ergebnis = []
     for a, quelle in VERWANDT.findall(summary or ""):
         t = ohne_quellname(reiner_text(a), reiner_text(quelle))
-        if t and t != titel and t not in ergebnis:
+        if t and t != titel and t not in ergebnis and not KEINE_SCHLAGZEILE.match(t):
             ergebnis.append(t)
     return ergebnis[:anzahl]
 
@@ -170,7 +173,7 @@ def lies_signal(daten: bytes, signal_id: str, jetzt: datetime) -> list[dict]:
     ergebnis = []
     for rang, eintrag in enumerate(feed.entries, start=1):
         titel = reiner_text(eintrag.get("title"))
-        if not titel:
+        if not titel or titel == "undefined":  # Google liefert gelegentlich leere Einträge
             continue
         quelle = reiner_text((eintrag.get("source") or {}).get("title")) or None
         zeile = {

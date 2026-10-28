@@ -40,9 +40,13 @@ google_news:
   woerter_bonus: 0.3
   woerter_voll: 12
   max_haeufig: 0.02          # Wörter in höchstens 2 % der Meldungen gelten als selten
-  schlagzeilen_bis: 10       # Plätze 1–10 sind Googles Schlagzeilen, danach folgen Rubriken
-  rubrik_anteil: 0.7         # so viel zählt ein Eintrag aus einer Rubrik im Vergleich zur Schlagzeile
-  land: { DE: 1.5, US: 1.0 }
+  schlagzeilen_bis: 10       # Plätze 1–10 der Schlagzeilen-Liste zählen voll, danach folgen dort Rubriken
+  rubrik_anteil: 0.7         # so viel zählt jeder andere Eintrag (Rubrik-Listen, hintere Schlagzeilen)
+  land: { DE: 1.5, US: 1.0, GB: 1.0 }
+  maximum: 3.0               # höchstens so viel Aufmerksamkeit aus Google News, egal in wie vielen Listen
+  mindestens_kurz: true      # was Google in einer Liste zeigt, fällt nie weg (mindestens Kurz & knapp)
+  eigene_geschichte: true    # passt keine eigene Geschichte, wird der Google-Eintrag selbst zur Geschichte (höchstens Kurz & knapp)
+  gleich: 0.85               # Google-Einträge aus verschiedenen Listen ab dieser Ähnlichkeit = dieselbe Geschichte
 
 # Google Trends: höchstens so viel Aufmerksamkeit insgesamt.
 trends_maximum: 1.5

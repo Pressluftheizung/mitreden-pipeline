@@ -159,7 +159,11 @@ class Wichtigkeit(unittest.TestCase):
         treffer = GoogleTreffer("google_news_top_de", 25, "Sängerin sagt Tour ab", 0, 0, 1.3, 1.0)
         b = self.bewerter.bewerte([0], m, vektoren(), self.leer, JETZT, [treffer])
         self.assertAlmostEqual(b.teile["aufmerksamkeit"], 1.5 * 0.7)
-        self.assertIn("Google News DE Platz 25 (Rubrik)", b.begruendung)
+        self.assertIn("Google News DE Schlagzeilen Platz 25", b.begruendung)
+        self.assertEqual(b.google_listen, 1)
+        b.wichtigkeit = 0.1  # selbst ganz unten: was Google zeigt, fällt nicht weg
+        self.bewerter.formate_vergeben([b])
+        self.assertEqual(b.format, "kurz")
 
     def test_allgemeiner_trend_zaehlt_nur_im_titel(self):
         m = baue_meldungen([teaser(1, "alpha", "Neue Studie zu Krebs", "Forscher über cancer research")], QUELLEN)

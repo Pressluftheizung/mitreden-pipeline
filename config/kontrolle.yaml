@@ -1,27 +1,14 @@
 # Kontrolle (pipeline/kontrolle.py, PLAN.md 7 und 16): Nimmt unser Modell alles Relevante auf?
-#
-# Vergleichsmaßstab sind die Schlagzeilen von Google News und die ersten Einträge jeder deutschen Rubrik.
-# Die Kontrolle lädt sie bei jedem Lauf frisch (nur Titel und verwandte Schlagzeilen) und speichert nur das Ergebnis.
 
-ziel_abdeckung: 0.95       # PLAN.md 7: Ziel über 95 % (gilt für die Kern-Listen)
+ziel_abdeckung: 0.95       # PLAN.md 7: Ziel über 95 %
 warnung_abdeckung: 0.85    # darunter: rot
+warnung_eigene_kern: 0.90  # Deutschland-Listen: so viel muss aus eigenen Quellen kommen, sonst fehlt eine Quelle
 max_alter_sammeln_h: 3     # so alt darf der letzte Sammellauf höchstens sein
 max_fehler_in_folge: 3     # ein Feed, der so oft hintereinander scheitert, gilt als ausgefallen
 leer_seit_h: 24            # eine Quelle ohne neue Meldung so lange: auffällig
 max_falsch_anteil: 0.03    # Prüfsets: so viele falsche Zuordnungen sind noch in Ordnung (Stand der Eichung: 2 %)
 max_uebersehen_anteil: 0.05
 
-# gruppe: kern   = worüber alle reden (Schlagzeilen, Deutschland, Welt, Wirtschaft): daran misst die Ampel das Ziel
-#         rubrik = Googles Fachrubriken: eigene Quote, zeigt Lücken bei Quellen und Schwellen
-#         info   = nur zur Information (USA)
-referenzen:
-  - { id: schlagzeilen_de, name: Schlagzeilen, url: "https://news.google.com/rss?hl=de&gl=DE&ceid=DE:de", anzahl: 10, gruppe: kern }
-  - { id: deutschland, name: Deutschland, url: "https://news.google.com/rss/headlines/section/topic/NATION?hl=de&gl=DE&ceid=DE:de", anzahl: 10, gruppe: kern }
-  - { id: welt, name: Welt, url: "https://news.google.com/rss/headlines/section/topic/WORLD?hl=de&gl=DE&ceid=DE:de", anzahl: 10, gruppe: kern }
-  - { id: wirtschaft, name: Wirtschaft, url: "https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=de&gl=DE&ceid=DE:de", anzahl: 10, gruppe: kern }
-  - { id: technik, name: Technik, url: "https://news.google.com/rss/headlines/section/topic/TECHNOLOGY?hl=de&gl=DE&ceid=DE:de", anzahl: 10, gruppe: rubrik }
-  - { id: unterhaltung, name: Unterhaltung, url: "https://news.google.com/rss/headlines/section/topic/ENTERTAINMENT?hl=de&gl=DE&ceid=DE:de", anzahl: 10, gruppe: rubrik }
-  - { id: sport, name: Sport, url: "https://news.google.com/rss/headlines/section/topic/SPORTS?hl=de&gl=DE&ceid=DE:de", anzahl: 10, gruppe: rubrik }
-  - { id: wissen, name: Wissen, url: "https://news.google.com/rss/headlines/section/topic/SCIENCE?hl=de&gl=DE&ceid=DE:de", anzahl: 10, gruppe: rubrik }
-  - { id: gesundheit, name: Gesundheit, url: "https://news.google.com/rss/headlines/section/topic/HEALTH?hl=de&gl=DE&ceid=DE:de", anzahl: 10, gruppe: rubrik }
-  - { id: schlagzeilen_us, name: Schlagzeilen USA, url: "https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en", anzahl: 10, gruppe: info }
+# Gemessen wird an den Google-News-Listen aus config/sources.yaml (signale), je die ersten messen_bis Einträge.
+# Ziel und Warnung gelten für jede Gruppe (kern = Deutschland, rubrik = deutsche Rubriken, global = USA und UK).
+messen_bis: 10

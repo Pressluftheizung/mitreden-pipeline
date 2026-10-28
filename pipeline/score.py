@@ -24,7 +24,8 @@ from .cluster import Meldung
 from .text import Seltenheit, inhaltswoerter, woerter
 
 LAGERGRUPPE = {"links": "links", "mitte_links": "links", "mitte": "mitte",
-               "mitte_rechts": "rechts", "rechts": "rechts", "international": "international"}
+               "mitte_rechts": "rechts", "rechts": "rechts", "international": "international",
+               "unbekannt": None}  # Google-Einträge ohne eigene Quelle zählen bei der Lagerbreite nicht
 
 
 @dataclass
@@ -40,6 +41,7 @@ class Bewertung:
     begruendung: list[str]
     quellen: list[str]
     mitglieder: list[int] = field(default_factory=list)
+    google_listen: int = 0  # in wie vielen Google-News-Listen die Geschichte steht
 
 
 class Themen:
@@ -165,30 +167,34 @@ class Bewerter:
         begruendung.append(f"{len(quellen)} Quellen{zusatz}")
 
         # Lagerbreite: links, Mitte, rechts, international (Vorschlag, Teil des Bias-Reviews)
-        gruppen = sorted({LAGERGRUPPE[m.quelle.lager] for m in ms})
+        gruppen = sorted({LAGERGRUPPE[m.quelle.lager] for m in ms} - {None})
         lager = 2 * len(gruppen) / 4
         begruendung.append("Lager: " + ", ".join(gruppen))
 
         # Tempo: Meldungen in den letzten Stunden
         fenster = g["tempo_fenster_h"] * 3600
-        neu = sum(1 for m in ms if (jetzt - m.zeit).total_seconds() <= fenster)
+        # je Artikel einmal (die Schlagzeilen eines Google-Eintrags teilen sich einen Link)
+        neu = len({(m.quelle.id, m.teaser["url"]) for m in ms if (jetzt - m.zeit).total_seconds() <= fenster})
         tempo = math.log2(1 + neu)
         if neu:
             begruendung.append(f"{neu} Meldungen in den letzten {g['tempo_fenster_h']} Std")
 
-        # Aufmerksamkeit: Google News Top. Google sortiert die Liste nach Rubriken (erst Schlagzeilen,
-        # dann Wirtschaft, Tech, Unterhaltung, Sport, Gesundheit). Ein Platz weiter unten heißt also nicht
-        # "unwichtig", nur "andere Rubrik". Deshalb zählt: Schlagzeile voll, sonst ein fester Anteil.
+        # Aufmerksamkeit: Google News (Schlagzeilen und Rubriken, Deutschland, USA, UK). Die Schlagzeilen-Liste
+        # ist nach Rubriken sortiert (erst Politik, dann Wirtschaft, Tech, Unterhaltung, Sport, Gesundheit):
+        # ein Platz weiter unten heißt nicht "unwichtig", nur "andere Rubrik". Deshalb zählt die Schlagzeile
+        # (Plätze 1–10 der Schlagzeilen-Liste) voll, jeder andere Eintrag mit festem Anteil.
         gn = g["google_news"]
-        aufmerksamkeit = 0.0
         beste: dict[str, GoogleTreffer] = {}
         for t in google:
             if t.signal not in beste or t.rang < beste[t.signal].rang:
                 beste[t.signal] = t
-        for t in beste.values():
-            schlagzeile = t.rang <= gn["schlagzeilen_bis"]
-            aufmerksamkeit += gn["land"].get(t.land, 1.0) * (1.0 if schlagzeile else gn["rubrik_anteil"])
-            begruendung.append(f"Google News {t.land} Platz {t.rang}" + ("" if schlagzeile else " (Rubrik)"))
+        google_punkte = 0.0
+        for t in sorted(beste.values(), key=lambda t: (not t.schlagzeile, t.rang)):
+            schlagzeile = t.schlagzeile and t.rang <= gn["schlagzeilen_bis"]
+            google_punkte += gn["land"].get(t.land, 1.0) * (1.0 if schlagzeile else gn["rubrik_anteil"])
+            liste = "Schlagzeilen" if t.schlagzeile else t.signal.removeprefix("google_news_").rsplit("_", 1)[0].capitalize()
+            begruendung.append(f"Google News {t.land} {liste} Platz {t.rang}")
+        aufmerksamkeit = min(gn["maximum"], google_punkte)
 
         # Google Trends: Suchbegriff muss in der Geschichte vorkommen. Einzelne Wörter zählen nur,
         # wenn sie selten sind und in einem Titel stehen ("cancer" im Teaser reicht nicht).
@@ -246,17 +252,22 @@ class Bewerter:
             thema=thema, unterthema=unter, region=region,
             teile={k: round(v, 2) for k, v in teile.items()},
             faktoren={"mitreden": round(mitreden, 2), "live": round(live, 2), "frische": round(frische, 2)},
-            begruendung=begruendung, quellen=quellen, mitglieder=list(geschichte),
+            begruendung=begruendung, quellen=quellen, mitglieder=list(geschichte), google_listen=len(beste),
         )
 
     def formate_vergeben(self, bewertungen: list[Bewertung]) -> None:
-        """Top-Story, Karte, Kurz & knapp oder weg (PLAN.md 4.1 und 6B)."""
+        """Top-Story, Karte, Kurz & knapp oder weg (PLAN.md 4.1 und 6B).
+
+        Was Google News in einer seiner Listen zeigt, ist mindestens Kurz & knapp: Darüber reden die Leute.
+        Geschichten nur aus Google-Schlagzeilen (ohne eigene Quelle, also ohne Text) sind höchstens Kurz & knapp.
+        """
         g = self.g
         bewertungen.sort(key=lambda b: -b.wichtigkeit)
         for i, b in enumerate(bewertungen):
-            if b.wichtigkeit >= g["schwelle_karte"]:
+            nur_google = b.quellen == ["google_news"]
+            if b.wichtigkeit >= g["schwelle_karte"] and not nur_google:
                 b.format = "top" if i < g["top_anzahl"] else "karte"
-            elif b.wichtigkeit >= g["schwelle_kurz"]:
+            elif b.wichtigkeit >= g["schwelle_kurz"] or nur_google or (b.google_listen and g["google_news"]["mindestens_kurz"]):
                 b.format = "kurz"
             else:
                 b.format = "weg"

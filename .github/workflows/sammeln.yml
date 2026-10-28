@@ -4,7 +4,7 @@ name: sammeln
 
 on:
   schedule:
-    - cron: "7 * * * *" # jede Stunde um :07 (nicht zur vollen Stunde, da sind GitHubs Runner voll)
+    - cron: "23 * * * *" # jede Stunde um :23 (weit weg von der vollen Stunde, da sind GitHubs Runner voll)
   workflow_dispatch: # von Hand starten: Actions → sammeln → Run workflow
 
 permissions:

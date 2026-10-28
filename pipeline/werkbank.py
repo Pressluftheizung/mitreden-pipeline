@@ -21,7 +21,7 @@ from pathlib import Path
 import numpy as np
 import yaml
 
-from .abgleich import GoogleTreffer, gleiche_ab, google_titel
+from .abgleich import GoogleTreffer, abdeckung, ergaenze_google_geschichten, gleiche_ab, google_titel
 from .cluster import Ergebnis, Meldung, Schwellen, baue_meldungen, bette_ein, finde_geschichten
 from .collect import lade_teaser
 from .quellen import lade_konfiguration
@@ -65,6 +65,10 @@ def berechne(daten: Path, config: Path, jetzt: datetime) -> Stand:
         google = gleiche_ab(signale.news, formulierungen, meldungen, vektoren, titel_vektoren,
                             ergebnis.geschichten, gewichte["google_news"])
     seltenheit = Seltenheit([m.woerter for m in meldungen])
+    if google and gewichte["google_news"]["eigene_geschichte"]:
+        vektoren, titel_vektoren = ergaenze_google_geschichten(
+            signale.news, formulierungen, google, meldungen, vektoren, titel_vektoren, ergebnis.geschichten,
+            gewichte["google_news"])
     stand = max((datetime.strptime(t["zuletzt_gesehen"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
                  for t in teaser), default=jetzt)
     bewertungen = [bewerter.bewerte(g, meldungen, vektoren, signale, jetzt,
@@ -78,7 +82,8 @@ def berechne(daten: Path, config: Path, jetzt: datetime) -> Stand:
 def rangliste(daten: Path, config: Path, jetzt: datetime) -> dict:
     st = berechne(daten, config, jetzt)
     meldungen, ergebnis, bewertungen = st.meldungen, st.ergebnis, st.sortiert
-    abdeckung = abdeckung_pruefen(st.google, st.in_reihenfolge, bewertungen, st.gewichte["google_news"])
+    gruppe_von = {s.id: s.gruppe for s in lade_konfiguration(config / "sources.yaml").signale if s.gruppe}
+    abdeckung_ = abdeckung(st.google, st.in_reihenfolge, bewertungen, gruppe_von, st.gewichte["google_news"])
     geschichte_von = {i: n for n, g in enumerate(ergebnis.geschichten) for i in g}
     grauzone = [p for p in ergebnis.grauzone if geschichte_von[p.a] != geschichte_von[p.b]]
     grauzone.sort(key=lambda p: -p.wertung)
@@ -102,45 +107,10 @@ def rangliste(daten: Path, config: Path, jetzt: datetime) -> dict:
         "meldungen": len(meldungen),
         "geschichten": len(geschichten),
         "formate": {f: sum(1 for b in bewertungen if b.format == f) for f in FORMAT_NAME},
-        "abdeckung": abdeckung,
+        "abdeckung": abdeckung_,
         "rangliste": geschichten,
         "grauzone": [{"wertung": p.wertung, "aehnlichkeit": p.aehnlichkeit, "gemeinsame_woerter": p.gemeinsame_woerter,
                       "a": meldung(p.a), "b": meldung(p.b)} for p in grauzone[:100]],
-    }
-
-
-def abdeckung_pruefen(google: list[GoogleTreffer], in_reihenfolge: list, sortiert: list, g: dict) -> dict:
-    """Abdeckungsquote (PLAN.md 7): Welche Top-Meldungen von Google News haben wir als Karte oder Zeile?
-
-    Jeder Eintrag bekommt einen Grund:
-      abgedeckt    wir haben die Geschichte als Top-Story, Karte oder Kurzmeldung
-      aussortiert  wir haben sie, aber sie liegt unter der Schwelle (fällt weg)
-      unsicher     eine ähnliche Geschichte gibt es, aber der Abgleich ist sich nicht sicher
-      fehlt        keine unserer Meldungen passt (Quelle fehlt oder Thema nicht gesammelt)
-    """
-    platz = {id(b): n for n, b in enumerate(sortiert, start=1)}
-    liste = []
-    for t in google:
-        b = in_reihenfolge[t.geschichte if t.geschichte is not None else t.beste]
-        if t.geschichte is None:
-            grund = "unsicher" if t.wert >= g["unsicher"] else "fehlt"
-        else:
-            grund = "aussortiert" if b.format == "weg" else "abgedeckt"
-        liste.append({"signal": t.signal, "rang": t.rang, "titel": t.titel, "grund": grund,
-                      "platz": platz[id(b)] if t.geschichte is not None else None, "format": b.format,
-                      "wert": t.wert, "aehnlichkeit": t.aehnlichkeit, "woerter": t.woerter, "unser_titel": b.titel})
-
-    def quote(auswahl: list[dict], gruende: set[str]) -> float | None:
-        return round(sum(1 for x in auswahl if x["grund"] in gruende) / len(auswahl), 3) if auswahl else None
-
-    de = [x for x in liste if x["signal"].endswith("_de")]
-    schlagzeilen = [x for x in de if x["rang"] <= g["schlagzeilen_bis"]]
-    return {
-        "quote": quote(de, {"abgedeckt"}),
-        "quote_schlagzeilen": quote(schlagzeilen, {"abgedeckt"}),
-        "quote_vorhanden": quote(de, {"abgedeckt", "aussortiert"}),
-        "gruende": {gr: sum(1 for x in de if x["grund"] == gr) for gr in ("abgedeckt", "aussortiert", "unsicher", "fehlt")},
-        "liste": liste,
     }
 
 
@@ -175,22 +145,27 @@ def als_html(r: dict) -> str:
         f"<li><b>{p['wertung']}</b> · {meldungszeile(p['a'])[4:-5]}<br>↔ {meldungszeile(p['b'])[4:-5]}"
         f" <span class='klein'>{e(', '.join(p['gemeinsame_woerter']))}</span></li>"
         for p in r["grauzone"][:40])
-    marke = {"abgedeckt": "✓", "aussortiert": "↓ aussortiert", "unsicher": "? unsicher", "fehlt": "✗ fehlt"}
-
-    def abdeckungszeile(x: dict) -> str:
-        kopf = f"✓ Platz {x['platz']} ({FORMAT_NAME[x['format']]})" if x["grund"] == "abgedeckt" else marke[x["grund"]]
-        farbe = "" if x["grund"] == "abgedeckt" else ' style="color:#c0392b"'
-        woerter = f", Wörter: {', '.join(x['woerter'])}" if x["woerter"] else ""
-        return (f"<li value='{x['rang']}'><b{farbe}>{e(kopf)}</b> · {e(x['titel'])} <span class='klein'>"
-                f"(beste: {e(x['unser_titel'])}, Wert {x['wert']}, Ähnlichkeit {x['aehnlichkeit']}{e(woerter)})</span></li>")
-
-    abdeckung = "".join(abdeckungszeile(x) for x in r["abdeckung"]["liste"] if x["signal"].endswith("_de"))
-    gruende = r["abdeckung"].get("gruende", {})
-    quote = r["abdeckung"]["quote"]
-    f = r["formate"]
+    marke = {"abgedeckt": "✓", "nur_google": "◐ nur über Google", "aussortiert": "↓ aussortiert",
+             "unsicher": "? unsicher", "fehlt": "✗ fehlt"}
 
     def fmt(wert: float | None) -> str:
         return f"{wert:.0%}" if wert is not None else "–"
+
+    def abdeckungszeile(x: dict) -> str:
+        kopf = f"✓ Platz {x['platz']} ({FORMAT_NAME[x['format']]})" if x["grund"] == "abgedeckt" else marke[x["grund"]]
+        farbe = {"abgedeckt": "", "nur_google": ' style="color:#a15c00"'}.get(x["grund"], ' style="color:#c0392b"')
+        woerter = f", Wörter: {', '.join(x['woerter'])}" if x["woerter"] else ""
+        liste = x["signal"].removeprefix("google_news_")
+        return (f"<li><b{farbe}>{e(kopf)}</b> · <span class='klein'>{e(liste)} {x['rang']}</span> {e(x['titel'])} "
+                f"<span class='klein'>(beste: {e(x['unser_titel'])}, Wert {x['wert']}{e(woerter)})</span></li>")
+
+    a = r["abdeckung"]
+    reihenfolge = ["abgedeckt", "nur_google", "aussortiert", "unsicher", "fehlt"]
+    abdeckung = "".join(abdeckungszeile(x) for x in sorted(a.get("liste", []), key=lambda x: (reihenfolge.index(x["grund"]), x["signal"], x["rang"]), reverse=True))
+    gruppen = " · ".join(f"{gr}: {fmt(v['quote'])} (eigene Quellen {fmt(v['quote_eigene'])}, {v['anzahl']} Meldungen)"
+                         for gr, v in a.get("gruppen", {}).items())
+    quote = a.get("gesamt", {}).get("quote")
+    f = r["formate"]
 
     return f"""<!doctype html>
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -215,15 +190,13 @@ def als_html(r: dict) -> str:
 <h1>Werkbank · Rangliste</h1>
 <p class="klein">Erzeugt {e(r['erzeugt'])} · {r['meldungen']} Meldungen → {r['geschichten']} Geschichten ·
 {f['top']} Top-Storys, {f['karte']} Karten, {f['kurz']} Kurz & knapp, {f['weg']} fallen weg ·
-<b>Abdeckung Google News DE: {fmt(quote)}</b>.
+<b>Abdeckung Google News: {fmt(quote)}</b>.
 Lager-Einordnung ist ein Vorschlag (Bias-Review steht aus).</p>
 <table>{''.join(zeilen)}</table>
-<h2>Abdeckung: Google News Top Deutschland</h2>
-<p class="klein">Ziel nach PLAN.md: über 95 %. Abgedeckt heißt: Die Meldung passt sicher zu einer unserer Geschichten, die nicht wegfällt.
-Google sortiert nach Rubriken: Plätze 1–10 sind Schlagzeilen, danach Wirtschaft, Tech, Unterhaltung, Sport, Gesundheit.<br>
-Schlagzeilen abgedeckt: {fmt(r['abdeckung'].get('quote_schlagzeilen'))} · vorhanden (auch aussortiert): {fmt(r['abdeckung'].get('quote_vorhanden'))} ·
-{gruende.get('abgedeckt', 0)} abgedeckt, {gruende.get('aussortiert', 0)} aussortiert, {gruende.get('unsicher', 0)} unsicher, {gruende.get('fehlt', 0)} fehlen</p>
-<ol>{abdeckung}</ol>
+<h2>Abdeckung: Google News (je die ersten 10 jeder Liste)</h2>
+<p class="klein">Ziel nach PLAN.md: über 95 %. Abgedeckt = passt sicher zu einer Geschichte aus unseren Quellen, die nicht wegfällt.
+Nur über Google = drin, aber keine eigene Quelle hatte es (Hinweis auf eine fehlende Quelle).<br>{e(gruppen)}</p>
+<ul>{abdeckung}</ul>
 <h2>Grauzone: Paare, bei denen unklar ist, ob es dieselbe Geschichte ist</h2>
 <p class="klein">Diese Paare wurden nicht zusammengelegt. Ab Phase 2 entscheidet hier die KI.</p>
 <ul>{grau}</ul>
@@ -244,13 +217,9 @@ def main() -> int:
     (args.ausgabe / "rangliste.json").write_text(json.dumps(r, ensure_ascii=False, indent=1), encoding="utf-8")
     (args.ausgabe / "werkbank.html").write_text(als_html(r), encoding="utf-8")
     f = r["formate"]
-    quote = r["abdeckung"]["quote"]
-    if quote is None:
-        print("Abdeckung: keine Signale")
-    else:
-        a = r["abdeckung"]
-        print(f"Abdeckung Google News DE: {quote:.0%} (Schlagzeilen {a['quote_schlagzeilen']:.0%}, "
-              f"vorhanden {a['quote_vorhanden']:.0%}) · " + ", ".join(f"{k} {v}" for k, v in a["gruende"].items()))
+    for gruppe, v in r["abdeckung"]["gruppen"].items():
+        print(f"Abdeckung {gruppe}: {v['quote']:.0%} (eigene Quellen {v['quote_eigene']:.0%}) · "
+              + ", ".join(f"{k} {n}" for k, n in v["gruende"].items() if n))
     print(f"{r['meldungen']} Meldungen → {r['geschichten']} Geschichten: "
           f"{f['top']} Top, {f['karte']} Karte, {f['kurz']} Kurz, {f['weg']} weg → {args.ausgabe / 'werkbank.html'}")
     return 0

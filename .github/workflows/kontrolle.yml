@@ -4,7 +4,7 @@ name: kontrolle
 
 on:
   schedule:
-    - cron: "37 7,14,19 * * *" # nach dem Sammeln um :07; 8:37, 15:37, 20:37 Uhr deutscher Winterzeit
+    - cron: "47 6,13,18 * * *" # nach dem Sammeln um :23; 7:47, 14:47, 19:47 Uhr deutscher Winterzeit (vor 8/15/20 Uhr)
   workflow_dispatch:
 
 permissions:

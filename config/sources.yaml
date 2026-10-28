@@ -206,9 +206,28 @@ quellen:
       volltext_erlaubt: false, bezahlschranke: teilweise }
 
 # Aufmerksamkeits-Signale (PLAN.md 5.2): nur Titel, Rang und bei Google News die verwandten Schlagzeilen, keine Texte.
+# Google News: Schlagzeilen und Rubriken für Deutschland, USA und UK, je die ersten "anzahl" Einträge.
+#   Sie geben Aufmerksamkeit, sind Maßstab der Kontrolle (gruppe: kern | rubrik | global) und sorgen dafür,
+#   dass nichts fehlt: Findet sich keine eigene Geschichte, wird der Google-Eintrag selbst zur Geschichte.
 # Wikipedia-Aufrufe kommen einmal täglich im Baulauf dazu.
 signale:
   - { id: google_trends_de, url: "https://trends.google.com/trending/rss?geo=DE" }
   - { id: google_trends_us, url: "https://trends.google.com/trending/rss?geo=US" }
-  - { id: google_news_top_de, url: "https://news.google.com/rss?hl=de&gl=DE&ceid=DE:de" }
-  - { id: google_news_top_us, url: "https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en" }
+  - { id: google_news_top_de, name: "Schlagzeilen DE", url: "https://news.google.com/rss?hl=de&gl=DE&ceid=DE:de", anzahl: 15, gruppe: kern }
+  - { id: google_news_deutschland_de, name: "Deutschland DE", url: "https://news.google.com/rss/headlines/section/topic/NATION?hl=de&gl=DE&ceid=DE:de", anzahl: 15, gruppe: kern }
+  - { id: google_news_welt_de, name: "Welt DE", url: "https://news.google.com/rss/headlines/section/topic/WORLD?hl=de&gl=DE&ceid=DE:de", anzahl: 15, gruppe: kern }
+  - { id: google_news_wirtschaft_de, name: "Wirtschaft DE", url: "https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=de&gl=DE&ceid=DE:de", anzahl: 15, gruppe: kern }
+  - { id: google_news_technik_de, name: "Technik DE", url: "https://news.google.com/rss/headlines/section/topic/TECHNOLOGY?hl=de&gl=DE&ceid=DE:de", anzahl: 15, gruppe: rubrik }
+  - { id: google_news_unterhaltung_de, name: "Unterhaltung DE", url: "https://news.google.com/rss/headlines/section/topic/ENTERTAINMENT?hl=de&gl=DE&ceid=DE:de", anzahl: 15, gruppe: rubrik }
+  - { id: google_news_sport_de, name: "Sport DE", url: "https://news.google.com/rss/headlines/section/topic/SPORTS?hl=de&gl=DE&ceid=DE:de", anzahl: 15, gruppe: rubrik }
+  - { id: google_news_wissen_de, name: "Wissen DE", url: "https://news.google.com/rss/headlines/section/topic/SCIENCE?hl=de&gl=DE&ceid=DE:de", anzahl: 15, gruppe: rubrik }
+  - { id: google_news_gesundheit_de, name: "Gesundheit DE", url: "https://news.google.com/rss/headlines/section/topic/HEALTH?hl=de&gl=DE&ceid=DE:de", anzahl: 15, gruppe: rubrik }
+  - { id: google_news_top_us, name: "Schlagzeilen USA", url: "https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en", anzahl: 15, gruppe: global }
+  - { id: google_news_welt_us, name: "Welt USA", url: "https://news.google.com/rss/headlines/section/topic/WORLD?hl=en-US&gl=US&ceid=US:en", anzahl: 15, gruppe: global }
+  - { id: google_news_wirtschaft_us, name: "Wirtschaft USA", url: "https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=en-US&gl=US&ceid=US:en", anzahl: 15, gruppe: global }
+  - { id: google_news_technik_us, name: "Technik USA", url: "https://news.google.com/rss/headlines/section/topic/TECHNOLOGY?hl=en-US&gl=US&ceid=US:en", anzahl: 15, gruppe: global }
+  - { id: google_news_unterhaltung_us, name: "Unterhaltung USA", url: "https://news.google.com/rss/headlines/section/topic/ENTERTAINMENT?hl=en-US&gl=US&ceid=US:en", anzahl: 15, gruppe: global }
+  - { id: google_news_sport_us, name: "Sport USA", url: "https://news.google.com/rss/headlines/section/topic/SPORTS?hl=en-US&gl=US&ceid=US:en", anzahl: 15, gruppe: global }
+  - { id: google_news_wissen_us, name: "Wissen USA", url: "https://news.google.com/rss/headlines/section/topic/SCIENCE?hl=en-US&gl=US&ceid=US:en", anzahl: 15, gruppe: global }
+  - { id: google_news_gesundheit_us, name: "Gesundheit USA", url: "https://news.google.com/rss/headlines/section/topic/HEALTH?hl=en-US&gl=US&ceid=US:en", anzahl: 15, gruppe: global }
+  - { id: google_news_top_gb, name: "Schlagzeilen UK", url: "https://news.google.com/rss?hl=en-GB&gl=GB&ceid=GB:en", anzahl: 15, gruppe: global }

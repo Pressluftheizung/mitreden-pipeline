@@ -39,6 +39,9 @@ class Quelle:
 class Signal:
     id: str
     url: str
+    name: str | None = None
+    anzahl: int | None = None  # nur die ersten Einträge speichern
+    gruppe: str | None = None  # Google News: kern | rubrik | global (Maßstab der Kontrolle)
 
 
 @dataclass(frozen=True)

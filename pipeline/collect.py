@@ -136,10 +136,12 @@ def speichere_teaser(ordner: Path, alle: dict[str, dict], jetzt: datetime) -> in
 
 def speichere_signale(ordner: Path, neu: list[dict], jetzt: datetime) -> None:
     grenze = iso(jetzt - AUFBEWAHRUNG)
+    # Von Google News zählt nur der letzte Stand: ältere Läufe derselben Liste werden ersetzt (hält die Dateien klein).
+    ersetzt = {z["signal"] for z in neu if z["signal"].startswith("google_news")}
     tage = {d.stem for d in ordner.glob("*.jsonl")} | {jetzt.strftime("%Y-%m-%d")}
     for tag in sorted(tage):
         datei = ordner / f"{tag}.jsonl"
-        zeilen = [z for z in lies_jsonl(datei) if z["zeit"] >= grenze]
+        zeilen = [z for z in lies_jsonl(datei) if z["zeit"] >= grenze and z["signal"] not in ersetzt]
         if tag == jetzt.strftime("%Y-%m-%d"):
             zeilen += neu
         if zeilen:
@@ -178,7 +180,7 @@ def sammeln(konfig: Konfiguration, daten: Path, jetzt: datetime, aus_ordner: Pat
     for s in konfig.signale:
         a = nach_id[s.id]
         if a.status == "ok":
-            neue_signale += lies_signal(a.daten, s.id, jetzt)
+            neue_signale += lies_signal(a.daten, s.id, jetzt)[: s.anzahl]
         elif a.status == "fehler":
             fehler.append(f"{s.id}: {a.fehler}")
         zustand[s.id] = merke(zustand.get(s.id, {}), a, jetzt, None)

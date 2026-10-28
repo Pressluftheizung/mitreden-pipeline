@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 
 import numpy as np
 
-from pipeline.abgleich import gleiche_ab, google_titel
+from pipeline.abgleich import ergaenze_google_geschichten, gleiche_ab, google_titel
 from pipeline.cluster import baue_meldungen
 from pipeline.teaser import lies_signal, ohne_quellname
 from test_werkbank import QUELLEN, teaser  # unittest discover lädt die Tests als eigene Module
@@ -82,3 +82,25 @@ class Abgleich(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class GoogleGeschichten(unittest.TestCase):
+    def test_ohne_eigene_geschichte_wird_google_eintrag_zur_geschichte(self):
+        meldungen = baue_meldungen([teaser(1, "alpha", "Gipfel in Genf endet")], QUELLEN)
+        vektoren = einheit(0)
+        geschichten = [[0]]
+        news = [{"signal": "google_news_top_de", "rang": 1, "titel": "Gipfel in Genf", "zeit": "2026-10-28T11:00:00Z"},
+                {"signal": "google_news_wissen_de", "rang": 4, "titel": "Komet entdeckt", "verwandt": ["Neuer Komet am Himmel"],
+                 "zeit": "2026-10-28T11:00:00Z", "url": "https://news.google.example/k"},
+                {"signal": "google_news_wissen_us", "rang": 2, "titel": "New comet discovered", "zeit": "2026-10-28T11:00:00Z"}]
+        # Formulierungen: Gipfel = Geschichte 0; Komet (deutsch, 2 Formulierungen) und Komet (englisch) sind fast gleich.
+        formulierungen = np.vstack([einheit(0), einheit(3), einheit(3), einheit(3)])
+        treffer = gleiche_ab(news, formulierungen, meldungen, vektoren, vektoren, geschichten, G)
+        self.assertEqual([t.geschichte for t in treffer], [0, None, None])
+        vektoren, titel_vektoren = ergaenze_google_geschichten(news, formulierungen, treffer, meldungen, vektoren,
+                                                               vektoren, geschichten, {**G, "gleich": 0.85})
+        self.assertEqual([t.geschichte for t in treffer], [0, 1, 1])  # beide Kometen-Einträge: eine Geschichte
+        self.assertTrue(treffer[1].nur_google and not treffer[0].nur_google)
+        self.assertEqual(len(geschichten[1]), 3)
+        self.assertEqual(vektoren.shape[0], len(meldungen))
+        self.assertEqual(meldungen[geschichten[1][0]].quelle.lager, "unbekannt")
