@@ -138,7 +138,8 @@ quellen:
   - { id: hn, name: Hacker News, url: "https://hnrss.org/frontpage",
       sprache: en, region: welt, lager: international, art: aggregator,
       volltext_erlaubt: false, bezahlschranke: nein, gewicht: 0.5 }
-  - { id: gamestar, name: GameStar, url: "https://www.gamestar.de/news/rss/news.rss",
+  # GameStar sperrt die Server von GitHub (HTTP 403), deshalb über die Google-News-Suche (wie AP).
+  - { id: gamestar, name: GameStar, url: "https://news.google.com/rss/search?q=when:1d+site:gamestar.de&hl=de&gl=DE&ceid=DE:de",
       sprache: de, region: deutschland, lager: mitte, art: fachmedium,
       volltext_erlaubt: false, bezahlschranke: teilweise }
 
@@ -149,7 +150,8 @@ quellen:
   - { id: sportschau, name: Sportschau, url: "https://www.sportschau.de/index~rss2.xml",
       sprache: de, region: deutschland, lager: mitte, art: oeffentlich_rechtlich,
       volltext_erlaubt: true, bezahlschranke: nein }
-  - { id: espn, name: ESPN, url: "https://www.espn.com/espn/rss/news",
+  # ESPN liefert den Servern von GitHub einen leeren Feed, deshalb über die Google-News-Suche.
+  - { id: espn, name: ESPN, url: "https://news.google.com/rss/search?q=when:1d+site:espn.com&hl=en-US&gl=US&ceid=US:en",
       sprache: en, region: usa, lager: international, art: fachmedium,
       volltext_erlaubt: false, bezahlschranke: nein }
   - { id: motorsport, name: Motorsport-Total, url: "https://www.motorsport-total.com/rss/rss_formel-1.xml",
