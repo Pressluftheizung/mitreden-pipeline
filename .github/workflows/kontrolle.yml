@@ -3,7 +3,7 @@
 name: kontrolle
 
 on:
-  workflow_dispatch: # dreimal täglich gestartet vom Ablauf "takt" (takt.yml), oder von Hand
+  workflow_dispatch: # dreimal täglich gestartet vom Cloudflare-Worker "mitreden-takt" (cloudflare/takt.js), oder von Hand
 
 permissions:
   contents: read

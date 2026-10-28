@@ -3,7 +3,12 @@
 name: sammeln
 
 on:
-  workflow_dispatch: # stündlich gestartet vom Ablauf "takt" (takt.yml), oder von Hand: Actions → sammeln → Run workflow
+  # Stündlich gestartet vom Cloudflare-Worker "mitreden-takt" (cloudflare/takt.js) um :23.
+  # GitHubs eigener Zeitplan unten ist nur Reserve (startete bei diesem Repo anfangs gar nicht);
+  # springt er zusätzlich an, ist das harmlos, unveränderte Feeds werden nicht neu geladen.
+  schedule:
+    - cron: "53 * * * *"
+  workflow_dispatch: # von Hand: Actions → sammeln → Run workflow
 
 permissions:
   contents: read
