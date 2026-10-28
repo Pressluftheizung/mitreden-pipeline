@@ -3,9 +3,7 @@
 name: sammeln
 
 on:
-  schedule:
-    - cron: "23 * * * *" # jede Stunde um :23 (weit weg von der vollen Stunde, da sind GitHubs Runner voll)
-  workflow_dispatch: # von Hand starten: Actions → sammeln → Run workflow
+  workflow_dispatch: # stündlich gestartet vom Ablauf "takt" (takt.yml), oder von Hand: Actions → sammeln → Run workflow
 
 permissions:
   contents: read

@@ -8,6 +8,7 @@ Dieses Repo ist öffentlich und enthält **nur Code, Prompts und Konfiguration**
 
 | Ablauf | Wann | Was |
 |---|---|---|
+| `takt` | dauernd | startet stündlich `sammeln` und 3× täglich `kontrolle`, dann sich selbst neu (GitHubs Zeitplan startete bei diesem Repo nicht zuverlässig); einmal von Hand anstoßen |
 | `sammeln` | stündlich | lädt alle Feeds aus `config/sources.yaml` (ohne KI) und speichert neue Teaser im privaten Repo |
 | `pruefen` | bei jedem Hochladen | Schutzprüfung (erlaubte Pfade, keine Schlüssel), gitleaks, Tests |
 | `kontrolle` | 3× täglich | prüft, ob alles Relevante aufgenommen wird (Abdeckung gegen Google News, Feeds, Prüfsets); Ergebnis nur im privaten Repo |

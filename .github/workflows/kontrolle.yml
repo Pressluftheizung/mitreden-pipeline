@@ -3,9 +3,7 @@
 name: kontrolle
 
 on:
-  schedule:
-    - cron: "47 6,13,18 * * *" # nach dem Sammeln um :23; 7:47, 14:47, 19:47 Uhr deutscher Winterzeit (vor 8/15/20 Uhr)
-  workflow_dispatch:
+  workflow_dispatch: # dreimal täglich gestartet vom Ablauf "takt" (takt.yml), oder von Hand
 
 permissions:
   contents: read

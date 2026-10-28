@@ -115,8 +115,8 @@ class Speichern(unittest.TestCase):
 
 class Konfiguration(unittest.TestCase):
     def test_alle_quellen_gueltig(self):
-        self.assertEqual(len(KONFIG.quellen), 53)
-        self.assertEqual(len({q.id for q in KONFIG.quellen}), 53)
+        self.assertEqual(len(KONFIG.quellen), 80)
+        self.assertEqual(len({q.id for q in KONFIG.quellen}), 80)
 
 
 if __name__ == "__main__":

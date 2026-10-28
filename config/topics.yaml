@@ -101,6 +101,31 @@ quelle_thema:
   aerzteblatt: wissen
   apotheken_umschau: wissen
   borncity: tech
+  spektrum: wissen
+  scinexx: wissen
+  wissenschaft_de: wissen
+  spiegel_wissen: wissen
+  spiegel_gesundheit: wissen
+  faz_wissen: wissen
+  focus_wissen: wissen
+  focus_gesundheit: wissen
+  tonline_gesundheit: wissen
+  stern_gesundheit: wissen
+  sciencedaily: wissen
+  physorg: wissen
+  livescience: wissen
+  space: wissen
+  sciencealert: wissen
+  nyt_science: wissen
+  nyt_health: wissen
+  statnews: wissen
+  nbc_health: wissen
+  aerztezeitung: wissen
+  ihre_vorsorge: wissen
+  eonline: popkultur
+  usweekly: popkultur
+  tmz: popkultur
+  variety: popkultur
   politico_eu: politik
   politico_us: politik
   euractiv: politik

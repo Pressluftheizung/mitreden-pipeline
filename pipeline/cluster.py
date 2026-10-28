@@ -45,6 +45,8 @@ class Meldung:
 
     @property
     def titel(self) -> str:
+        if "news.google.com/rss/search" in self.quelle.url:  # Google-News-Suche hängt immer " - Redaktion" an
+            return self.teaser["titel"].rsplit(" - ", 1)[0].strip()
         return bereinige_titel(self.teaser["titel"], self.quelle.name)
 
 

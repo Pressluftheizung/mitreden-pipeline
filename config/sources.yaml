@@ -140,6 +140,95 @@ quellen:
       sprache: en, region: welt, lager: international, art: fachmedium,
       volltext_erlaubt: false, bezahlschranke: nein }
 
+  # ---------- Wissen & Gesundheit (neu 28.10.2026; Lager-Vorschlag ungeprüft, Rubriken wie das Mutterhaus) ----------
+  - { id: spektrum, name: Spektrum der Wissenschaft, url: "https://www.spektrum.de/alias/rss/spektrum-de-rss-feed/996406",
+      sprache: de, region: deutschland, lager: mitte, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: teilweise }
+  - { id: scinexx, name: scinexx, url: "https://www.scinexx.de/feed/",
+      sprache: de, region: deutschland, lager: mitte, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: wissenschaft_de, name: wissenschaft.de, url: "https://www.wissenschaft.de/feed/",
+      sprache: de, region: deutschland, lager: mitte, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: spiegel_wissen, name: Spiegel Wissenschaft, url: "https://www.spiegel.de/wissenschaft/index.rss", haus: spiegel,
+      sprache: de, region: deutschland, lager: mitte_links, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: teilweise }
+  - { id: spiegel_gesundheit, name: Spiegel Gesundheit, url: "https://www.spiegel.de/gesundheit/index.rss", haus: spiegel,
+      sprache: de, region: deutschland, lager: mitte_links, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: teilweise }
+  - { id: faz_wissen, name: FAZ Wissen, url: "https://www.faz.net/rss/aktuell/wissen/", haus: faz,
+      sprache: de, region: deutschland, lager: mitte_rechts, art: zeitung,
+      volltext_erlaubt: false, bezahlschranke: teilweise, bezahl_muster: ["/premium/"] }
+  - { id: focus_wissen, name: Focus Wissen, url: "https://rss.focus.de/wissen/", haus: focus,
+      sprache: de, region: deutschland, lager: mitte_rechts, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: focus_gesundheit, name: Focus Gesundheit, url: "https://rss.focus.de/gesundheit/", haus: focus,
+      sprache: de, region: deutschland, lager: mitte_rechts, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: tonline_gesundheit, name: t-online Gesundheit, url: "https://www.t-online.de/gesundheit/feed.rss", haus: t-online,
+      sprache: de, region: deutschland, lager: mitte, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: stern_gesundheit, name: stern Gesundheit, url: "https://www.stern.de/feed/standard/gesundheit/", haus: stern,
+      sprache: de, region: deutschland, lager: mitte_links, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: teilweise }
+  - { id: sciencedaily, name: ScienceDaily, url: "https://www.sciencedaily.com/rss/top.xml",
+      sprache: en, region: usa, lager: international, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: physorg, name: Phys.org, url: "https://phys.org/rss-feed/",
+      sprache: en, region: usa, lager: international, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: livescience, name: Live Science, url: "https://www.livescience.com/feeds/all",
+      sprache: en, region: usa, lager: international, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: space, name: Space.com, url: "https://www.space.com/feeds/all",
+      sprache: en, region: usa, lager: international, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: sciencealert, name: ScienceAlert, url: "https://www.sciencealert.com/feed",
+      sprache: en, region: usa, lager: international, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: nyt_science, name: New York Times Science, url: "https://rss.nytimes.com/services/xml/rss/nyt/Science.xml", haus: nyt,
+      sprache: en, region: usa, lager: mitte_links, art: zeitung,
+      volltext_erlaubt: false, bezahlschranke: teilweise }
+  - { id: nyt_health, name: New York Times Health, url: "https://rss.nytimes.com/services/xml/rss/nyt/Health.xml", haus: nyt,
+      sprache: en, region: usa, lager: mitte_links, art: zeitung,
+      volltext_erlaubt: false, bezahlschranke: teilweise }
+  - { id: statnews, name: STAT, url: "https://www.statnews.com/feed/",
+      sprache: en, region: usa, lager: international, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: teilweise }
+  - { id: nbc_health, name: NBC News Health, url: "https://feeds.nbcnews.com/nbcnews/public/health",
+      sprache: en, region: usa, lager: mitte_links, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+
+  # Ärzte Zeitung (eigener Feed veraltet) und Ihre Vorsorge prägen Googles Gesundheits-Rubrik: Google-News-Suche.
+  - { id: aerztezeitung, name: Ärzte Zeitung, url: "https://news.google.com/rss/search?q=when:2d+site:aerztezeitung.de&hl=de&gl=DE&ceid=DE:de",
+      sprache: de, region: deutschland, lager: mitte, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: ihre_vorsorge, name: Ihre Vorsorge, url: "https://news.google.com/rss/search?q=when:3d+site:ihre-vorsorge.de&hl=de&gl=DE&ceid=DE:de",
+      sprache: de, region: deutschland, lager: mitte, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+
+  # ---------- Großbritannien (neu 28.10.2026; Lager wie das Mutterhaus) ----------
+  - { id: bbc_uk, name: BBC UK, url: "https://feeds.bbci.co.uk/news/uk/rss.xml", haus: bbc_world,
+      sprache: en, region: europa, lager: international, art: oeffentlich_rechtlich,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: guardian_uk, name: Guardian UK, url: "https://www.theguardian.com/uk-news/rss", haus: guardian_world,
+      sprache: en, region: europa, lager: mitte_links, art: zeitung,
+      volltext_erlaubt: false, bezahlschranke: nein }
+
+  # ---------- US-Promis & Entertainment (neu 28.10.2026; Lager-Vorschlag ungeprüft) ----------
+  - { id: eonline, name: E! News, url: "https://www.eonline.com/syndication/feeds/rssfeeds/topstories.xml",
+      sprache: en, region: usa, lager: international, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: usweekly, name: Us Weekly, url: "https://www.usmagazine.com/feed/",
+      sprache: en, region: usa, lager: international, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: tmz, name: TMZ, url: "https://www.tmz.com/rss.xml",
+      sprache: en, region: usa, lager: international, art: magazin,
+      volltext_erlaubt: false, bezahlschranke: nein }
+  - { id: variety, name: Variety, url: "https://variety.com/feed/",
+      sprache: en, region: usa, lager: international, art: fachmedium,
+      volltext_erlaubt: false, bezahlschranke: nein }
+
   # ---------- Tech & Gaming ----------
   - { id: heise, name: heise online, url: "https://www.heise.de/rss/heise-atom.xml",
       sprache: de, region: deutschland, lager: mitte, art: fachmedium,
