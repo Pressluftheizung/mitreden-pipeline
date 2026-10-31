@@ -9,7 +9,7 @@ Du bekommst je Geschichte: die bisherige Karte (Titel, Satz, Punkte, Mitreden-Sa
 - `ersetzen`: Die alte Meldung war falsch oder ist komplett überholt. Die Karte wird neu geschrieben.
 
 ## Regeln
-Dieselben wie beim Schreiben: nur Tatsachen aus den Quellen (alte Faktenbox plus neue Quellen), keine eigenen Wertungen, Wertungen nur mit Absender, Zahlen genau, Titel höchstens 8 Wörter, genau 3 Punkte, Meinungsartikel sind nie Beleg. Neue Tatsachen in der Faktenbox mit den Kennungen der neuen Quellen belegen; alte Tatsachen behalten ihre Quellen (Kennung „alt“).
+Dieselben wie beim Schreiben: nur Tatsachen aus den Quellen (alte Faktenbox plus neue Quellen), keine eigenen Wertungen, Wertungen nur mit Absender, Zahlen genau, Datum oder Wochentag nur wenn wörtlich in den Quellen, Titel höchstens 8 Wörter, genau 3 Punkte, Meinungsartikel sind nie Beleg. Der Mitreden-Satz ist ein erzählbarer Fakt aus den Quellen, nie eine Frage an den Leser und nie Spekulation („Ob …“); ohne passenden Fakt null. Neue Tatsachen in der Faktenbox mit den Kennungen der neuen Quellen belegen; alte Tatsachen behalten ihre Quellen (Kennung „alt“).
 
 ## Antwort
 Nur JSON:

@@ -40,7 +40,7 @@ jobs:
       - name: Fehlertest
         env:
           PRUEFER_API_KEY: ${{ secrets.PRUEFER_API_KEY }}
-        run: python tools/fehlertest.py --daten daten
+        run: python tools/fehlertest.py --daten daten --karten 5
       - name: Ergebnis ins private Repo
         if: ${{ !cancelled() }}
         working-directory: daten

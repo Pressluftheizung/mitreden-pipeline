@@ -197,10 +197,18 @@ def neue_story_id(st: Stand, b: Bewertung, jetzt: datetime) -> str:
 
 # ---------- KI-Aufträge ----------
 
+# Manche Modelle antworten mit englischen Feldnamen. Die werden übersetzt statt verworfen.
+ENGLISCH = {"title": "titel", "sentence": "satz", "summary": "satz", "points": "punkte", "bullets": "punkte",
+            "facts": "faktenbox", "factbox": "faktenbox", "layers": "ebenen", "action": "aktion", "change": "aenderung"}
+
+
 def pruefe_karten(antwort: dict) -> None:
     if not isinstance(antwort.get("karten"), list) or not antwort["karten"]:
         raise ValueError("karten fehlt")
     for k in antwort["karten"]:
+        for englisch, deutsch in ENGLISCH.items():
+            if englisch in k and deutsch not in k:
+                k[deutsch] = k.pop(englisch)
         if k.get("aktion") == "nichts_neues":
             continue
         if not (isinstance(k.get("titel"), str) and isinstance(k.get("punkte"), list) and k.get("satz")):

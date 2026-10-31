@@ -18,7 +18,7 @@
     "karte": { "kette": ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemma-4-31b-it"], "prompt": "prompts/karte.md" },
     "update": { "kette": ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemma-4-31b-it"], "prompt": "prompts/update.md" },
     "kurz": { "kette": ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemma-4-31b-it"], "prompt": "prompts/kurz.md" },
-    "pruefen": { "kette": ["openai/gpt-oss-120b", "qwen/qwen3.8-27b"], "verteilen": true, "prompt": "prompts/pruefen.md" }
+    "pruefen": { "kette": ["openai/gpt-oss-120b", "qwen/qwen3.8-27b"], "verteilen": true, "max_ausgabe": 1500, "prompt": "prompts/pruefen.md" }
   },
   "je_bau": {
     "max_neue_karten": 60,

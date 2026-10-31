@@ -46,6 +46,19 @@ class Anwenden(unittest.TestCase):
         self.assertEqual(anwenden(k, [], urteil, "groq", "test")["ergebnis"], "warnung")
         self.assertEqual(k["titel"], "Bahn streicht 120 Züge")
 
+    def test_mitreden_ohne_beleg_wird_gestrichen(self):
+        k = karte()
+        urteil = {"aussagen": [{"nr": 6, "urteil": "nicht_belegt", "grund": "Spekulation"}], "neutralitaet": "mitte",
+                  "seitentausch_ok": True}
+        p = anwenden(k, [], urteil, "groq", "test")
+        self.assertEqual((p["ergebnis"], k["mitreden"]), ("korrigiert", None))
+
+    def test_englische_feldnamen(self):
+        from pipeline.bauen import pruefe_karten
+        antwort = {"karten": [{"story": "s1", "title": "Titel", "sentence": "Satz.", "points": ["a", "b", "c"]}]}
+        pruefe_karten(antwort)
+        self.assertEqual(antwort["karten"][0]["titel"], "Titel")
+
     def test_ohne_pruef_ki(self):
         self.assertEqual(anwenden(karte(), [], None, None, None)["ergebnis"], "ungeprueft")
 
@@ -88,6 +101,16 @@ class KISchicht(unittest.TestCase):
                     ki.frage("kurz", json.dumps({"geschichten": []}))
             finally:
                 os.environ.update({k: v for k, v in alt.items() if v})
+
+
+class Wartezeit(unittest.TestCase):
+    def test_groq_und_gemini(self):
+        from pipeline.ki import HttpFehler, wartezeit
+        self.assertAlmostEqual(wartezeit(HttpFehler(429, "Rate limit reached ... Please try again in 7.5s")), 8.5)
+        self.assertEqual(wartezeit(HttpFehler(429, "Please try again in 1m2s")), 63.0)
+        self.assertIsNone(wartezeit(HttpFehler(429, "Request too large for model")))
+        self.assertEqual(wartezeit(HttpFehler(503, "overloaded")), 10.0)
+        self.assertIsNone(wartezeit(HttpFehler(400, "bad")))
 
 
 class BildAdresse(unittest.TestCase):

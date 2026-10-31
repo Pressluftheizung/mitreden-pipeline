@@ -2,7 +2,7 @@
 
 1. Code: Jede Zahl der Karte muss in einer Quelle stehen. Titel höchstens 8 Wörter, genau 3 Punkte.
 2. Prüf-KI: jede Aussage belegt / nicht belegt / unklar, wertende Wörter, Neutralität, Seitentausch-Test.
-3. Anwenden: Nicht belegte Punkte und Fakten fliegen raus. Ist Titel, Satz oder Mitreden-Satz nicht belegt
+3. Anwenden: Nicht belegte Punkte, Fakten und Mitreden-Sätze fliegen raus. Sind Titel oder Satz nicht belegt
    oder die Karte nicht neutral, bekommt sie eine Warnung (PLAN.md 8, B6).
 
 ⚠ Neutralität und Wort-Prüfung gehören zum Bias-Algorithmus (PLAN.md 8) und sind bis zum Review des
@@ -53,10 +53,12 @@ def code_pruefung(karte: dict, quelltexte: list[str]) -> list[dict]:
 
 def pruef_anfrage(karte: dict, quellen: list[dict]) -> str:
     """Eingabe für die Prüf-KI: Quellen (gekürzt) und nummerierte Aussagen."""
+    # Geprüft wird, was der Leser sieht. Die Faktenbox (steht am Ende der Nummerierung) prüft nur der Code;
+    # das hält die Anfrage klein genug für das Minutenlimit der Prüf-KI.
     return json.dumps({
         "quellen": [{"id": q["id"], "outlet": q["redaktion"], "leaning": q["lager"], "type": q["art"],
-                     "title": q["titel"], "text": q["text"]} for q in quellen],
-        "aussagen": [{"nr": a["nr"], "feld": a["feld"], "text": a["text"]} for a in aussagen(karte)],
+                     "title": q["titel"], "text": q["text"][:350]} for q in quellen[:6]],
+        "aussagen": [{"nr": a["nr"], "feld": a["feld"], "text": a["text"]} for a in aussagen(karte) if a["feld"] != "faktenbox"],
     }, ensure_ascii=False)
 
 
@@ -86,7 +88,7 @@ def anwenden(karte: dict, code: list[dict], ki: dict | None, anbieter: str | Non
             elif u["urteil"] == "unklar":
                 unklar.append(f"{nach_nr[u['nr']]['text'][:60]}: {u.get('grund', '')}")
 
-    hinweise, warnung = [], False
+    hinweise, warnung, mitreden_weg = [], False, False
     weg_punkte, weg_fakten = set(), set()
     for nr, grund in schlecht.items():
         a = nach_nr[nr]
@@ -96,6 +98,10 @@ def anwenden(karte: dict, code: list[dict], ki: dict | None, anbieter: str | Non
         elif a["feld"] == "faktenbox":
             weg_fakten.add(a["index"])
             hinweise.append(f"Fakt entfernt ({grund}): {a['text']}")
+        elif a["feld"] == "mitreden":  # Zusatz ohne Beleg: lieber weglassen als warnen
+            karte["mitreden"] = None
+            mitreden_weg = True
+            hinweise.append(f"Mitreden-Satz entfernt ({grund}): {a['text']}")
         else:
             warnung = True
             hinweise.append(f"{a['feld'].capitalize()} nicht belegt ({grund}): {a['text']}")
@@ -118,7 +124,7 @@ def anwenden(karte: dict, code: list[dict], ki: dict | None, anbieter: str | Non
     woerter = (ki or {}).get("wertende_woerter") or []
     hinweise += [f"wertendes Wort „{w.get('wort')}“ → „{w.get('ersatz')}“" for w in woerter if isinstance(w, dict)]
 
-    eingriffe = len(weg_punkte) + len(weg_fakten)
+    eingriffe = len(weg_punkte) + len(weg_fakten) + mitreden_weg
     if ki is None:
         ergebnis = "ungeprueft"
     elif warnung:

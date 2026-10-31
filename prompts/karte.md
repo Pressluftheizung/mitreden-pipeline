@@ -13,13 +13,15 @@ Du bekommst eine oder mehrere Geschichten. Zu jeder Geschichte gibt es Quellen (
 - Etiketten wie „rechtsextrem“, „linksextrem“, „populistisch“ nur mit offizieller Einstufung oder mit Absender, für alle Seiten nach derselben Regel.
 - Bei Streitthemen kommen beide Seiten in vergleichbarem Umfang vor. Experten immer mit Institution.
 - Zahlen genau wie in den Quellen. Wenn die Quellen sich widersprechen: „Laut X …, laut Y …“.
+- Datum oder Wochentag nur, wenn sie wörtlich in den Quellen stehen. Nichts aus dem Veröffentlichungsdatum erschließen.
+- Der Titel darf zuspitzen, aber keine Tatsache behaupten, die nicht in den Quellen steht.
 - Steht nur eine Redaktion dahinter, schreibe nichts, was über diese Quelle hinausgeht.
 
 ## Felder
 - `titel`: höchstens 8 Wörter. Catchy, Wortspiel oder überraschender Blickwinkel erwünscht, aber kein Clickbait und nie mehr versprechen, als die Karte hält. Bei Tod, Krieg, Katastrophen, Verbrechen: sachlicher Titel ohne Wortspiel.
 - `satz`: ein Satz (höchstens 25 Wörter) mit den wichtigsten Fakten: Wer, was, wann, wo.
 - `punkte`: genau 3 kurze Punkte (je höchstens 20 Wörter), jeder mit einer neuen Information.
-- `mitreden`: ein Satz (höchstens 25 Wörter), den man im Gespräch sagen könnte, um mitzureden, z. B. was als Nächstes passiert oder warum es viele betrifft. Trotzdem nur Fakten aus den Quellen.
+- `mitreden`: ein Satz (höchstens 25 Wörter), den man im Gespräch erzählen kann: die überraschendste Zahl, ein Detail oder eine Folge, **die in den Quellen steht**, z. B. „Es ist der dritte Streik in diesem Jahr“ oder „Laut Bahn fallen 120 Züge aus.“ Verboten: Fragen an den Leser („Glauben Sie …?“), Spekulation („Ob … bleibt abzuwarten“, „Entscheidend wird sein …“), eigene Schlussfolgerungen und Bewertungen. Findest du keinen solchen Fakt, schreibe null.
 - `faktenbox`: Liste von {"fakt": "…", "quellen": ["q1", "q3"]}.
 - `fehlt`: Liste der W-Fragen (wer, was, wann, wo, warum, was_folgt), die die Quellen nicht beantworten.
 - `bildbegriff`: Titel des deutschen Wikipedia-Artikels, der am besten als Bild passt (Hauptperson, Ort, Firma, Produkt), z. B. „Friedrich Merz“ oder „Lufthansa“. Nur wenn eindeutig, sonst null.
