@@ -64,8 +64,10 @@ class FeedLesen(unittest.TestCase):
         unbekannt = lies_feed(FEED, replace(QUELLE, bezahl_markiert=False), KONFIG, JETZT)
         self.assertIsNone(next(t for t in unbekannt if t["position_im_feed"] == 1)["bezahlschranke"])
 
-    def test_keine_bilder(self):
-        self.assertFalse(any("bild" in k or "media" in k for t in self.teaser for k in t))
+    def test_nur_bildadresse(self):
+        # Vom Bild wird nur die Adresse gespeichert (die App lädt es beim Verlag), keine weiteren Medienfelder.
+        self.assertFalse(any("media" in k for t in self.teaser for k in t))
+        self.assertTrue(all(t["bild"] is None or t["bild"].startswith("https://") for t in self.teaser))
 
 
 class Speichern(unittest.TestCase):

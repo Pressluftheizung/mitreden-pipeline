@@ -31,7 +31,7 @@ from .collect import lade_teaser, lies_jsonl, zeit
 from .quellen import lade_konfiguration
 from .score import Signale, jetzt_utc
 from .teaser import iso
-from .werkbank import berechne
+from .werkbank import Stand, berechne
 
 
 def pruefe_sammeln(daten: Path, k: dict, jetzt: datetime, quellen_ids: list[str], signal_ids: list[str]) -> dict:
@@ -117,11 +117,11 @@ def ampel(bericht: dict, k: dict) -> tuple[str, list[str]]:
     return ("rot" if rot else "gelb" if gelb else "grün"), gruende
 
 
-def kontrolle(daten: Path, config: Path, jetzt: datetime, pruefsets: Path | None) -> dict:
+def kontrolle(daten: Path, config: Path, jetzt: datetime, pruefsets: Path | None, st: Stand | None = None) -> dict:
     k = yaml.safe_load((config / "kontrolle.yaml").read_text(encoding="utf-8"))
     konfig = lade_konfiguration(config / "sources.yaml")
     gruppe_von = {s.id: s.gruppe for s in konfig.signale if s.gruppe}
-    st = berechne(daten, config, jetzt)
+    st = st or berechne(daten, config, jetzt)
     a = abdeckung(st.google, st.in_reihenfolge, st.sortiert, gruppe_von, st.gewichte["google_news"], k["messen_bis"])
     bericht = {
         "zeit": iso(jetzt),
@@ -158,15 +158,22 @@ def main() -> int:
 
     jetzt = datetime.fromisoformat(args.jetzt.replace("Z", "+00:00")) if args.jetzt else jetzt_utc()
     b = kontrolle(args.daten, args.config, jetzt.astimezone(timezone.utc), args.pruefsets or args.daten / "pruefset")
-
     if not args.nur_lesen:
-        ordner = args.daten / "metriken"
-        ordner.mkdir(parents=True, exist_ok=True)
-        verlauf = [z for z in lies_jsonl(ordner / "kontrolle.jsonl") if z["zeit"] >= iso(jetzt - timedelta(days=60))]
-        verlauf.append(kurzfassung(b))
-        (ordner / "kontrolle.jsonl").write_text("".join(json.dumps(z, ensure_ascii=False) + "\n" for z in verlauf), encoding="utf-8")
-        (ordner / "kontrolle-letzte.json").write_text(json.dumps(b, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        schreibe(b, args.daten, jetzt)
+    drucke(b)
+    return 0
 
+
+def schreibe(b: dict, daten: Path, jetzt: datetime) -> None:
+    ordner = daten / "metriken"
+    ordner.mkdir(parents=True, exist_ok=True)
+    verlauf = [z for z in lies_jsonl(ordner / "kontrolle.jsonl") if z["zeit"] >= iso(jetzt - timedelta(days=60))]
+    verlauf.append(kurzfassung(b))
+    (ordner / "kontrolle.jsonl").write_text("".join(json.dumps(z, ensure_ascii=False) + "\n" for z in verlauf), encoding="utf-8")
+    (ordner / "kontrolle-letzte.json").write_text(json.dumps(b, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+
+
+def drucke(b: dict) -> None:
     print(f"Ampel: {b['ampel'].upper()}" + "".join(f"\n  · {g}" for g in b["ampel_gruende"]))
     s = b["sammeln"]
     print(f"Sammeln: letzter Lauf {s['letzter_lauf']} (vor {s['alter_h']} Std), ausgefallen: {', '.join(s['ausgefallen']) or '–'}")
@@ -181,7 +188,6 @@ def main() -> int:
         print(f"Abgleich (Prüfsets): {p['richtig']} richtig, {p['falsch_zugeordnet']} falsch zugeordnet, {p['uebersehen']} übersehen")
         for f in p["fehler"]:
             print(f"  {f[:110]}")
-    return 0
 
 
 if __name__ == "__main__":

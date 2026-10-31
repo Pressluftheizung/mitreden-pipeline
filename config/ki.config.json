@@ -1,0 +1,31 @@
+{
+  "_hinweis": "Anbieter und Modelle je Aufgabe (PLAN.md 9.3). Wechsel = Reihenfolge in 'kette' ändern. 'secret' nennt nur den Namen des GitHub Secrets. Grenzen = Gratis-Kontingent laut AI Studio bzw. Groq-Konsole (31.10.2026).",
+  "anbieter": {
+    "gemini": { "art": "gemini", "secret": "GEMINI_API_KEY", "url": "https://generativelanguage.googleapis.com/v1beta" },
+    "groq": { "art": "openai", "secret": "PRUEFER_API_KEY", "url": "https://api.groq.com/openai/v1" }
+  },
+  "modelle": {
+    "gemini-3.8-flash": { "anbieter": "gemini", "rpm": 5, "rpd": 20, "tpm": 250000 },
+    "gemini-3.6-flash": { "anbieter": "gemini", "rpm": 5, "rpd": 20, "tpm": 250000 },
+    "gemini-3.5-flash-lite": { "anbieter": "gemini", "rpm": 15, "rpd": 500, "tpm": 250000 },
+    "gemini-3.1-flash-lite": { "anbieter": "gemini", "rpm": 15, "rpd": 500, "tpm": 250000 },
+    "gemma-4-31b-it": { "anbieter": "gemini", "rpm": 30, "rpd": 14400, "tpm": 16000 },
+    "openai/gpt-oss-120b": { "anbieter": "groq", "rpm": 30, "rpd": 1000, "tpm": 8000, "tpd": 200000 },
+    "qwen/qwen3.8-27b": { "anbieter": "groq", "rpm": 30, "rpd": 1000, "tpm": 8000, "tpd": 200000 }
+  },
+  "aufgaben": {
+    "top": { "kette": ["gemini-3.8-flash", "gemini-3.6-flash", "gemini-3.5-flash-lite"], "prompt": "prompts/karte.md" },
+    "karte": { "kette": ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemma-4-31b-it"], "prompt": "prompts/karte.md" },
+    "update": { "kette": ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemma-4-31b-it"], "prompt": "prompts/update.md" },
+    "kurz": { "kette": ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemma-4-31b-it"], "prompt": "prompts/kurz.md" },
+    "pruefen": { "kette": ["openai/gpt-oss-120b", "qwen/qwen3.8-27b"], "verteilen": true, "prompt": "prompts/pruefen.md" }
+  },
+  "je_bau": {
+    "max_neue_karten": 60,
+    "top_pro_anfrage": 2,
+    "karten_pro_anfrage": 5,
+    "kurz_pro_anfrage": 20,
+    "max_pruefungen": 80,
+    "reserve_anteil": 0.1
+  }
+}

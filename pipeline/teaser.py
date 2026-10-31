@@ -1,7 +1,8 @@
 """Wandelt einen geladenen Feed in Teaser-Einträge um (Format: docs/DATENFLUSS.md Abschnitt 2).
 
 Reine Funktionen ohne Netz und ohne Dateien, damit sie sich leicht testen lassen.
-Bilder aus den Feeds (meist Pressefotos) werden bewusst nicht übernommen.
+Von Bildern im Feed wird nur die Adresse gespeichert, nie das Bild selbst (die App lädt es beim Anzeigen
+direkt beim Verlag; Entscheidung des Nutzers vom 31.10.2026).
 """
 
 import calendar
@@ -64,6 +65,30 @@ def zeitpunkt(eintrag) -> str | None:
 
 def stichwoerter(eintrag) -> list[str]:
     return [t.get("term", "") for t in eintrag.get("tags", []) if t.get("term")]
+
+
+IMG = re.compile(r"<img[^>]+src=[\"']([^\"']+)[\"']", re.I)
+BILDENDUNG = re.compile(r"\.(?:jpe?g|png|webp|gif)(?:[?#]|$)", re.I)
+
+
+def bild_url(eintrag) -> str | None:
+    """Adresse des Artikelbilds aus dem Feed (media:content, media:thumbnail, enclosure oder <img> im Text)."""
+    kandidaten = []
+    for m in eintrag.get("media_content", None) or []:
+        if m.get("url") and (m.get("medium") == "image" or "image" in (m.get("type") or "") or BILDENDUNG.search(m["url"])):
+            kandidaten.append((int(m.get("width") or 0), m["url"]))
+    if kandidaten:
+        return max(kandidaten)[1]  # das größte
+    for m in eintrag.get("media_thumbnail", None) or []:
+        if m.get("url"):
+            return m["url"]
+    for link in eintrag.get("links", []):
+        if link.get("rel") == "enclosure" and "image" in (link.get("type") or "") and link.get("href"):
+            return link["href"]
+    treffer = IMG.search(eintrag.get("summary", "") or "")
+    if treffer and treffer.group(1).startswith("https://"):
+        return html.unescape(treffer.group(1))
+    return None
 
 
 def rubrik(eintrag) -> str | None:
@@ -134,6 +159,7 @@ def lies_feed(daten: bytes, quelle: Quelle, konfig: Konfiguration, jetzt: dateti
             "ist_meinung": ist_meinung(url, titel, woerter, quelle, konfig),
             "bezahlschranke": bezahlschranke(eintrag, url, woerter, quelle),
             "position_im_feed": position,
+            "bild": bild_url(eintrag),
         })
     return ergebnis
 

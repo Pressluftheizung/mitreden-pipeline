@@ -1,9 +1,14 @@
-# Dreimal täglich prüfen, ob die Pipeline alles Relevante aufnimmt (pipeline/kontrolle.py).
-# Ergebnis nur ins PRIVATE Repo (metriken/), denn es enthält Titel. In dieses öffentliche Repo schreibt der Ablauf nichts.
-name: kontrolle
+# Dreimal täglich eine Ausgabe: Karten bauen (pipeline/bauen.py) und kontrollieren, ob alles Relevante drin ist
+# (pipeline/kontrolle.py), beides in pipeline/ausgabe.py. Gestartet vom Cloudflare-Worker (cloudflare/takt.js)
+# um 7:23, 14:23 und 19:23 Uhr deutscher Winterzeit; der Dateiname bleibt deshalb kontrolle.yml.
+# Ergebnis nur ins PRIVATE Repo (Branch rohdaten). Bis zum Bias-Review des Nutzers entstehen nur Testkarten.
+name: ausgabe
 
 on:
-  workflow_dispatch: # dreimal täglich gestartet vom Cloudflare-Worker "mitreden-takt" (cloudflare/takt.js), oder von Hand
+  workflow_dispatch:
+  push: # Probebau: config/probebau.txt ändern und hochladen
+    branches: [main]
+    paths: [config/probebau.txt]
 
 permissions:
   contents: read
@@ -13,9 +18,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  kontrolle:
+  ausgabe:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - name: Code holen
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -40,19 +45,23 @@ jobs:
       - name: Pakete installieren
         run: pip install -r requirements.txt
 
-      - name: Kontrolle
-        run: python -m pipeline.kontrolle --daten daten
+      - name: Karten bauen und kontrollieren
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PRUEFER_API_KEY: ${{ secrets.PRUEFER_API_KEY }}
+        run: python -m pipeline.ausgabe --daten daten
 
       - name: Ergebnis ins private Repo speichern
+        if: ${{ !cancelled() }}
         working-directory: daten
         run: |
           git config user.name "mitreden-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A metriken
+          git add -A metriken testkarten stories
           if git diff --cached --quiet; then
             exit 0
           fi
-          git commit -q -m "Kontrolle $(date -u +%Y-%m-%dT%H:%MZ)"
+          git commit -q -m "Ausgabe $(date -u +%Y-%m-%dT%H:%MZ)"
           for versuch in 1 2 3; do
             git push -q origin HEAD:rohdaten && exit 0
             git pull -q --rebase origin rohdaten

@@ -10,10 +10,9 @@ Dieses Repo ist öffentlich und enthält **nur Code, Prompts und Konfiguration**
 |---|---|---|
 | `sammeln` | stündlich (:23, gestartet vom Cloudflare-Worker `cloudflare/takt.js`) | lädt alle Feeds aus `config/sources.yaml` (ohne KI) und speichert neue Teaser im privaten Repo |
 | `pruefen` | bei jedem Hochladen | Schutzprüfung (erlaubte Pfade, keine Schlüssel), gitleaks, Tests |
-| `kontrolle` | 3× täglich | prüft, ob alles Relevante aufgenommen wird (Abdeckung gegen Google News, Feeds, Prüfsets); Ergebnis nur im privaten Repo |
+| `ausgabe` (Datei `kontrolle.yml`) | 3× täglich (7:23, 14:23, 19:23) | baut die Karten (`pipeline/bauen.py`: Gemini schreibt, Groq prüft, Bilder) und kontrolliert, ob alles Relevante drin ist; bis zum Bias-Review nur Testkarten im privaten Repo (`testkarten/`) |
 | `status` | monatlich | aktualisiert `STATUS.md`, damit GitHub die geplanten Abläufe nicht pausiert |
 
-Geplant: `bauen` (dreimal täglich Karten bauen und prüfen).
 
 ## Werkbank (Phase 1)
 
@@ -38,6 +37,19 @@ für Deutschland und die USA, Schlagzeilen UK), je mit den verwandten Schlagzeil
 - **Netz:** Findet sich zu einem Google-Eintrag keine eigene Geschichte, wird der Eintrag selbst zur Geschichte
   (nur Schlagzeilen und Link, deshalb höchstens Kurz & knapp).
 - **Maßstab:** Die Kontrolle misst daran, ob alles drin ist und wie viel davon aus eigenen Quellen kommt.
+
+## Karten bauen (Phase 2)
+
+- **Neu:** Gemini schreibt die Karte aus 3–8 Quellen (Top-Storys mit dem besten Modell). Erst eine Faktenliste,
+  dann die Karte daraus (PLAN.md 8.0, B7).
+- **Bekannt:** Die Karte bleibt. Kommen mindestens zwei neue Meldungen dazu, entscheidet Gemini: nichts Neues,
+  ergänzen, korrigieren oder ersetzen.
+- **Kurz & knapp:** eine Zeile je Geschichte, 20 Geschichten pro Anfrage.
+- **Prüfen:** Zahlen prüft der Code, jede Aussage prüft Groq (anderes Unternehmen). Nicht Belegtes fliegt raus.
+- **Bilder:** Artikelbild nur verlinkt, sonst freies Bild von Wikimedia.
+- Modelle, Reihenfolge und Grenzen: `config/ki.config.json`; Prompts: `prompts/`. Verbrauch je Modell und Tag
+  steht im privaten Repo unter `metriken/ki-verbrauch.json`.
+- Probebau ohne Zeitplan: `config/probebau.txt` ändern und hochladen.
 
 ## Kontrolle
 
@@ -82,5 +94,6 @@ Der Datenordner liegt außerhalb dieses Repos und wird nie committet.
 ## Regeln
 
 - Keine Artikeltexte, Teaser, Karten oder persönlichen Daten in dieses Repo.
-- Keine Pressefotos. Bilder aus den Feeds werden nicht übernommen.
+- Keine Bilder in dieses Repo. Von Artikelbildern speichert die Pipeline nur die Adresse (im privaten Repo),
+  die App lädt sie beim Anzeigen direkt beim Verlag. Sonst freie Bilder (Wikimedia).
 - Keine Schlüssel in Dateien. Lokal nur in `.env` (steht in `.gitignore`).

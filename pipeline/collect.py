@@ -108,7 +108,7 @@ def fuehre_zusammen(alle: dict[str, dict], neu: list[dict]) -> tuple[int, int]:
         if (alt["titel"], alt["teaser"]) != (t["titel"], t["teaser"]):
             anzahl_akt += 1
         alt.update({k: t[k] for k in ("titel", "teaser", "zuletzt_gesehen", "position_im_feed",
-                                      "ist_meinung", "bezahlschranke", "rubrik")})
+                                      "ist_meinung", "bezahlschranke", "rubrik", "bild")})
         alt["veroeffentlicht"] = alt.get("veroeffentlicht") or t["veroeffentlicht"]
     return anzahl_neu, anzahl_akt
 
