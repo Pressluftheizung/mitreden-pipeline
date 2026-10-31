@@ -37,6 +37,7 @@ from pathlib import Path
 import yaml
 
 from .bilder import waehle_bilder
+from .volltext import lies_volltext
 from .ki import KI, KeinModellFrei, Zaehler
 from .pruefen import anwenden, code_pruefung, pruef_anfrage, pruefe_antwort
 from .pruefansicht import als_html
@@ -120,8 +121,18 @@ def quellen_auswahl(st: Stand, b: Bewertung, anzahl: int = 6, mit_meinung: bool 
             nimm(m)
     return [{"id": f"q{n}", "redaktion": m.quelle.name, "lager": m.quelle.lager,
              "art": "meinung" if m.teaser.get("ist_meinung") else "bericht",
-             "titel": m.titel, "text": (m.teaser.get("teaser") or "")[:500], "url": m.teaser.get("url")}
+             "titel": m.titel, "text": (m.teaser.get("teaser") or "")[:500], "url": m.teaser.get("url"),
+             "volltext_ok": m.quelle.volltext_erlaubt and not m.teaser.get("bezahlschranke")
+             and "news.google.com" not in (m.teaser.get("url") or "")}
             for n, m in enumerate(gewaehlt, start=1)]
+
+
+def lade_volltexte(quellen: list[dict], anzahl: int = 2) -> None:
+    """Volltext für bis zu `anzahl` frei zugängliche Quellen (nur im Arbeitsspeicher, nie gespeichert)."""
+    for q in [q for q in quellen if q.get("volltext_ok") and q.get("url")][:anzahl]:
+        text = lies_volltext(q["url"])
+        if text and len(text) > len(q["text"]) + 300:  # nur wenn es wirklich mehr ist als der Anrisstext
+            q["volltext"] = text
 
 
 def quellen_liste(st: Stand, b: Bewertung) -> list[dict]:
@@ -274,25 +285,32 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
     quellen_ki: dict[int, list[dict]] = {}
     fehler: list[str] = []
 
+    # Schlagzeilen der wichtigsten Geschichten: damit die KI im Mitreden-Satz Verbindungen herstellen kann
+    andere_themen = [b.titel for b in aktiv[:30]]
+
     def schreibe(aufgabe: str, auswahl: list[int], groesse: int) -> None:
         for portion in in_portionen(auswahl, groesse):
             eingabe = []
             for n in portion:
                 b = aktiv[n]
                 qs = quellen_auswahl(st, b, 8 if b.format == "top" else 6, mit_meinung=b.format == "top")
+                if b.format == "top":
+                    lade_volltexte(qs)
                 quellen_ki[n] = qs
+                if aufgabe == "update":  # nur die neuen Meldungen schicken
+                    neue_urls = {st.meldungen[i].teaser.get("url") for i in b.mitglieder
+                                 if st.meldungen[i].teaser["id"] not in set(alt[zuordnung[n]].get("teaser_ids", []))}
+                    qs = [q for q in qs if q.get("url") in neue_urls] or qs
+                felder = ("id", "redaktion", "lager", "art", "titel", "text", "volltext")
                 eintrag = {"story": f"s{n}", "format": b.format, "thema": b.thema, "region": b.region,
-                           "quellen": [{k: q[k] for k in ("id", "redaktion", "lager", "art", "titel", "text")} for q in qs]}
+                           "quellen": [{k: q[k] for k in felder if q.get(k)} for q in qs]}
                 if aufgabe == "update":
                     k = alt[zuordnung[n]]["karte"]
                     eintrag["bisherige_karte"] = {f: k.get(f) for f in ("titel", "satz", "punkte", "mitreden", "faktenbox")}
-                    neue = set(echte_ids(st, b)) - set(alt[zuordnung[n]].get("teaser_ids", []))
-                    eintrag["quellen"] = [q for q in eintrag["quellen"]
-                                          if any(st.meldungen[i].teaser["id"] in neue and st.meldungen[i].teaser.get("url") == q.get("url")
-                                                 for i in b.mitglieder)] or eintrag["quellen"]
                 eingabe.append(eintrag)
+            daten = {"geschichten": eingabe, "andere_themen": andere_themen}
             try:
-                antwort, modell = ki.frage(aufgabe, json.dumps({"geschichten": eingabe}, ensure_ascii=False), pruefe_karten)
+                antwort, modell = ki.frage(aufgabe, json.dumps(daten, ensure_ascii=False), pruefe_karten)
             except KeinModellFrei as e:
                 fehler.append(f"{aufgabe}: {e}")
                 continue
@@ -342,7 +360,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
         karte = dict(vorher)
         if plan[n] in ("neu", "update"):
             t = texte[n]
-            for feld in ("titel", "satz", "punkte", "mitreden", "mitreden_art", "faktenbox", "ebenen"):
+            for feld in ("titel", "satz", "punkte", "mitreden", "mitreden_art", "faktenbox", "ebenen", "erklaerung"):
                 if feld in t:
                     karte[feld] = t[feld]
             karte["punkte"] = (karte.get("punkte") or [])[:3]
@@ -374,6 +392,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
         karte.setdefault("aktualisiert", iso(jetzt))
         karte.setdefault("aenderung", None)
         karte.setdefault("ebenen", [])
+        karte.setdefault("erklaerung", None)
         karten_voll[n] = karte
 
     # Prüfen (nur neu geschriebene Karten; die übrigen behalten ihre Prüfung)
@@ -383,6 +402,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
             continue
         b = aktiv[n]
         alle_texte = [f"{st.meldungen[i].titel} {st.meldungen[i].teaser.get('teaser') or ''}" for i in b.mitglieder]
+        alle_texte += [q["volltext"] for q in karte["_quellen_ki"] if q.get("volltext")]
         code = code_pruefung(karte, alle_texte)
         urteil, anbieter, modell = None, None, None
         if pruefungen < jb["max_pruefungen"]:
@@ -493,9 +513,10 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
                    "frei": sum(1 for k in karten_voll.values() if (k.get("bild") or {}).get("art") == "frei"),
                    "keins": sum(1 for k in karten_voll.values() if not k.get("bild"))},
         # beobachten (Wunsch des Nutzers 01.11.2026): wie oft ordnet der Mitreden-Satz selbst ein, wie oft fliegt er raus
-        "mitreden": {"einordnung": sum(1 for k in karten_voll.values() if k.get("_neu_geschrieben") and k.get("mitreden_art") == "einordnung"),
-                     "fakt": sum(1 for k in karten_voll.values() if k.get("_neu_geschrieben") and k.get("mitreden_art") == "fakt"),
-                     "gestrichen": sum(1 for k in karten_voll.values() if k.get("_neu_geschrieben") and not k.get("mitreden"))},
+        "mitreden": {art: sum(1 for k in karten_voll.values() if k.get("_neu_geschrieben") and k.get("mitreden")
+                              and k.get("mitreden_art") == art) for art in ("fakt", "wissen", "spekulation")}
+                    | {"gestrichen": sum(1 for k in karten_voll.values() if k.get("_neu_geschrieben") and not k.get("mitreden"))},
+        "volltexte": sum(1 for k in karten_voll.values() for q in k.get("_quellen_ki") or [] if q.get("volltext")),
         "ki": ki.protokoll, "fehler": fehler,
     }
 
@@ -534,7 +555,7 @@ def drucke(m: dict) -> None:
     print("  Plan: " + ", ".join(f"{k} {v}" for k, v in m["plan"].items()))
     print("  Prüfung: " + ", ".join(f"{k} {v}" for k, v in m["pruefung"].items()))
     print("  Bilder: " + ", ".join(f"{k} {v}" for k, v in m["bilder"].items()))
-    print("  Mitreden-Satz: " + ", ".join(f"{k} {v}" for k, v in m["mitreden"].items()))
+    print("  Mitreden-Satz: " + ", ".join(f"{k} {v}" for k, v in m["mitreden"].items()) + f" · Volltexte {m['volltexte']}")
     anfragen: dict[str, int] = {}
     for p in m["ki"]:
         anfragen[p["modell"]] = anfragen.get(p["modell"], 0) + 1

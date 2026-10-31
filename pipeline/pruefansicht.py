@@ -32,10 +32,15 @@ def _karte(k: dict) -> str:
         ebenen += f"<details><summary>{E(e.get('titel', e.get('typ', '')))}</summary>{streit}<ul>{inhalt}</ul></details>"
     quellen = "".join(
         f'<li id="{E(k["id"])}-{E(q["id"])}"><b>{E(q["id"])}</b> <span class="lager {E(q["lager"])}">{E(q["redaktion"])}</span>'
-        f'{" <i>Meinung</i>" if q["art"] == "meinung" else ""} <a href="{E(q.get("url") or "#")}" target="_blank" rel="noopener">'
+        f'{" <i>Meinung</i>" if q["art"] == "meinung" else ""}{" <i>+ Volltext</i>" if q.get("volltext") else ""}'
+        f' <a href="{E(q.get("url") or "#")}" target="_blank" rel="noopener">'
         f'{E(q["titel"])}</a><div class="klein">{E(q["text"])}</div></li>' for q in qs)
     hinweise = "".join(f"<li>{E(h)}</li>" for h in p.get("hinweise", []))
-    fehlt = ", ".join((k.get("_ki") or {}).get("fehlt") or [])
+    erklaerung = ""
+    if k.get("erklaerung"):
+        erklaerung = ("<details><summary>Erklär mir das</summary><ul>"
+                      + "".join(f"<li>{E(x)}</li>" for x in k["erklaerung"]) + "</ul></details>")
+    fehlt =", ".join((k.get("_ki") or {}).get("fehlt") or [])
     return f"""
 <section class="paar {E(p.get('ergebnis', ''))}" data-id="{E(k['id'])}">
   <div class="karte">
@@ -50,6 +55,7 @@ def _karte(k: dict) -> str:
     <div class="klein">Labels: {E(', '.join(k.get('labels', [])) or '–')} · Lager-Mix: {E(json.dumps(k.get('lager_mix', {}), ensure_ascii=False))}
       {(' · ' + E(k['lager_hinweis'])) if k.get('lager_hinweis') else ''} · Quellen fehlen zu: {E(fehlt or '–')}</div>
     <h3>Faktenbox <span class="klein">(anklicken markiert die Quellen)</span></h3><ul>{fakten}</ul>
+    {erklaerung}
     {ebenen}
     {f'<h3>Prüf-Hinweise</h3><ul class="hinweise">{hinweise}</ul>' if hinweise else ''}
   </div>

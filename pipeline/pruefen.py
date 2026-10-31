@@ -40,6 +40,8 @@ def code_pruefung(karte: dict, quelltexte: list[str]) -> list[dict]:
     bekannt = set().union(*(zahlen(t) for t in quelltexte)) if quelltexte else set()
     probleme = []
     for a in aussagen(karte):
+        if a["feld"] == "mitreden":
+            continue  # Einordnung darf Wissen und Zahlen von außerhalb der Quellen enthalten (Wunsch des Nutzers)
         fremd = sorted(z for z in zahlen(a["text"]) if z not in bekannt)
         if fremd:
             probleme.append({"nr": a["nr"], "feld": a["feld"], "index": a["index"],
@@ -57,7 +59,8 @@ def pruef_anfrage(karte: dict, quellen: list[dict]) -> str:
     # das hält die Anfrage klein genug für das Minutenlimit der Prüf-KI.
     return json.dumps({
         "quellen": [{"id": q["id"], "outlet": q["redaktion"], "leaning": q["lager"], "type": q["art"],
-                     "title": q["titel"], "text": q["text"][:350]} for q in quellen[:6]],
+                     "title": q["titel"], "text": (q.get("volltext") or q["text"])[:2500 if q.get("volltext") else 350]}
+                    for q in quellen[:6]],
         "aussagen": [{"nr": a["nr"], "feld": a["feld"], "text": a["text"]} for a in aussagen(karte) if a["feld"] != "faktenbox"],
     }, ensure_ascii=False)
 
