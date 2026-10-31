@@ -267,7 +267,8 @@ class Bewerter:
     def formate_vergeben(self, bewertungen: list[Bewertung]) -> None:
         """Top-Story, Karte, Kurz & knapp oder weg (PLAN.md 4.1 und 6B).
 
-        Was Google News in einer seiner Listen zeigt, ist mindestens Kurz & knapp: Darüber reden die Leute.
+        Sicherheitsboden: Was frisch ist und ein klares Zeichen trägt, dass darüber geredet wird, ist immer
+        mindestens Kurz & knapp, egal wie die Punktzahl ausfällt (siehe `boden`).
         Geschichten nur aus Google-Schlagzeilen (ohne eigene Quelle, also ohne Text) sind höchstens Kurz & knapp.
         """
         g = self.g
@@ -276,10 +277,29 @@ class Bewerter:
             nur_google = b.quellen == ["google_news"]
             if b.wichtigkeit >= g["schwelle_karte"] and not nur_google:
                 b.format = "top" if i < g["top_anzahl"] else "karte"
-            elif b.wichtigkeit >= g["schwelle_kurz"] or nur_google or (b.google_listen and g["google_news"]["mindestens_kurz"]):
+            elif b.wichtigkeit >= g["schwelle_kurz"]:
                 b.format = "kurz"
+            elif grund := self.boden(b):
+                b.format = "kurz"
+                b.begruendung.append(f"Sicherheitsboden: {grund}")
             else:
                 b.format = "weg"
+
+    def boden(self, b: Bewertung) -> str | None:
+        """Grund, warum die Geschichte nie wegfallen darf, oder None (Werte in gewichte.yaml unter `boden`)."""
+        bo = self.g["boden"]
+        if b.faktoren.get("frische", 1) < bo["frische_mindestens"]:
+            return None
+        s = b.gespraech
+        if s.get("schlagzeile") is not None and s["schlagzeile"] <= bo["schlagzeile_bis"]:
+            return f"Google-Schlagzeile Platz {s['schlagzeile']}"
+        if s.get("rubrik") is not None and s["rubrik"] <= bo["rubrik_bis"]:
+            return f"Google-Rubrik Platz {s['rubrik']}"
+        if bo["trends"] and s.get("trends"):
+            return "Google-Suchtrend"
+        if s.get("redaktionen", 0) >= bo["redaktionen_ab"]:
+            return f"{s['redaktionen']} Redaktionen"
+        return None
 
 
 def repraesentativ(ms: list[Meldung], vektoren: np.ndarray) -> str:

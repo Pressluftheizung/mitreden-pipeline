@@ -9,6 +9,8 @@ leer_seit_h: 72            # eine Quelle ohne neue Meldung so lange: auffällig 
 max_falsch_anteil: 0.03    # Prüfsets: so viele falsche Zuordnungen sind noch in Ordnung (Stand der Eichung: 2 %)
 max_uebersehen_anteil: 0.05
 
-# Gemessen wird an den Google-News-Listen aus config/sources.yaml (signale), je die ersten messen_bis Einträge.
-# Ziel und Warnung gelten für jede Gruppe (kern = Deutschland, rubrik = deutsche Rubriken, global = USA und UK).
+# Gemessen wird an den Google-News-Listen aus config/sources.yaml (signale): Schlagzeilen-Listen bis Platz 10,
+# Rubriken bis Platz 5 (wie der Sicherheitsboden in gewichte.yaml). Ziel und Warnung gelten für jede Gruppe
+# (kern = Deutschland, rubrik = deutsche Rubriken, global = USA und UK).
 messen_bis: 10
+messen_bis_rubrik: 5

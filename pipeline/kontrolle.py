@@ -122,7 +122,8 @@ def kontrolle(daten: Path, config: Path, jetzt: datetime, pruefsets: Path | None
     konfig = lade_konfiguration(config / "sources.yaml")
     gruppe_von = {s.id: s.gruppe for s in konfig.signale if s.gruppe}
     st = st or berechne(daten, config, jetzt)
-    a = abdeckung(st.google, st.in_reihenfolge, st.sortiert, gruppe_von, st.gewichte["google_news"], k["messen_bis"])
+    a = abdeckung(st.google, st.in_reihenfolge, st.sortiert, gruppe_von, st.gewichte["google_news"], k["messen_bis"],
+                  k["messen_bis_rubrik"])
     bericht = {
         "zeit": iso(jetzt),
         "sammeln": pruefe_sammeln(daten, k, jetzt, [q.id for q in konfig.quellen], [s.id for s in konfig.signale]),

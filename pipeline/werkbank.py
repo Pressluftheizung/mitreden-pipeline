@@ -88,7 +88,8 @@ def schreibe_verteilung(st: Stand, daten: Path, name: str, aufheben: int = 9) ->
     ordner.mkdir(parents=True, exist_ok=True)
     zeilen = [json.dumps({"w": b.wichtigkeit, "format": b.format, "thema": b.thema, "unterthema": b.unterthema,
                           "titel": b.titel[:120], "meldungen": len(b.mitglieder), "nur_google": b.quellen == ["google_news"],
-                          **b.gespraech, "teile": b.teile, "mitreden": b.faktoren.get("mitreden")}, ensure_ascii=False)
+                          **b.gespraech, "teile": b.teile, "mitreden": b.faktoren.get("mitreden"),
+                          "frische": b.faktoren.get("frische")}, ensure_ascii=False)
               for b in st.sortiert]
     datei = ordner / f"{name}.jsonl"
     datei.write_text("\n".join(zeilen) + "\n", encoding="utf-8")

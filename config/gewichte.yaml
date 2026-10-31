@@ -44,7 +44,6 @@ google_news:
   rubrik_anteil: 0.7         # so viel zählt jeder andere Eintrag (Rubrik-Listen, hintere Schlagzeilen)
   land: { DE: 1.5, US: 1.0, GB: 1.0 }
   maximum: 3.0               # höchstens so viel Aufmerksamkeit aus Google News, egal in wie vielen Listen
-  mindestens_kurz: true      # was Google in einer Liste zeigt, fällt nie weg (mindestens Kurz & knapp)
   eigene_geschichte: true    # passt keine eigene Geschichte, wird der Google-Eintrag selbst zur Geschichte (höchstens Kurz & knapp)
   gleich: 0.85               # Google-Einträge aus verschiedenen Listen ab dieser Ähnlichkeit = dieselbe Geschichte
 
@@ -53,8 +52,19 @@ trends_maximum: 1.5
 
 # Formate (PLAN.md 4.1). Keine feste Obergrenze an Karten.
 top_anzahl: 7          # die besten (5–8) werden Top-Story, wenn sie über der Kartenschwelle liegen
-schwelle_karte: 3.0    # Schwelle 1
-schwelle_kurz: 1.5     # Schwelle 2, darunter fällt es weg
+# Kalibriert am 01.11.2026 an allen 3757 Geschichten eines Stands (metriken/verteilung/): ergibt im Bestand
+# (48 Std) rund 60 Karten und 200 Kurzmeldungen, je Ausgabe neu etwa 15–25 Karten und 50 Zeilen.
+schwelle_karte: 5.0    # Schwelle 1
+schwelle_kurz: 3.0     # Schwelle 2, darunter fällt es weg, außer der Sicherheitsboden greift
+
+# Sicherheitsboden: Ziel der App ist, über alles mitreden zu können, worüber geredet wird. Was frisch ist
+# (neueste Meldung höchstens ~24 Std alt) und eines dieser Zeichen trägt, ist immer mindestens Kurz & knapp.
+boden:
+  frische_mindestens: 0.4  # Frische 0,4 ≈ 24 Std (Halbwertszeit 18 Std)
+  schlagzeile_bis: 15      # Google-News-Schlagzeilen (Deutschland, USA, UK)
+  rubrik_bis: 5            # Google-News-Rubriken (Deutschland, Welt, Wirtschaft, Technik, …)
+  trends: true             # passt zu einem Google-Suchtrend
+  redaktionen_ab: 5        # so viele unabhängige Redaktionen berichten
 
 # Dubletten (Algorithmus A), siehe pipeline/cluster.py für die Bedeutung.
 dubletten:

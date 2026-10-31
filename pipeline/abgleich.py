@@ -122,7 +122,7 @@ GRUENDE = ("abgedeckt", "nur_google", "aussortiert", "unsicher", "fehlt")
 
 
 def abdeckung(google: list[GoogleTreffer], in_reihenfolge: list, sortiert: list, gruppe_von: dict[str, str],
-              g: dict, messen_bis: int = 10) -> dict:
+              g: dict, messen_bis: int = 10, messen_bis_rubrik: int = 5) -> dict:
     """Abdeckungsquote (PLAN.md 7): Haben wir jede Google-Meldung als Top-Story, Karte oder Kurzmeldung?
 
     Gemessen an den ersten Einträgen jeder Google-Liste. Jeder Eintrag bekommt einen Grund:
@@ -135,7 +135,7 @@ def abdeckung(google: list[GoogleTreffer], in_reihenfolge: list, sortiert: list,
     platz = {id(b): n for n, b in enumerate(sortiert, start=1)}
     liste = []
     for t in google:
-        if t.rang > messen_bis:
+        if t.rang > (messen_bis if t.schlagzeile else messen_bis_rubrik):
             continue
         b = in_reihenfolge[t.geschichte if t.geschichte is not None else t.beste]
         if t.geschichte is None:

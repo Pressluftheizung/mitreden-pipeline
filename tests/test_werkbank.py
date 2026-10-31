@@ -161,9 +161,16 @@ class Wichtigkeit(unittest.TestCase):
         self.assertAlmostEqual(b.teile["aufmerksamkeit"], 1.5 * 0.7)
         self.assertIn("Google News DE Schlagzeilen Platz 25", b.begruendung)
         self.assertEqual(b.google_listen, 1)
-        b.wichtigkeit = 0.1  # selbst ganz unten: was Google zeigt, fällt nicht weg
-        self.bewerter.formate_vergeben([b])
-        self.assertEqual(b.format, "kurz")
+
+    def test_sicherheitsboden(self):
+        m = baue_meldungen([teaser(1, "alpha", "Sängerin sagt Tour ab")], QUELLEN)
+        oben = GoogleTreffer("google_news_top_de", 12, "Sängerin sagt Tour ab", 0, 0, 1.3, 1.0)
+        unten = GoogleTreffer("google_news_unterhaltung_us", 9, "Singer cancels tour", 0, 0, 1.3, 1.0)
+        for treffer, erwartet in (([oben], "kurz"), ([unten], "weg"), ([], "weg")):
+            b = self.bewerter.bewerte([0], m, vektoren(), self.leer, JETZT, treffer)
+            b.wichtigkeit = 0.1  # selbst ganz unten: eine Google-Schlagzeile fällt nie weg, Rubrik-Platz 9 schon
+            self.bewerter.formate_vergeben([b])
+            self.assertEqual(b.format, erwartet, treffer)
 
     def test_allgemeiner_trend_zaehlt_nur_im_titel(self):
         m = baue_meldungen([teaser(1, "alpha", "Neue Studie zu Krebs", "Forscher über cancer research")], QUELLEN)
@@ -187,7 +194,7 @@ class Wichtigkeit(unittest.TestCase):
     def test_formate(self):
         m = baue_meldungen([teaser(i, "alpha", f"Meldung {i}") for i in range(3)], QUELLEN)
         bewertungen = [self.bewerter.bewerte([i], m, vektoren(0, 0), self.leer, JETZT) for i in range(3)]
-        for b, wert in zip(bewertungen, (5.0, 2.0, 0.5)):
+        for b, wert in zip(bewertungen, (6.0, 3.5, 0.5)):
             b.wichtigkeit = wert
         self.bewerter.formate_vergeben(bewertungen)
         self.assertEqual([b.format for b in bewertungen], ["top", "kurz", "weg"])
