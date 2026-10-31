@@ -3,7 +3,7 @@
 Gibt nur Modellnamen und Statuscodes aus, nie Schlüssel oder Antworttexte (die Logs sind öffentlich).
 Schlüssel kommen aus den Umgebungsvariablen GEMINI_API_KEY und PRUEFER_API_KEY.
 
-Aufruf: python tools/ki_check.py
+Aufruf: python tools/ki_check.py [--ausgabe datei.json]   (Modellliste zusätzlich als Datei, z. B. ins private Repo)
 """
 
 import json
@@ -25,6 +25,7 @@ def anfrage(url: str, kopf: dict, daten: dict | None = None) -> tuple[int, dict]
 
 def main() -> int:
     fehler = 0
+    ergebnis: dict = {}
     gemini = os.environ.get("GEMINI_API_KEY", "")
     if not gemini:
         print("GEMINI_API_KEY fehlt")
@@ -36,6 +37,7 @@ def main() -> int:
         namen = [m["name"].removeprefix("models/") for m in daten.get("models", [])
                  if "generateContent" in m.get("supportedGenerationMethods", [])]
         print("  " + ", ".join(sorted(namen)))
+        ergebnis["gemini"] = sorted(namen)
         test = next((n for n in sorted(namen, reverse=True) if "flash-lite" in n and "preview" not in n), None)
         if test:
             status, _ = anfrage(f"https://generativelanguage.googleapis.com/v1beta/models/{test}:generateContent", kopf,
@@ -51,11 +53,17 @@ def main() -> int:
         status, daten = anfrage("https://api.groq.com/openai/v1/models", kopf)
         print(f"Groq Modellliste: HTTP {status}")
         print("  " + ", ".join(sorted(m["id"] for m in daten.get("data", []))))
+        ergebnis["groq"] = sorted(m["id"] for m in daten.get("data", [])))
         status, _ = anfrage("https://api.groq.com/openai/v1/chat/completions", kopf,
                             {"model": "openai/gpt-oss-120b", "max_tokens": 50,
                              "messages": [{"role": "user", "content": "Antworte nur mit: OK"}]})
         print(f"Groq Testanfrage (openai/gpt-oss-120b): HTTP {status}")
         fehler += status != 200
+    if "--ausgabe" in sys.argv:
+        ziel = sys.argv[sys.argv.index("--ausgabe") + 1]
+        os.makedirs(os.path.dirname(ziel) or ".", exist_ok=True)
+        with open(ziel, "w", encoding="utf-8") as f:
+            json.dump(ergebnis, f, indent=1)
     return 1 if fehler else 0
 
 
