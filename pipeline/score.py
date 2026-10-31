@@ -42,6 +42,9 @@ class Bewertung:
     quellen: list[str]
     mitglieder: list[int] = field(default_factory=list)
     google_listen: int = 0  # in wie vielen Google-News-Listen die Geschichte steht
+    # Gesprächs-Signale für den Sicherheitsboden (formate_vergeben) und die Kalibrierung:
+    # bester Platz in Google-Schlagzeilen / -Rubriken, Treffer in Google Trends, Zahl unabhängiger Redaktionen
+    gespraech: dict = field(default_factory=dict)
 
 
 class Themen:
@@ -253,6 +256,12 @@ class Bewerter:
             teile={k: round(v, 2) for k, v in teile.items()},
             faktoren={"mitreden": round(mitreden, 2), "live": round(live, 2), "frische": round(frische, 2)},
             begruendung=begruendung, quellen=quellen, mitglieder=list(geschichte), google_listen=len(beste),
+            gespraech={
+                "schlagzeile": min((t.rang for t in beste.values() if t.schlagzeile), default=None),
+                "rubrik": min((t.rang for t in beste.values() if not t.schlagzeile), default=None),
+                "trends": trends > 0,
+                "redaktionen": len({r for r in erste_titel if r != "google_news"}),
+            },
         )
 
     def formate_vergeben(self, bewertungen: list[Bewertung]) -> None:

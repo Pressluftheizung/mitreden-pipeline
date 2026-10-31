@@ -15,7 +15,7 @@ from pathlib import Path
 
 from . import bauen, kontrolle
 from .score import jetzt_utc
-from .werkbank import berechne
+from .werkbank import berechne, schreibe_verteilung
 
 
 def main() -> int:
@@ -27,6 +27,7 @@ def main() -> int:
     jetzt = (datetime.fromisoformat(args.jetzt.replace("Z", "+00:00")) if args.jetzt else jetzt_utc()).astimezone(timezone.utc)
 
     st = berechne(args.daten, args.config, jetzt)
+    schreibe_verteilung(st, args.daten, bauen.ausgabe_id(jetzt)[0])
     bau_ok = True
     try:
         bauen.drucke(bauen.bauen(args.daten, args.config, jetzt, st=st))

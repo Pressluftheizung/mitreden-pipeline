@@ -79,6 +79,24 @@ def berechne(daten: Path, config: Path, jetzt: datetime) -> Stand:
     return Stand(meldungen, vektoren, titel_vektoren, ergebnis, in_reihenfolge, bewertungen, google, gewichte, stand)
 
 
+def schreibe_verteilung(st: Stand, daten: Path, name: str, aufheben: int = 9) -> Path:
+    """Kurze Übersicht aller Geschichten (eine Zeile je Geschichte) für die Kalibrierung der Schwellen.
+
+    Liegt im privaten Repo unter metriken/verteilung/; die letzten `aufheben` Läufe bleiben (3 Tage).
+    """
+    ordner = daten / "metriken" / "verteilung"
+    ordner.mkdir(parents=True, exist_ok=True)
+    zeilen = [json.dumps({"w": b.wichtigkeit, "format": b.format, "thema": b.thema, "unterthema": b.unterthema,
+                          "titel": b.titel[:120], "meldungen": len(b.mitglieder), "nur_google": b.quellen == ["google_news"],
+                          **b.gespraech, "teile": b.teile, "mitreden": b.faktoren.get("mitreden")}, ensure_ascii=False)
+              for b in st.sortiert]
+    datei = ordner / f"{name}.jsonl"
+    datei.write_text("\n".join(zeilen) + "\n", encoding="utf-8")
+    for alt in sorted(ordner.glob("*.jsonl"))[:-aufheben]:
+        alt.unlink()
+    return datei
+
+
 def rangliste(daten: Path, config: Path, jetzt: datetime) -> dict:
     st = berechne(daten, config, jetzt)
     meldungen, ergebnis, bewertungen = st.meldungen, st.ergebnis, st.sortiert
