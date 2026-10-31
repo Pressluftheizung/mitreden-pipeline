@@ -53,7 +53,7 @@ def main() -> int:
         status, daten = anfrage("https://api.groq.com/openai/v1/models", kopf)
         print(f"Groq Modellliste: HTTP {status}")
         print("  " + ", ".join(sorted(m["id"] for m in daten.get("data", []))))
-        ergebnis["groq"] = sorted(m["id"] for m in daten.get("data", [])))
+        ergebnis["groq"] = sorted(m["id"] for m in daten.get("data", []))
         status, _ = anfrage("https://api.groq.com/openai/v1/chat/completions", kopf,
                             {"model": "openai/gpt-oss-120b", "max_tokens": 50,
                              "messages": [{"role": "user", "content": "Antworte nur mit: OK"}]})
