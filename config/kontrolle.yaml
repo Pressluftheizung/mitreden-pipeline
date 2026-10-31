@@ -5,7 +5,7 @@ warnung_abdeckung: 0.85    # darunter: rot
 warnung_eigene_kern: 0.90  # Deutschland-Listen: so viel muss aus eigenen Quellen kommen, sonst fehlt eine Quelle
 max_alter_sammeln_h: 3     # so alt darf der letzte Sammellauf höchstens sein
 max_fehler_in_folge: 3     # ein Feed, der so oft hintereinander scheitert, gilt als ausgefallen
-leer_seit_h: 24            # eine Quelle ohne neue Meldung so lange: auffällig
+leer_seit_h: 72            # eine Quelle ohne neue Meldung so lange: auffällig (Rubrik-Feeds sind manchmal einen Tag still)
 max_falsch_anteil: 0.03    # Prüfsets: so viele falsche Zuordnungen sind noch in Ordnung (Stand der Eichung: 2 %)
 max_uebersehen_anteil: 0.05
 
