@@ -134,4 +134,5 @@ def anwenden(karte: dict, code: list[dict], ki: dict | None, anbieter: str | Non
     else:
         ergebnis = "ok"
     return {"anbieter": anbieter, "modell": modell, "ergebnis": ergebnis, "neutralitaet": neutral,
-            "seitentausch_ok": seitentausch, "eingriffe": eingriffe, "unklar": len(unklar), "hinweise": hinweise}
+            "seitentausch_ok": seitentausch, "mitreden_einordnung": (ki or {}).get("mitreden_einordnung"),
+            "eingriffe": eingriffe, "unklar": len(unklar), "hinweise": hinweise}

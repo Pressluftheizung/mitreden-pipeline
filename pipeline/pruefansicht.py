@@ -45,7 +45,7 @@ def _karte(k: dict) -> str:
     <h2>{E(k.get('titel', ''))}</h2>
     <p><b>{E(k.get('satz', ''))}</b></p>
     <ul>{''.join(f'<li>{E(x)}</li>' for x in k.get('punkte') or [])}</ul>
-    <p class="mitreden">💬 {E(k.get('mitreden', ''))}</p>
+    <p class="mitreden">💬 {E(k.get('mitreden') or '– (gestrichen)')} <span class="klein">{E(k.get('mitreden_art') or '')}</span></p>
     {f'<p class="klein">Geändert: {E(k["aenderung"])}</p>' if k.get('aenderung') else ''}
     <div class="klein">Labels: {E(', '.join(k.get('labels', [])) or '–')} · Lager-Mix: {E(json.dumps(k.get('lager_mix', {}), ensure_ascii=False))}
       {(' · ' + E(k['lager_hinweis'])) if k.get('lager_hinweis') else ''} · Quellen fehlen zu: {E(fehlt or '–')}</div>

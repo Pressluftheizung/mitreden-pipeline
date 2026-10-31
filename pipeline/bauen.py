@@ -342,7 +342,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
         karte = dict(vorher)
         if plan[n] in ("neu", "update"):
             t = texte[n]
-            for feld in ("titel", "satz", "punkte", "mitreden", "faktenbox", "ebenen"):
+            for feld in ("titel", "satz", "punkte", "mitreden", "mitreden_art", "faktenbox", "ebenen"):
                 if feld in t:
                     karte[feld] = t[feld]
             karte["punkte"] = (karte.get("punkte") or [])[:3]
@@ -492,6 +492,10 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
         "bilder": {"verlinkt": sum(1 for k in karten_voll.values() if (k.get("bild") or {}).get("art") == "verlinkt"),
                    "frei": sum(1 for k in karten_voll.values() if (k.get("bild") or {}).get("art") == "frei"),
                    "keins": sum(1 for k in karten_voll.values() if not k.get("bild"))},
+        # beobachten (Wunsch des Nutzers 01.11.2026): wie oft ordnet der Mitreden-Satz selbst ein, wie oft fliegt er raus
+        "mitreden": {"einordnung": sum(1 for k in karten_voll.values() if k.get("_neu_geschrieben") and k.get("mitreden_art") == "einordnung"),
+                     "fakt": sum(1 for k in karten_voll.values() if k.get("_neu_geschrieben") and k.get("mitreden_art") == "fakt"),
+                     "gestrichen": sum(1 for k in karten_voll.values() if k.get("_neu_geschrieben") and not k.get("mitreden"))},
         "ki": ki.protokoll, "fehler": fehler,
     }
 
@@ -530,6 +534,7 @@ def drucke(m: dict) -> None:
     print("  Plan: " + ", ".join(f"{k} {v}" for k, v in m["plan"].items()))
     print("  Prüfung: " + ", ".join(f"{k} {v}" for k, v in m["pruefung"].items()))
     print("  Bilder: " + ", ".join(f"{k} {v}" for k, v in m["bilder"].items()))
+    print("  Mitreden-Satz: " + ", ".join(f"{k} {v}" for k, v in m["mitreden"].items()))
     anfragen: dict[str, int] = {}
     for p in m["ki"]:
         anfragen[p["modell"]] = anfragen.get(p["modell"], 0) + 1
