@@ -57,10 +57,10 @@ top_anzahl: 7          # die besten (5–8) werden Top-Story, wenn sie über der
 schwelle_karte: 5.0    # Schwelle 1
 schwelle_kurz: 3.0     # Schwelle 2, darunter fällt es weg, außer der Sicherheitsboden greift
 
-# Sicherheitsboden: Ziel der App ist, über alles mitreden zu können, worüber geredet wird. Was frisch ist
-# (neueste Meldung höchstens ~24 Std alt) und eines dieser Zeichen trägt, ist immer mindestens Kurz & knapp.
+# Sicherheitsboden: Ziel der App ist, über alles mitreden zu können, worüber geredet wird. Was in einer Google-Liste
+# steht oder zu einem Suchtrend passt, ist immer mindestens Kurz & knapp; viele Redaktionen zählen nur, solange es frisch ist.
 boden:
-  frische_mindestens: 0.4  # Frische 0,4 ≈ 24 Std (Halbwertszeit 18 Std)
+  frische_mindestens: 0.4  # nur für redaktionen_ab: Frische 0,4 ≈ 24 Std (Halbwertszeit 18 Std)
   schlagzeile_bis: 15      # Google-News-Schlagzeilen (Deutschland, USA, UK)
   rubrik_bis: 5            # Google-News-Rubriken (Deutschland, Welt, Wirtschaft, Technik, …)
   trends: true             # passt zu einem Google-Suchtrend

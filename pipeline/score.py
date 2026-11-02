@@ -288,16 +288,16 @@ class Bewerter:
     def boden(self, b: Bewertung) -> str | None:
         """Grund, warum die Geschichte nie wegfallen darf, oder None (Werte in gewichte.yaml unter `boden`)."""
         bo = self.g["boden"]
-        if b.faktoren.get("frische", 1) < bo["frische_mindestens"]:
-            return None
         s = b.gespraech
+        # Google-Listen und Suchtrends zeigen, was gerade jetzt gefragt ist, auch bei älteren Geschichten.
         if s.get("schlagzeile") is not None and s["schlagzeile"] <= bo["schlagzeile_bis"]:
             return f"Google-Schlagzeile Platz {s['schlagzeile']}"
         if s.get("rubrik") is not None and s["rubrik"] <= bo["rubrik_bis"]:
             return f"Google-Rubrik Platz {s['rubrik']}"
         if bo["trends"] and s.get("trends"):
             return "Google-Suchtrend"
-        if s.get("redaktionen", 0) >= bo["redaktionen_ab"]:
+        # Viele Redaktionen zählen nur, solange die Geschichte frisch ist.
+        if b.faktoren.get("frische", 1) >= bo["frische_mindestens"] and s.get("redaktionen", 0) >= bo["redaktionen_ab"]:
             return f"{s['redaktionen']} Redaktionen"
         return None
 

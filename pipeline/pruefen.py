@@ -61,7 +61,10 @@ def pruef_anfrage(karte: dict, quellen: list[dict]) -> str:
         "quellen": [{"id": q["id"], "outlet": q["redaktion"], "leaning": q["lager"], "type": q["art"],
                      "title": q["titel"], "text": (q.get("volltext") or q["text"])[:2500 if q.get("volltext") else 350]}
                     for q in quellen[:6]],
-        "aussagen": [{"nr": a["nr"], "feld": a["feld"], "text": a["text"]} for a in aussagen(karte) if a["feld"] != "faktenbox"],
+        "aussagen": [{"nr": a["nr"], "feld": a["feld"], "text": a["text"]} for a in aussagen(karte)
+                     if a["feld"] not in ("faktenbox", "mitreden")],
+        # Der Mitreden-Satz darf Wissen und Spekulation enthalten: nur auf Falsches und Parteinahme geprüft
+        "mitreden": karte.get("mitreden"),
     }, ensure_ascii=False)
 
 
@@ -116,6 +119,11 @@ def anwenden(karte: dict, code: list[dict], ki: dict | None, anbieter: str | Non
             warnung = True  # nichts übrig: Punkte bleiben, Karte bekommt eine Warnung
     if weg_fakten:
         karte["faktenbox"] = [f for i, f in enumerate(karte["faktenbox"]) if i not in weg_fakten]
+    problem = (ki or {}).get("mitreden_problem")
+    if problem in {"falsch", "spekulation_als_fakt", "parteiisch"} and karte.get("mitreden"):
+        hinweise.append(f"Mitreden-Satz entfernt ({problem}: {(ki or {}).get('mitreden_grund', '')}): {karte['mitreden']}")
+        karte["mitreden"] = None
+        mitreden_weg = True
     hinweise += [p["problem"] for p in code if p.get("form")]
     hinweise += [f"unklar: {u}" for u in unklar]
 
@@ -137,5 +145,5 @@ def anwenden(karte: dict, code: list[dict], ki: dict | None, anbieter: str | Non
     else:
         ergebnis = "ok"
     return {"anbieter": anbieter, "modell": modell, "ergebnis": ergebnis, "neutralitaet": neutral,
-            "seitentausch_ok": seitentausch, "mitreden_einordnung": (ki or {}).get("mitreden_einordnung"),
+            "seitentausch_ok": seitentausch, "mitreden_problem": (ki or {}).get("mitreden_problem"),
             "eingriffe": eingriffe, "unklar": len(unklar), "hinweise": hinweise}

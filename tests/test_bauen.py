@@ -53,6 +53,13 @@ class Anwenden(unittest.TestCase):
         p = anwenden(k, [], urteil, "groq", "test")
         self.assertEqual((p["ergebnis"], k["mitreden"]), ("korrigiert", None))
 
+    def test_mitreden_nur_bei_falsch_oder_parteiisch_weg(self):
+        for problem, erwartet in ((None, "Wer am Montag fährt, sollte die App prüfen."), ("parteiisch", None)):
+            k = karte()
+            urteil = {"aussagen": [], "neutralitaet": "mitte", "seitentausch_ok": True, "mitreden_problem": problem}
+            anwenden(k, [], urteil, "groq", "test")
+            self.assertEqual(k["mitreden"], erwartet)
+
     def test_englische_feldnamen(self):
         from pipeline.bauen import pruefe_karten
         antwort = {"karten": [{"story": "s1", "title": "Titel", "sentence": "Satz.", "points": ["a", "b", "c"]}]}

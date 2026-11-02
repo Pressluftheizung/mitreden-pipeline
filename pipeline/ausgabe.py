@@ -34,6 +34,10 @@ def main() -> int:
     except Exception:
         bau_ok = False
         traceback.print_exc()
+        # Das Log bei GitHub ist ohne Anmeldung nicht lesbar: Fehler zusätzlich ins private Repo schreiben
+        (args.daten / "metriken").mkdir(parents=True, exist_ok=True)
+        (args.daten / "metriken" / f"bau-fehler-{bauen.ausgabe_id(jetzt)[0]}.txt").write_text(
+            traceback.format_exc(), encoding="utf-8")
     b = kontrolle.kontrolle(args.daten, args.config, jetzt, args.daten / "pruefset", st=st)
     if not bau_ok:
         b["ampel"], b["ampel_gruende"] = "rot", ["Kartenbau fehlgeschlagen"] + b["ampel_gruende"]
