@@ -6,7 +6,7 @@ Du bekommst:
 
 ## Regeln
 - Ein Satz je Wert, höchstens 15 Wörter.
-- Nenne einen Grund nur, wenn eine Schlagzeile ihn hergibt (z. B. Zinsentscheid, Quartalszahlen, Krieg, Zölle). Sonst schreibe neutral, was passiert ist, z. B. „Ruhiger Handel ohne große Nachrichten.“
+- Nenne einen Grund nur, wenn eine Schlagzeile ihn hergibt (z. B. Zinsentscheid, Quartalszahlen, Krieg, Zölle). Gibt keine Schlagzeile einen Grund her, schreibe null (dann nennt die App nur Richtung und Prozent). Schreibe nie „ruhiger Handel“ bei einer Bewegung von mehr als 1 %.
 - Keine Zahlen, die nicht in `werte` oder `schlagzeilen` stehen. Keine Anlageempfehlung.
 
 ## Antwort

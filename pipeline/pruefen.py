@@ -120,7 +120,9 @@ def anwenden(karte: dict, code: list[dict], ki: dict | None, anbieter: str | Non
     if weg_fakten:
         karte["faktenbox"] = [f for i, f in enumerate(karte["faktenbox"]) if i not in weg_fakten]
     problem = (ki or {}).get("mitreden_problem")
-    if problem in {"falsch", "spekulation_als_fakt", "parteiisch"} and karte.get("mitreden"):
+    if problem == "spekulation_als_fakt" and karte.get("mitreden"):  # nur beobachten (Wunsch des Nutzers: Freiheit)
+        hinweise.append(f"Mitreden-Satz beobachten (Spekulation als Fakt? {(ki or {}).get('mitreden_grund', '')})")
+    if problem in {"falsch", "parteiisch"} and karte.get("mitreden"):
         hinweise.append(f"Mitreden-Satz entfernt ({problem}: {(ki or {}).get('mitreden_grund', '')}): {karte['mitreden']}")
         karte["mitreden"] = None
         mitreden_weg = True

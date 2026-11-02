@@ -128,10 +128,17 @@ def quellen_auswahl(st: Stand, b: Bewertung, anzahl: int = 6, mit_meinung: bool 
             for n, m in enumerate(gewaehlt, start=1)]
 
 
+VOLLTEXT_VERSUCHE: list[str] = []  # je Versuch: Ergebnis, für die Kennzahlen des Laufs
+
+
 def lade_volltexte(quellen: list[dict], anzahl: int = 2) -> None:
     """Volltext für bis zu `anzahl` frei zugängliche Quellen (nur im Arbeitsspeicher, nie gespeichert)."""
-    for q in [q for q in quellen if q.get("volltext_ok") and q.get("url")][:anzahl]:
+    kandidaten = [q for q in quellen if q.get("volltext_ok") and q.get("url")][:anzahl]
+    if not kandidaten:
+        VOLLTEXT_VERSUCHE.append("keine freie Quelle")
+    for q in kandidaten:
         text = lies_volltext(q["url"])
+        VOLLTEXT_VERSUCHE.append("ok" if text and len(text) > len(q["text"]) + 300 else ("zu kurz" if text else "nicht lesbar"))
         if text and len(text) > len(q["text"]) + 300:  # nur wenn es wirklich mehr ist als der Anrisstext
             q["volltext"] = text
 
@@ -533,6 +540,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
                               and k.get("mitreden_art") == art) for art in ("fakt", "wissen", "spekulation")}
                     | {"gestrichen": sum(1 for k in karten_voll.values() if k.get("_neu_geschrieben") and not k.get("mitreden"))},
         "datenkarten": {"zahlen": bool(zahlen), "ergebnisse": len(ergebnisse)},
+        "volltext_versuche": {e: VOLLTEXT_VERSUCHE.count(e) for e in set(VOLLTEXT_VERSUCHE)},
         "volltexte": sum(1 for k in karten_voll.values() for q in k.get("_quellen_ki") or [] if q.get("volltext")),
         "ki": ki.protokoll, "fehler": fehler,
     }
