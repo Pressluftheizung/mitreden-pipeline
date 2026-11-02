@@ -37,6 +37,7 @@ from pathlib import Path
 import yaml
 
 from .bilder import waehle_bilder
+from .daten import ergebnis_karten, lade_ergebnisse, lade_zahlen, zahlen_karte
 from .volltext import lies_volltext
 from .ki import KI, KeinModellFrei, Zaehler
 from .pruefen import anwenden, code_pruefung, pruef_anfrage, pruefe_antwort
@@ -464,6 +465,21 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
             karten.append(kurz_karten.pop(0))
     karten += kurz_karten
 
+    # Datenkarten: Zahlen in jeder Ausgabe (an dritter Stelle), neue Fußballergebnisse (an sechster Stelle)
+    daten_datei = daten / "stories" / "datenkarten.json"
+    gezeigt = json.loads(daten_datei.read_text(encoding="utf-8")) if daten_datei.exists() else {}
+    schlagzeilen = [b.titel for b in aktiv if b.thema == "geld"][:25] + andere_themen[:15]
+    zahlen = zahlen_karte(lade_zahlen(), schlagzeilen, ki, ausgabe)
+    ergebnisse = ergebnis_karten(lade_ergebnisse(jetzt), ausgabe, set(gezeigt.get("ergebnisse", {})))
+    for k in ergebnisse:
+        for schluessel in k["_gezeigt"]:
+            gezeigt.setdefault("ergebnisse", {})[schluessel] = iso(jetzt)
+    karten[5:5] = ergebnisse
+    if zahlen:
+        karten.insert(2, zahlen)
+    grenze_daten = iso(jetzt - timedelta(days=7))
+    gezeigt["ergebnisse"] = {k: v for k, v in gezeigt.get("ergebnisse", {}).items() if v >= grenze_daten}
+
     # Gedächtnis aktualisieren
     neue_stories: dict[str, dict] = {}
     for n, b in enumerate(aktiv):
@@ -516,6 +532,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
         "mitreden": {art: sum(1 for k in karten_voll.values() if k.get("_neu_geschrieben") and k.get("mitreden")
                               and k.get("mitreden_art") == art) for art in ("fakt", "wissen", "spekulation")}
                     | {"gestrichen": sum(1 for k in karten_voll.values() if k.get("_neu_geschrieben") and not k.get("mitreden"))},
+        "datenkarten": {"zahlen": bool(zahlen), "ergebnisse": len(ergebnisse)},
         "volltexte": sum(1 for k in karten_voll.values() for q in k.get("_quellen_ki") or [] if q.get("volltext")),
         "ki": ki.protokoll, "fehler": fehler,
     }
@@ -532,6 +549,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
     stories_datei.parent.mkdir(parents=True, exist_ok=True)
     zeilen_json = ",\n".join(json.dumps(s, ensure_ascii=False, separators=(",", ":")) for s in neue_stories.values())
     stories_datei.write_text(f'{{"stand": "{iso(jetzt)}", "stories": [\n{zeilen_json}\n]}}\n', encoding="utf-8")
+    daten_datei.write_text(json.dumps(gezeigt, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     (daten / "metriken").mkdir(parents=True, exist_ok=True)
     (daten / "metriken" / f"bau-{ausgabe}.json").write_text(json.dumps(metriken, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     ki.zaehler.speichere()

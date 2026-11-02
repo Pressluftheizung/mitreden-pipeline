@@ -1,0 +1,171 @@
+"""Datenkarten (PLAN.md 4.1 und 6D): Zahlen (Börse) und Ergebnisse (Fußball), gebaut vom Programm.
+
+- Zahlen: DAX, S&P 500, Bitcoin, Gold, Öl, Euro/Dollar mit Veränderung zum letzten Schlusskurs.
+  Quelle: Yahoo Finance (Kursdaten), Ersatz: EZB-Referenzkurs (Euro/Dollar), CoinGecko (Bitcoin).
+  Den Satz „warum“ schreibt die KI aus den Schlagzeilen der Ausgabe; ein Programm verwirft ihn, wenn er
+  Zahlen enthält, die weder in den Daten noch in den Schlagzeilen stehen.
+- Ergebnisse: Bundesliga, 2. Bundesliga und DFB-Pokal von OpenLigaDB (frei, ohne Schlüssel), nur Spiele,
+  die in den letzten 36 Stunden zu Ende gegangen sind. Titel aus Vorlagen.
+"""
+
+import json
+import urllib.parse
+import urllib.request
+from datetime import datetime, timedelta, timezone
+
+from .pruefen import zahlen
+
+KENNUNG = "Mozilla/5.0 (compatible; Mitreden-Pipeline/0.1; +https://github.com/Pressluftheizung/mitreden-pipeline)"
+
+WERTE = [  # Name, Yahoo-Symbol, Einheit, Nachkommastellen
+    ("DAX", "^GDAXI", "Punkte", 0),
+    ("S&P 500", "^GSPC", "Punkte", 0),
+    ("Bitcoin", "BTC-EUR", "€", 0),
+    ("Gold", "GC=F", "$ je Unze", 0),
+    ("Öl (Brent)", "BZ=F", "$ je Barrel", 2),
+    ("Euro/Dollar", "EURUSD=X", "$", 4),
+]
+
+LIGEN = [("bl1", "Bundesliga"), ("bl2", "2. Bundesliga"), ("dfb", "DFB-Pokal")]
+
+
+def _json(url: str):
+    anfrage = urllib.request.Request(url, headers={"User-Agent": KENNUNG, "Accept": "application/json"})
+    with urllib.request.urlopen(anfrage, timeout=15) as antwort:
+        return json.loads(antwort.read())
+
+
+def deutsch(zahl: float, stellen: int) -> str:
+    return f"{zahl:,.{stellen}f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+
+def yahoo(symbol: str) -> tuple[float, float] | None:
+    """(aktueller Kurs, letzter Schlusskurs davor)."""
+    try:
+        d = _json(f"https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(symbol)}?range=5d&interval=1d")
+        r = d["chart"]["result"][0]
+        schluss = [x for x in r["indicators"]["quote"][0]["close"] if x]
+        jetzt = r["meta"].get("regularMarketPrice") or schluss[-1]
+        # Ist der letzte Tageswert schon der aktuelle Kurs, zählt der Schlusskurs des Vortags.
+        vorher = schluss[-2] if len(schluss) >= 2 and abs(schluss[-1] - jetzt) <= abs(jetzt) * 0.0005 else schluss[-1]
+        return float(jetzt), float(vorher)
+    except Exception:
+        return None
+
+
+def ersatz(name: str) -> tuple[float, float] | None:
+    try:
+        if name == "Euro/Dollar":
+            zeilen = urllib.request.urlopen(urllib.request.Request(
+                "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A?lastNObservations=2&format=csvdata",
+                headers={"User-Agent": KENNUNG}), timeout=15).read().decode().strip().splitlines()[1:]
+            kurse = [float(z.split(",")[7]) for z in zeilen]
+            return kurse[-1], kurse[-2]
+        if name == "Bitcoin":
+            d = _json("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur&include_24hr_change=true")
+            jetzt = float(d["bitcoin"]["eur"])
+            return jetzt, jetzt / (1 + d["bitcoin"]["eur_24h_change"] / 100)
+    except Exception:
+        return None
+    return None
+
+
+def lade_zahlen() -> list[dict]:
+    werte = []
+    for name, symbol, einheit, stellen in WERTE:
+        kurs = yahoo(symbol) or ersatz(name)
+        if not kurs:
+            continue
+        jetzt, vorher = kurs
+        werte.append({"name": name, "wert": f"{deutsch(jetzt, stellen)} {einheit}",
+                      "veraenderung_prozent": round((jetzt / vorher - 1) * 100, 2) if vorher else 0.0})
+    return werte
+
+
+def vorlage_warum(w: dict) -> str:
+    """Satz ohne KI: Richtung und Stärke der Bewegung."""
+    p = w["veraenderung_prozent"]
+    if abs(p) < 0.2:
+        return "Kaum verändert."
+    staerke = " deutlich" if abs(p) >= 2 else ""
+    richtung = f"legt{staerke} zu" if p > 0 else f"gibt{staerke} nach"
+    return f"{w['name']} {richtung}: {'+' if p > 0 else '−'}{deutsch(abs(p), 1)} %."
+
+
+def zahlen_karte(werte: list[dict], schlagzeilen: list[str], ki, ausgabe: str) -> dict | None:
+    """Karte „Zahlen“: Werte vom Programm, „warum“ von der KI mit Prüfung, sonst aus der Vorlage."""
+    if not werte:
+        return None
+    warum: dict[str, str] = {}
+    if ki is not None:
+        try:
+            antwort, _ = ki.frage("zahlen", json.dumps({"werte": werte, "schlagzeilen": schlagzeilen[:40]}, ensure_ascii=False),
+                                  lambda a: isinstance(a.get("warum"), dict) or (_ for _ in ()).throw(ValueError("warum fehlt")))
+            erlaubt = set().union(*(zahlen(t) for t in schlagzeilen)) | set().union(
+                *(zahlen(f"{w['wert']} {w['veraenderung_prozent']}") for w in werte))
+            for name, satz in antwort["warum"].items():
+                if isinstance(satz, str) and satz.strip() and zahlen(satz) <= erlaubt:
+                    warum[name] = satz.strip()  # Zahlen, die nirgends stehen: Satz verwerfen, Vorlage nehmen
+        except Exception:
+            pass
+    return {"id": f"zahlen-{ausgabe}", "format": "zahlen", "thema": "geld", "region": "welt", "titel": "Die Zahlen",
+            "labels": [], "quellen": [{"name": "Yahoo Finance", "lager": "international", "url": "https://finance.yahoo.com"}],
+            "lager_mix": {}, "werte": [{**w, "warum": warum.get(w["name"]) or vorlage_warum(w)} for w in werte]}
+
+
+def lade_ergebnisse(jetzt: datetime, stunden: int = 36) -> list[dict]:
+    """Je Wettbewerb die Spiele, die in den letzten `stunden` beendet wurden."""
+    ergebnis = []
+    for kurz, name in LIGEN:
+        try:
+            spiele = _json(f"https://api.openligadb.de/getmatchdata/{kurz}")
+        except Exception:
+            continue
+        fertig = []
+        for s in spiele:
+            if not s.get("matchIsFinished") or not s.get("matchDateTimeUTC"):
+                continue
+            beginn = datetime.fromisoformat(s["matchDateTimeUTC"].replace("Z", "+00:00"))
+            if not timedelta(0) <= jetzt - beginn <= timedelta(hours=stunden):
+                continue
+            end = next((r for r in s.get("matchResults", []) if r.get("resultTypeID") == 2), None) or \
+                (s.get("matchResults") or [None])[-1]
+            if not end:
+                continue
+            fertig.append({"heim": s["team1"]["shortName"] or s["team1"]["teamName"],
+                           "gast": s["team2"]["shortName"] or s["team2"]["teamName"],
+                           "tore": (end["pointsTeam1"], end["pointsTeam2"]),
+                           "runde": (s.get("group") or {}).get("groupName", "")})
+        if fertig:
+            ergebnis.append({"liga": kurz, "wettbewerb": name, "runde": fertig[0]["runde"], "spiele": fertig})
+    return ergebnis
+
+
+def vorlage_titel(spiele: list[dict]) -> str:
+    """Titel aus Regeln (PLAN.md 6D): höchster Sieg, sonst Torfestival, sonst Spieltag."""
+    groesster = max(spiele, key=lambda s: abs(s["tore"][0] - s["tore"][1]))
+    a, b = groesster["tore"]
+    if abs(a - b) >= 3:
+        sieger, verlierer = (groesster["heim"], groesster["gast"]) if a > b else (groesster["gast"], groesster["heim"])
+        return f"{sieger} schießt {verlierer} ab"
+    tore = max(spiele, key=lambda s: sum(s["tore"]))
+    if sum(tore["tore"]) >= 6:
+        return f"Torfestival: {tore['heim']} gegen {tore['gast']}"
+    return "Die Ergebnisse"
+
+
+def ergebnis_karten(ligen: list[dict], ausgabe: str, schon_gezeigt: set[str]) -> list[dict]:
+    karten = []
+    for liga in ligen:
+        neu = [s for s in liga["spiele"] if f"{liga['liga']}:{s['heim']}:{s['gast']}:{s['runde']}" not in schon_gezeigt]
+        if not neu:
+            continue
+        karten.append({
+            "id": f"ergebnisse-{liga['liga']}-{ausgabe}", "format": "ergebnisse", "thema": "sport", "unterthema": "fussball",
+            "region": "deutschland", "titel": vorlage_titel(neu), "labels": [],
+            "quellen": [{"name": "OpenLigaDB", "lager": "international", "url": "https://www.openligadb.de"}], "lager_mix": {},
+            "tabelle": {"wettbewerb": f"{liga['wettbewerb']} · {liga['runde']}",
+                        "spiele": [{"heim": s["heim"], "gast": s["gast"], "ergebnis": f"{s['tore'][0]}:{s['tore'][1]}"} for s in neu]},
+            "_gezeigt": [f"{liga['liga']}:{s['heim']}:{s['gast']}:{s['runde']}" for s in neu],
+        })
+    return karten

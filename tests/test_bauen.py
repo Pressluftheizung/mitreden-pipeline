@@ -120,6 +120,30 @@ class Wartezeit(unittest.TestCase):
         self.assertIsNone(wartezeit(HttpFehler(400, "bad")))
 
 
+class Datenkarten(unittest.TestCase):
+    def test_vorlagen(self):
+        from pipeline.daten import deutsch, vorlage_titel, vorlage_warum
+        self.assertEqual(deutsch(25873.2, 0), "25.873")
+        self.assertEqual(vorlage_warum({"name": "Öl", "veraenderung_prozent": -7.79}), "Öl gibt deutlich nach: −7,8 %.")
+        self.assertEqual(vorlage_warum({"name": "DAX", "veraenderung_prozent": 0.1}), "Kaum verändert.")
+        spiele = [{"heim": "A", "gast": "B", "tore": (4, 1)}, {"heim": "C", "gast": "D", "tore": (2, 2)}]
+        self.assertEqual(vorlage_titel(spiele), "A schießt B ab")
+        self.assertEqual(vorlage_titel([{"heim": "C", "gast": "D", "tore": (3, 3)}]), "Torfestival: C gegen D")
+
+    def test_warum_mit_fremder_zahl_wird_verworfen(self):
+        from pipeline.daten import zahlen_karte
+
+        class KI:
+            def frage(self, aufgabe, nutzer, pruefe):
+                return {"warum": {"DAX": "DAX steigt dank Rekordgewinn von 42 Milliarden.", "Gold": "Anleger suchen Sicherheit."}}, "test"
+
+        werte = [{"name": "DAX", "wert": "25.874 Punkte", "veraenderung_prozent": 0.5},
+                 {"name": "Gold", "wert": "3.910 $ je Unze", "veraenderung_prozent": 1.0}]
+        k = zahlen_karte(werte, ["Gold gefragt wie nie"], KI(), "x")
+        self.assertEqual(k["werte"][0]["warum"], "DAX legt zu: +0,5 %.")  # 42 steht nirgends: Vorlage
+        self.assertEqual(k["werte"][1]["warum"], "Anleger suchen Sicherheit.")
+
+
 class BildAdresse(unittest.TestCase):
     def test_reihenfolge(self):
         self.assertEqual(bild_url({"media_content": [{"url": "https://a.example/klein.jpg", "width": "200"},

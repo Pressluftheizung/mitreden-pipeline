@@ -70,6 +70,15 @@ def als_html(ergebnis: dict, karten_voll: dict, metriken: dict) -> str:
     kopf = (f"{m['geschichten']} Geschichten → {m['karten_voll']} Karten ({len(neu)} neu geschrieben), "
             f"{m['kurz_zeilen']} Kurzmeldungen · Prüfung: {', '.join(f'{k} {v}' for k, v in m['pruefung'].items())} · "
             f"Bilder: {', '.join(f'{k} {v}' for k, v in m['bilder'].items())} · {m['dauer_s']} s")
+    datenkarten = ""
+    for k in ergebnis["karten"]:
+        if k["format"] == "zahlen":
+            datenkarten += "<h3>Die Zahlen</h3><ul>" + "".join(
+                f"<li><b>{E(w['name'])}</b> {E(w['wert'])} ({w['veraenderung_prozent']:+.2f} %): {E(w.get('warum') or '')}</li>"
+                for w in k["werte"]) + "</ul>"
+        elif k["format"] == "ergebnisse":
+            datenkarten += f"<h3>{E(k['titel'])} <span class='klein'>{E(k['tabelle']['wettbewerb'])}</span></h3><ul>" + "".join(
+                f"<li>{E(sp['heim'])} – {E(sp['gast'])} {E(sp['ergebnis'])}</li>" for sp in k["tabelle"]["spiele"]) + "</ul>"
     kurz = "".join(f"<li>{E(z['text'])} <a class='klein' href='{E(z.get('url') or '#')}' target='_blank' rel='noopener'>Quelle</a></li>"
                    for k in ergebnis["karten"] if k["format"] == "kurz" for z in k["meldungen"])
     return f"""<!doctype html>
@@ -99,6 +108,7 @@ def als_html(ergebnis: dict, karten_voll: dict, metriken: dict) -> str:
 {''.join(_karte(k) for k in neu)}
 <h2>Übernommene Karten</h2>
 {''.join(_karte(k) for k in alt)}
+<h2>Datenkarten</h2>{datenkarten or '<p class="klein">keine</p>'}
 <h2>Kurz & knapp</h2><ul>{kurz}</ul>
 <script>
 document.querySelectorAll('.fakt').forEach(function (f) {{
