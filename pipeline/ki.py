@@ -7,7 +7,6 @@
   damit das Gratis-Kontingent nie ganz aufgebraucht wird. Schlüssel kommen nur aus Umgebungsvariablen.
 """
 
-import http.client
 import json
 import os
 import re
@@ -208,7 +207,7 @@ class KI:
                         time.sleep(pause)
                         continue
                     break
-                except (OSError, http.client.HTTPException, KeyError, IndexError, ValueError, TypeError) as e:
+                except Exception as e:  # Netz, ungültiges JSON, falscher Aufbau: nächstes Modell, Bau läuft weiter
                     self.zaehler.buche(modell, geschaetzt // 2, fehler=True)
                     self.protokoll.append({"aufgabe": aufgabe, "modell": modell, "fehler": str(e)[:200],
                                            "sekunden": round(time.monotonic() - start, 1)})

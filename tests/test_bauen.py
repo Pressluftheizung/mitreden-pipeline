@@ -60,6 +60,11 @@ class Anwenden(unittest.TestCase):
             anwenden(k, [], urteil, "groq", "test")
             self.assertEqual(k["mitreden"], erwartet)
 
+    def test_liste_statt_objekt_ist_ungueltig(self):
+        from pipeline.bauen import pruefe_karten
+        with self.assertRaises(ValueError):
+            pruefe_karten([{"story": "s1"}])
+
     def test_englische_feldnamen(self):
         from pipeline.bauen import pruefe_karten
         antwort = {"karten": [{"story": "s1", "title": "Titel", "sentence": "Satz.", "points": ["a", "b", "c"]}]}

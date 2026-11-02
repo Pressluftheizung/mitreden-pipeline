@@ -70,7 +70,7 @@ def pruef_anfrage(karte: dict, quellen: list[dict]) -> str:
 
 def pruefe_antwort(antwort: dict) -> None:
     """Wirft ValueError, wenn die Antwort der Prüf-KI nicht den erwarteten Aufbau hat."""
-    if not isinstance(antwort.get("aussagen"), list):
+    if not isinstance(antwort, dict) or not isinstance(antwort.get("aussagen"), list):
         raise ValueError("aussagen fehlt")
     for a in antwort["aussagen"]:
         if a.get("urteil") not in {"belegt", "nicht_belegt", "unklar"} or not isinstance(a.get("nr"), int):

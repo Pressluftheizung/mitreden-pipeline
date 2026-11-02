@@ -215,7 +215,7 @@ ENGLISCH = {"title": "titel", "sentence": "satz", "summary": "satz", "points": "
 
 
 def pruefe_karten(antwort: dict) -> None:
-    if not isinstance(antwort.get("karten"), list) or not antwort["karten"]:
+    if not isinstance(antwort, dict) or not isinstance(antwort.get("karten"), list) or not antwort["karten"]:
         raise ValueError("karten fehlt")
     for k in antwort["karten"]:
         for englisch, deutsch in ENGLISCH.items():
@@ -228,7 +228,7 @@ def pruefe_karten(antwort: dict) -> None:
 
 
 def pruefe_zeilen(antwort: dict) -> None:
-    if not isinstance(antwort.get("zeilen"), list) or not all(isinstance(z.get("text"), str) for z in antwort["zeilen"]):
+    if not isinstance(antwort, dict) or not isinstance(antwort.get("zeilen"), list) or not all(isinstance(z.get("text"), str) for z in antwort["zeilen"]):
         raise ValueError("zeilen fehlt")
 
 
