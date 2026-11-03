@@ -15,3 +15,4 @@ Dieselben wie beim Schreiben: nur Tatsachen aus den Quellen (alte Faktenbox plus
 Nur JSON:
 {"karten": [{"story": "<Kennung>", "aktion": "nichts_neues|zusammenfuehren|korrigieren|ersetzen", "aenderung": "ein kurzer Satz, was neu oder korrigiert ist (bei nichts_neues leer)", "titel": "…", "satz": "…", "punkte": ["…", "…", "…"], "mitreden": "…", "mitreden_art": "fakt|wissen|spekulation", "faktenbox": [{"fakt": "…", "quellen": ["q1", "alt"]}]}]}
 Bei `nichts_neues` reichen "story" und "aktion".
+Hat die bisherige Karte `ebenen` oder `erklaerung`, gib sie bei jeder anderen Aktion ebenfalls zurück, auf den neuen Stand gebracht: Nichts darin darf den neuen Fakten widersprechen (z. B. „bislang keine Ausfälle“, wenn jetzt Ausfälle gemeldet werden).

@@ -161,7 +161,7 @@ def ergebnis_karten(ligen: list[dict], ausgabe: str, schon_gezeigt: set[str]) ->
         if not neu:
             continue
         karten.append({
-            "id": f"ergebnisse-{liga['liga']}-{ausgabe}", "format": "ergebnisse", "thema": "sport", "unterthema": "fussball",
+            "id": f"ergebnisse-{liga['liga']}-{liga['runde'].lower().replace('.', '').replace(' ', '-')}", "format": "ergebnisse", "thema": "sport", "unterthema": "fussball",
             "region": "deutschland", "titel": vorlage_titel(neu), "labels": [],
             "quellen": [{"name": "OpenLigaDB", "lager": "international", "url": "https://www.openligadb.de"}], "lager_mix": {},
             "tabelle": {"wettbewerb": f"{liga['wettbewerb']} · {liga['runde']}",

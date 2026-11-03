@@ -59,8 +59,8 @@ def pruef_anfrage(karte: dict, quellen: list[dict]) -> str:
     # das hält die Anfrage klein genug für das Minutenlimit der Prüf-KI.
     return json.dumps({
         "quellen": [{"id": q["id"], "outlet": q["redaktion"], "leaning": q["lager"], "type": q["art"],
-                     "title": q["titel"], "text": (q.get("volltext") or q["text"])[:2500 if q.get("volltext") else 350]}
-                    for q in quellen[:6]],
+                     "title": q["titel"], "text": (q.get("volltext") or q["text"])[:2500 if q.get("volltext") else 500]}
+                    for q in quellen[:8]],  # dieselben Quellen und Längen, die auch die schreibende KI hatte
         "aussagen": [{"nr": a["nr"], "feld": a["feld"], "text": a["text"]} for a in aussagen(karte)
                      if a["feld"] not in ("faktenbox", "mitreden")],
         # Der Mitreden-Satz darf Wissen und Spekulation enthalten: nur auf Falsches und Parteinahme geprüft

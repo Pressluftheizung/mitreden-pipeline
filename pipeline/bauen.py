@@ -314,7 +314,8 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
                            "quellen": [{k: q[k] for k in felder if q.get(k)} for q in qs]}
                 if aufgabe == "update":
                     k = alt[zuordnung[n]]["karte"]
-                    eintrag["bisherige_karte"] = {f: k.get(f) for f in ("titel", "satz", "punkte", "mitreden", "faktenbox")}
+                    eintrag["bisherige_karte"] = {f: k.get(f) for f in ("titel", "satz", "punkte", "mitreden", "faktenbox",
+                                                                          "ebenen", "erklaerung") if k.get(f)}
                 eingabe.append(eintrag)
             daten = {"geschichten": eingabe, "andere_themen": andere_themen}
             try:
@@ -371,6 +372,11 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
             for feld in ("titel", "satz", "punkte", "mitreden", "mitreden_art", "faktenbox", "ebenen", "erklaerung"):
                 if feld in t:
                     karte[feld] = t[feld]
+            if plan[n] == "update":  # nicht mitgeliefertes Hintergrundwissen könnte dem neuen Stand widersprechen
+                if "ebenen" not in t:
+                    karte["ebenen"] = [e for e in karte.get("ebenen") or [] if e.get("typ") != "hintergrund"]
+                if "erklaerung" not in t:
+                    karte["erklaerung"] = None
             karte["punkte"] = (karte.get("punkte") or [])[:3]
             karte["version"] = vorher.get("version", 0) + 1
             karte["aktualisiert"] = iso(jetzt)
@@ -477,15 +483,18 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
     gezeigt = json.loads(daten_datei.read_text(encoding="utf-8")) if daten_datei.exists() else {}
     schlagzeilen = [b.titel for b in aktiv if b.thema == "geld"][:25] + andere_themen[:15]
     zahlen = zahlen_karte(lade_zahlen(), schlagzeilen, ki, ausgabe)
-    ergebnisse = ergebnis_karten(lade_ergebnisse(jetzt), ausgabe, set(gezeigt.get("ergebnisse", {})))
+    # Feste Karten-ID je Spieltag: die App zeigt sie einmal und bei neuen Spielen als „Aktualisiert“ (höhere Version)
+    ergebnisse = ergebnis_karten(lade_ergebnisse(jetzt), ausgabe, set())
     for k in ergebnisse:
-        for schluessel in k["_gezeigt"]:
-            gezeigt.setdefault("ergebnisse", {})[schluessel] = iso(jetzt)
+        alt_k = gezeigt.setdefault("karten", {}).get(k["id"], {"version": 0, "spiele": []})
+        neu = sorted(k["_gezeigt"])
+        k["version"] = alt_k["version"] + (neu != alt_k["spiele"])
+        gezeigt["karten"][k["id"]] = {"version": k["version"], "spiele": neu, "zeit": iso(jetzt)}
     karten[5:5] = ergebnisse
     if zahlen:
         karten.insert(2, zahlen)
     grenze_daten = iso(jetzt - timedelta(days=7))
-    gezeigt["ergebnisse"] = {k: v for k, v in gezeigt.get("ergebnisse", {}).items() if v >= grenze_daten}
+    gezeigt = {"karten": {k: v for k, v in gezeigt.get("karten", {}).items() if v["zeit"] >= grenze_daten}}
 
     # Gedächtnis aktualisieren
     neue_stories: dict[str, dict] = {}
