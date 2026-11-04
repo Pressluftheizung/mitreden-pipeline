@@ -46,6 +46,7 @@ class Stand:
     letzter_lauf: datetime
     eigene_geschichten: list[list[int]] = field(default_factory=list)  # ohne die Google-Geschichten (hinten)
     dubletten: dict = field(default_factory=dict)  # Bericht des KI-Schritts (pipeline/dubletten.py)
+    themen: dict = field(default_factory=dict)  # Bericht des KI-Schritts (pipeline/themen.py)
 
 
 def berechne(daten: Path, config: Path, jetzt: datetime, ki=None) -> Stand:
@@ -97,6 +98,12 @@ def berechne(daten: Path, config: Path, jetzt: datetime, ki=None) -> Stand:
                                                         cfg["speicher_tage"]), auswerten)
         except Exception as e:  # ein Fehler hier darf die Ausgabe nicht verhindern
             st.dubletten = {"fehler": [f"{type(e).__name__}: {e}"]}
+    if ki is not None and gewichte.get("themen_ki", {}).get("an"):
+        from .themen import buendeln
+        try:
+            st = buendeln(st, ki, gewichte["themen_ki"], auswerten, bewerter)
+        except Exception as e:  # ein Fehler hier darf die Ausgabe nicht verhindern
+            st.themen = {"fehler": [f"{type(e).__name__}: {e}"]}
     return st
 
 

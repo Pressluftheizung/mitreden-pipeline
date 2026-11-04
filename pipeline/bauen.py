@@ -267,13 +267,15 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
         vorher = alt.get(zuordnung.get(n, ""), {})
         karte_vorher = vorher.get("karte")
         voll = b.format in ("top", "karte") and not nur_google(b)
+        # Neues Großthema (oder ein anderes als bisher): Sammelkarte neu schreiben statt die alte Einzelkarte fortzuführen
+        neues_thema = bool(b.sammel) and (karte_vorher or {}).get("sammel") != b.sammel["name"]
         if not voll:
             if vorher.get("zeile") or (karte_vorher and karte_vorher.get("satz")):
                 plan[n] = "kurz_behalten"
             else:
                 plan[n] = "kurz_neu"
                 kurz_neu.append(n)
-        elif karte_vorher and karte_vorher.get("titel"):
+        elif karte_vorher and karte_vorher.get("titel") and not neues_thema:
             neue = set(echte_ids(st, b)) - set(vorher.get("teaser_ids", []))
             if len(neue) >= 2 and budget > 0:
                 plan[n] = "update"
@@ -312,6 +314,8 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
                 felder = ("id", "redaktion", "lager", "art", "titel", "text", "volltext")
                 eintrag = {"story": f"s{n}", "format": b.format, "thema": b.thema, "region": b.region,
                            "quellen": [{k: q[k] for k in felder if q.get(k)} for q in qs]}
+                if b.sammel:  # Sammelkarte: Schlagzeilen der Teilgeschichten, damit alle Teile vorkommen
+                    eintrag["sammelthema"] = {"name": b.sammel["name"], "teile": b.sammel["teile"][:12]}
                 if aufgabe == "update":
                     k = alt[zuordnung[n]]["karte"]
                     eintrag["bisherige_karte"] = {f: k.get(f) for f in ("titel", "satz", "punkte", "mitreden", "faktenbox",
@@ -401,6 +405,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
             "labels": labels, "quellen": qliste, "lager_mix": mix, "lager_hinweis": hinweis,
             "erstellt": vorher.get("erstellt") or iso(jetzt),
             "begruendung": b.begruendung,
+            "sammel": (b.sammel or {}).get("name"),
         })
         karte.setdefault("version", 1)
         karte.setdefault("aktualisiert", iso(jetzt))
@@ -552,6 +557,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
         "volltext_versuche": {e: VOLLTEXT_VERSUCHE.count(e) for e in set(VOLLTEXT_VERSUCHE)},
         "volltexte": sum(1 for k in karten_voll.values() for q in k.get("_quellen_ki") or [] if q.get("volltext")),
         "dubletten": st.dubletten,
+        "themen": st.themen,
         "ki": ki.protokoll, "fehler": fehler,
     }
 
@@ -600,6 +606,12 @@ def drucke(m: dict) -> None:
               f"({z['aus_speicher']} aus dem Speicher)")
     for f in d.get("fehler", []):
         print(f"  ⚠ Dubletten: {f}")
+    t = m.get("themen") or {}
+    if t.get("gefragt"):
+        g = ", ".join(f"„{x['name']}“ ({x['teile']})" for x in t.get("grossthemen", [])) or "keine"
+        print(f"  Großthemen: {g} · Gesprächswert " + ", ".join(f"{k}: {v}" for k, v in t.get("gespraech", {}).items()))
+    for f in t.get("fehler", []):
+        print(f"  ⚠ Großthemen: {f}")
     anfragen: dict[str, int] = {}
     for p in m["ki"]:
         anfragen[p["modell"]] = anfragen.get(p["modell"], 0) + 1

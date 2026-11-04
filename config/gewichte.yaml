@@ -55,7 +55,10 @@ top_anzahl: 7          # die besten (5–8) werden Top-Story, wenn sie über der
 # Kalibriert am 01.11.2026 an allen 3757 Geschichten eines Stands (metriken/verteilung/): ergibt im Bestand
 # (48 Std) rund 60 Karten und 200 Kurzmeldungen, je Ausgabe neu etwa 15–25 Karten und 50 Zeilen.
 schwelle_karte: 5.0    # Schwelle 1
-schwelle_kurz: 3.0     # Schwelle 2, darunter fällt es weg, außer der Sicherheitsboden greift
+schwelle_kurz: 3.0
+# Feste Altersgrenze (Wunsch des Nutzers 04.11.2026): keine neue Meldung seit so vielen Stunden → weg.
+# Neue Meldungen (neue Infos) machen die Geschichte wieder frisch.
+max_alter_h: 48     # Schwelle 2, darunter fällt es weg, außer der Sicherheitsboden greift
 
 # Sicherheitsboden: Ziel der App ist, über alles mitreden zu können, worüber geredet wird. Was in einer Google-Liste
 # steht oder zu einem Suchtrend passt, ist immer mindestens Kurz & knapp; viele Redaktionen zählen nur, solange es frisch ist.
@@ -98,3 +101,13 @@ dubletten_ki:
   selten: 0.02
   max_paare: 120
   paare_pro_anfrage: 40
+
+# Großthemen und Gesprächswert mit KI (pipeline/themen.py, Feedback des Nutzers 04.11.2026), nur im Kartenbau.
+# Kosten: 1 Anfrage je Bau (Gemini Flash Lite, ≈ 0,2 % des Tageskontingents).
+themen_ki:
+  an: true
+  max_geschichten: 200   # die wichtigsten so vielen Geschichten werden bewertet, der Rest bleibt unverändert
+  min_teile: 3
+  max_teile: 12
+  # Wichtigkeit × Faktor je Gesprächswert (1 = kaum Gesprächsstoff, 3 = darüber reden alle)
+  faktor: { 1: 0.6, 2: 1.0, 3: 1.35 }

@@ -45,6 +45,8 @@ class Bewertung:
     # Gesprächs-Signale für den Sicherheitsboden (formate_vergeben) und die Kalibrierung:
     # bester Platz in Google-Schlagzeilen / -Rubriken, Treffer in Google Trends, Zahl unabhängiger Redaktionen
     gespraech: dict = field(default_factory=dict)
+    # Sammelkarte für ein Großthema (pipeline/themen.py): {"name": …, "teile": [Schlagzeilen der Teilgeschichten]}
+    sammel: dict | None = None
 
 
 class Themen:
@@ -261,6 +263,7 @@ class Bewerter:
                 "rubrik": min((t.rang for t in beste.values() if not t.schlagzeile), default=None),
                 "trends": trends > 0,
                 "redaktionen": len({r for r in erste_titel if r != "google_news"}),
+                "alter_h": round(alter_h, 1),
             },
         )
 
@@ -273,10 +276,19 @@ class Bewerter:
         """
         g = self.g
         bewertungen.sort(key=lambda b: -b.wichtigkeit)
-        for i, b in enumerate(bewertungen):
+        max_alter = g.get("max_alter_h")
+        i = 0  # Rang unter den Geschichten, die nicht zu alt sind
+        for b in bewertungen:
             nur_google = b.quellen == ["google_news"]
+            # Feste Altersgrenze (Wunsch des Nutzers 04.11.2026): ohne neue Meldung seit max_alter_h Stunden
+            # fällt eine Geschichte weg, auch wenn sie noch in einer Google-Liste steht.
+            if max_alter and b.gespraech.get("alter_h", 0) > max_alter:
+                b.format = "weg"
+                b.begruendung.append(f"älter als {max_alter} Std ohne neue Meldung")
+                continue
+            i += 1
             if b.wichtigkeit >= g["schwelle_karte"] and not nur_google:
-                b.format = "top" if i < g["top_anzahl"] else "karte"
+                b.format = "top" if i <= g["top_anzahl"] else "karte"
             elif b.wichtigkeit >= g["schwelle_kurz"]:
                 b.format = "kurz"
             elif grund := self.boden(b):
