@@ -25,7 +25,15 @@ Du bekommst eine oder mehrere Geschichten. Zu jeder Geschichte gibt es Quellen (
 - `titel`: höchstens 8 Wörter. Catchy, Wortspiel oder überraschender Blickwinkel erwünscht, aber kein Clickbait und nie mehr versprechen, als die Karte hält. Bei Tod, Krieg, Katastrophen, Verbrechen: sachlicher Titel ohne Wortspiel.
 - `satz`: ein Satz (höchstens 25 Wörter) mit den wichtigsten Fakten: Wer, was, wann, wo.
 - `punkte`: genau 3 kurze Punkte (je höchstens 20 Wörter), jeder mit einer neuen Information.
-- `mitreden`: ein Satz (höchstens 30 Wörter), mit dem man im Gespräch mitreden kann (Einordnung, siehe oben): eine Folge, ein Zusammenhang mit einer anderen Nachricht, ein Vergleich, eine Vorgeschichte aus deinem Wissen oder eine erkennbare Spekulation. Z. B. „Schon der dritte Bahnstreik in diesem Jahr – und die Tarifrunde ist noch lange nicht vorbei.“ `mitreden_art`: „fakt“ (steht so in den Quellen), „wissen“ (aus deinem Wissen oder einer Verbindung zu anderen Nachrichten), „spekulation“ (Abschätzung, was kommen könnte).
+- `mitreden`: ein Satz (höchstens 30 Wörter), mit dem man im Gespräch mitreden kann (Einordnung, siehe oben). **Er muss etwas Neues bringen, das nicht schon in `titel`, `satz` oder `punkte` steht.** Eine Zusammenfassung der Karte ist verboten. Wähle eins:
+  - eine **Folge** („Für Pendler heißt das: …“, „Als Nächstes muss …“),
+  - einen **Zusammenhang** mit einer anderen Nachricht aus `andere_themen` oder früheren Ereignissen,
+  - einen **Vergleich** (früher, anderes Land, Größenordnung),
+  - eine **Vorgeschichte** aus deinem Wissen,
+  - eine erkennbare **Spekulation**, was kommen könnte.
+  Gut: „Schon der dritte Bahnstreik in diesem Jahr – und die Tarifrunde ist noch lange nicht vorbei.“ Schlecht (wiederholt nur): „Die Bahn streikt, viele Züge fallen aus.“
+  Prüfe vor der Antwort: Wer nur `titel` und `satz` gelesen hat, lernt aus `mitreden` etwas dazu? Wenn nicht, schreibe ihn neu.
+  `mitreden_art`: „fakt“ (steht so in den Quellen), „wissen“ (aus deinem Wissen oder einer Verbindung zu anderen Nachrichten), „spekulation“ (Abschätzung, was kommen könnte). „fakt“ nur, wenn die Quellen selbst eine Folge, einen Vergleich oder eine Vorgeschichte nennen.
 - `faktenbox`: Liste von {"fakt": "…", "quellen": ["q1", "q3"]}.
 - `fehlt`: Liste der W-Fragen (wer, was, wann, wo, warum, was_folgt), die die Quellen nicht beantworten.
 - `bildbegriff`: Titel des deutschen Wikipedia-Artikels, der am besten als Bild passt (Hauptperson, Ort, Firma, Produkt), z. B. „Friedrich Merz“ oder „Lufthansa“. Nur wenn eindeutig, sonst null.
