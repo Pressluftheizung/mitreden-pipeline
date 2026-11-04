@@ -113,11 +113,18 @@ class Zusammenlegen(unittest.TestCase):
         self.assertFalse(any("Watch" in str(p) for p in gefragt))  # Pixel-Regel: gar nicht erst gefragt
         self.assertEqual(lauf.bericht["zusammenlegen"]["gleich"], 1)
 
-    def test_getrennte_teile_bleiben_getrennt(self):
-        ki = ScheinKI({"dubletten": lambda d: {"paare": [{"nr": p["nr"], "gleich": True} for p in d["paare"]]}})
-        neu = Lauf(ki, CFG, Speicher(None, JETZT)).zusammenlegen(
-            [[0], [1], [4]], ["karte", "kurz", "kurz"], self.ms, self.v, [], [{0, 1}])
-        self.assertEqual(len(neu), 3)
+    def test_keine_ketten_gegen_ein_nein(self):
+        # A = B und B = C, aber A ≠ C: nur ein Paar wird verbunden
+        v = np.array([vektor(1, 0), vektor(1, 1), vektor(0, 0, 1), vektor(0, 0, 0, 1), vektor(0, 1)])
+
+        def antwort(d):
+            return {"paare": [{"nr": p["nr"], "gleich": not ("Waffenruhe" in str(p) and "Bahn" in str(p))} for p in d["paare"]]}
+
+        lauf = Lauf(ScheinKI({"dubletten": antwort}), CFG, Speicher(None, JETZT))
+        neu = lauf.zusammenlegen([[0], [1], [4]], ["karte", "kurz", "kurz"], self.ms, v,
+                                 [Paar(0, 4, 0.0, 0.9, [], "grauzone")], [])
+        self.assertEqual(len(neu), 2)
+        self.assertEqual(lauf.bericht["zusammenlegen"]["kette_verhindert"], 1)
 
     def test_grauzone_wird_gefragt(self):
         v = np.array([vektor(1, 0), vektor(0, 1), vektor(0, 0, 1), vektor(0, 0, 0, 1), vektor(0, 0, 0, 0, 1)])

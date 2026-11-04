@@ -26,6 +26,8 @@ from .ki import KeinModellFrei
 from .text import Seltenheit, produkte_widersprechen
 
 VOLL = ("top", "karte")
+# Fassung der Prompts: ändert sie sich, werden gemerkte Urteile verworfen (sie stammen von alten Regeln).
+FASSUNG = 2
 
 
 def _iso(zeit: datetime) -> str:
@@ -42,6 +44,8 @@ class Speicher:
     def __init__(self, datei: Path | None, jetzt: datetime, tage: float = 2):
         self.datei, self.jetzt = datei, jetzt
         roh = json.loads(datei.read_text(encoding="utf-8")) if datei and datei.exists() else {}
+        if roh.get("fassung") != FASSUNG:
+            roh = {}
         grenze = _iso(jetzt - timedelta(days=tage))
         self.paare = [p for p in roh.get("paare", []) if p["zeit"] >= grenze]
         self.gruppen = [g for g in roh.get("gruppen", []) if g["zeit"] >= grenze]
@@ -70,7 +74,7 @@ class Speicher:
     def speichere(self) -> None:
         if self.datei:
             self.datei.parent.mkdir(parents=True, exist_ok=True)
-            self.datei.write_text(json.dumps({"paare": self.paare, "gruppen": self.gruppen}, ensure_ascii=False,
+            self.datei.write_text(json.dumps({"fassung": FASSUNG, "paare": self.paare, "gruppen": self.gruppen}, ensure_ascii=False,
                                              separators=(",", ":")) + "\n", encoding="utf-8")
 
 
@@ -161,7 +165,7 @@ class Lauf:
         self.ki, self.cfg, self.speicher = ki, cfg, speicher
         self.anfragen = 0
         self.bericht: dict = {"aufteilen": {"geprueft": 0, "aus_speicher": 0, "aufgeteilt": 0, "abgetrennt": 0},
-                              "zusammenlegen": {"kandidaten": 0, "aus_speicher": 0, "gefragt": 0, "gleich": 0},
+                              "zusammenlegen": {"kandidaten": 0, "aus_speicher": 0, "gefragt": 0, "gleich": 0, "kette_verhindert": 0},
                               "anfragen": 0, "fehler": [], "beispiele": {"aufgeteilt": [], "zusammengelegt": []}}
 
     def frage(self, aufgabe: str, daten: dict, pruefe):
@@ -256,7 +260,6 @@ class Lauf:
         if len(aktiv) < 2:
             return geschichten
         geschichte_von = {i: n for n, g in enumerate(geschichten) for i in g}
-        nie = {frozenset((x, y)) for teile in getrennt for x in teile for y in teile if x != y}
 
         # Mittelpunkt, Kernwörter (in mindestens 30 % der Meldungen) und Produkte jeder Geschichte
         mitte = np.array([vektoren[geschichten[n]].mean(axis=0) for n in aktiv], dtype=np.float32)
@@ -287,11 +290,11 @@ class Lauf:
             wertung[(x, y)] = max(wertung.get((x, y), 0.0), p.wertung, float(sim[x, y]))
 
         kandidaten = [(x, y) for (x, y), w in sorted(wertung.items(), key=lambda kv: -kv[1])
-                      if frozenset((aktiv[x], aktiv[y])) not in nie
-                      and not produkte_widersprechen(produkte[x], produkte[y])][:c["max_paare"]]
+                      if not produkte_widersprechen(produkte[x], produkte[y])][:c["max_paare"]]
         self.bericht["zusammenlegen"]["kandidaten"] = len(kandidaten)
 
         gleich: list[tuple[int, int]] = []
+        verschieden: set[frozenset[int]] = set()  # Indizes in `geschichten`
         offen = []
         for x, y in kandidaten:
             frueher = self.speicher.paar(ids(geschichten[aktiv[x]], meldungen), ids(geschichten[aktiv[y]], meldungen))
@@ -301,6 +304,8 @@ class Lauf:
                 self.bericht["zusammenlegen"]["aus_speicher"] += 1
                 if frueher:
                     gleich.append((x, y))
+                else:
+                    verschieden.add(frozenset((aktiv[x], aktiv[y])))
 
         def zeige(n: int) -> dict:
             gezeigt = auswahl(geschichten[n], meldungen, vektoren, 3)
@@ -324,9 +329,17 @@ class Lauf:
                                          eintrag["gleich"])
                 if eintrag["gleich"]:
                     gleich.append((x, y))
+                    if len(self.bericht["beispiele"]["zusammengelegt"]) < 15:
+                        self.bericht["beispiele"]["zusammengelegt"].append(
+                            [str(eintrag.get("ereignis_a", ""))[:80], str(eintrag.get("ereignis_b", ""))[:80],
+                             meldungen[geschichten[aktiv[x]][0]].titel, meldungen[geschichten[aktiv[y]][0]].titel])
+                else:
+                    verschieden.add(frozenset((aktiv[x], aktiv[y])))
 
-        # Gleiche Paare verbinden (auch über mehrere Schritte: A = B und B = C)
+        # Gleiche Paare verbinden (auch über mehrere Schritte: A = B und B = C), aber nie zwei Gruppen,
+        # zwischen denen ein Paar ausdrücklich als verschieden beurteilt wurde (A = B, B = C, A ≠ C)
         wurzel = list(range(len(geschichten)))
+        gruppe = {n: {n} for n in range(len(geschichten))}
 
         def finde(n: int) -> int:
             while wurzel[n] != n:
@@ -336,12 +349,15 @@ class Lauf:
 
         for x, y in gleich:
             a, b = finde(aktiv[x]), finde(aktiv[y])
-            if a != b and frozenset((a, b)) not in nie:
-                wurzel[max(a, b)] = min(a, b)
-                self.bericht["zusammenlegen"]["gleich"] += 1
-                if len(self.bericht["beispiele"]["zusammengelegt"]) < 15:
-                    self.bericht["beispiele"]["zusammengelegt"].append(
-                        [meldungen[geschichten[aktiv[x]][0]].titel, meldungen[geschichten[aktiv[y]][0]].titel])
+            if a == b:
+                continue
+            if any(frozenset((p, q)) in verschieden for p in gruppe[a] for q in gruppe[b]):
+                self.bericht["zusammenlegen"]["kette_verhindert"] += 1
+                continue
+            neu_w, alt_w = min(a, b), max(a, b)
+            wurzel[alt_w] = neu_w
+            gruppe[neu_w] |= gruppe.pop(alt_w)
+            self.bericht["zusammenlegen"]["gleich"] += 1
         neu: dict[int, list[int]] = {}
         for n, g in enumerate(geschichten):
             neu.setdefault(finde(n), []).extend(g)
