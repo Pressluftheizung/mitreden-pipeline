@@ -1,7 +1,8 @@
 # Dreimal täglich eine Ausgabe: Karten bauen (pipeline/bauen.py) und kontrollieren, ob alles Relevante drin ist
 # (pipeline/kontrolle.py), beides in pipeline/ausgabe.py. Gestartet vom Cloudflare-Worker (cloudflare/takt.js)
 # um 7:23, 14:23 und 19:23 Uhr deutscher Winterzeit; der Dateiname bleibt deshalb kontrolle.yml.
-# Ergebnis nur ins PRIVATE Repo (Branch rohdaten). Bis zum Bias-Review des Nutzers entstehen nur Testkarten.
+# Ergebnis nur ins PRIVATE Repo (Branch rohdaten, die Karten für die App zusätzlich nach main/karten/).
+# Bis zum Bias-Review des Nutzers entstehen nur Testkarten.
 name: ausgabe
 
 on:
@@ -65,5 +66,38 @@ jobs:
           for versuch in 1 2 3; do
             git push -q origin HEAD:rohdaten && exit 0
             git pull -q --rebase origin rohdaten
+          done
+          exit 1
+
+      # Früher Prototyp (Entscheidung 04.11.2026, PLAN.md 15): die neueste Ausgabe in die App legen.
+      # Nur karten/karten.json im privaten Branch main; Cloudflare Pages baut die App daraus (hinter Access).
+      - name: App-Code aus dem privaten Repo holen
+        if: ${{ !cancelled() }}
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: Pressluftheizung/mitreden-app
+          ref: main
+          token: ${{ secrets.APP_REPO_TOKEN }}
+          path: app
+          fetch-depth: 1
+
+      - name: Karten in die App legen
+        if: ${{ !cancelled() }}
+        run: python -m pipeline.veroeffentlichen --daten daten --app app
+
+      - name: App-Karten speichern
+        if: ${{ !cancelled() }}
+        working-directory: app
+        run: |
+          git config user.name "mitreden-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add karten/karten.json
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -q -m "Karten $(date -u +%Y-%m-%dT%H:%MZ)"
+          for versuch in 1 2 3; do
+            git push -q origin HEAD:main && exit 0
+            git pull -q --rebase origin main
           done
           exit 1
