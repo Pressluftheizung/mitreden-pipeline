@@ -13,21 +13,44 @@ Gesprächswert verschiebt nur, er ersetzt sie nicht. Fehlt die KI, bleibt alles 
 import json
 
 
+def als_nummer(x) -> int | None:
+    """3, 3.0, "3" oder "s3" → 3 (Modelle schreiben Nummern nicht immer als Zahl)."""
+    if isinstance(x, bool):
+        return None
+    if isinstance(x, (int, float)) and float(x).is_integer():
+        return int(x)
+    if isinstance(x, str):
+        ziffern = x.strip().lstrip("sSnr#").strip()
+        return int(ziffern) if ziffern.isdigit() else None
+    return None
+
+
 def lies_antwort(antwort, anzahl: int, cfg: dict) -> tuple[list[tuple[str, list[int]]], list[int]]:
     """Großthemen (Name, Nummern ab 0) und Gesprächswerte (je Geschichte 1–3, sonst 2). Unbrauchbares fällt weg."""
     werte = [2] * anzahl
     roh = antwort.get("gespraech") if isinstance(antwort, dict) else None
-    if isinstance(roh, list):
+    if isinstance(roh, dict):  # {"3": [Nummern], "1": [Nummern]}, alle übrigen 2
+        for w, nrs in roh.items():
+            w = als_nummer(w)
+            if w is None or not 1 <= w <= 3 or not isinstance(nrs, list):
+                continue
+            for x in nrs:
+                x = als_nummer(x)
+                if x is not None and 1 <= x <= anzahl:
+                    werte[x - 1] = w
+    elif isinstance(roh, list):
         for i, w in enumerate(roh[:anzahl]):
-            if isinstance(w, (int, float)) and 1 <= w <= 3:
-                werte[i] = int(round(w))
+            w = als_nummer(w)
+            if w is not None and 1 <= w <= 3:
+                werte[i] = w
     themen, vergeben = [], set()
     for t in (antwort.get("grossthemen") or []) if isinstance(antwort, dict) else []:
         if not isinstance(t, dict) or not isinstance(t.get("nr"), list):
             continue
         nrs = []
         for x in t["nr"]:
-            if isinstance(x, int) and 1 <= x <= anzahl and x - 1 not in vergeben and x - 1 not in nrs:
+            x = als_nummer(x)
+            if x is not None and 1 <= x <= anzahl and x - 1 not in vergeben and x - 1 not in nrs:
                 nrs.append(x - 1)
         if cfg["min_teile"] <= len(nrs) <= cfg["max_teile"]:
             vergeben.update(nrs)
@@ -36,7 +59,7 @@ def lies_antwort(antwort, anzahl: int, cfg: dict) -> tuple[list[tuple[str, list[
 
 
 def pruefe(antwort) -> None:
-    if not isinstance(antwort, dict) or not isinstance(antwort.get("gespraech"), list):
+    if not isinstance(antwort, dict) or not isinstance(antwort.get("gespraech"), (list, dict)):
         raise ValueError("gespraech fehlt")
 
 
@@ -90,6 +113,9 @@ def buendeln(st, ki, cfg: dict, auswerten, bewerter):
 
     st.themen = {
         "modell": modell, "gefragt": len(kandidaten),
+        # Rohvorschlag der KI (Name, Zahl der Nummern), um zu sehen, was die Prüfung aussortiert hat
+        "vorschlag": [{"name": str(t.get("name"))[:60], "nr": len(t.get("nr") or [])}
+                      for t in antwort.get("grossthemen") or [] if isinstance(t, dict)][:20],
         "grossthemen": [{"name": name, "teile": len(nrs)} for name, nrs in themen],
         "gespraech": {w: werte.count(w) for w in (1, 2, 3)},
     }

@@ -12,7 +12,9 @@ Nicht bündeln:
 - Geschichten, die nur das Sachgebiet teilen („Fußball“, „KI“, „Wirtschaft“, „Krieg in der Ukraine“ über verschiedene Tage und Vorfälle);
 - Geschichten mit eigenem, großem Gesprächswert, die man getrennt erzählen würde.
 
-Ein Großthema hat mindestens 3 und höchstens 12 Geschichten. Die meisten Geschichten gehören zu keinem Großthema. Im Zweifel nicht bündeln.
+Zu einem Großthema gehören auch Reaktionen, Folgen (z. B. für Börse oder Wirtschaft), Analysen, Rücktritte und Gratulationen, wenn sie sich auf dasselbe große Ereignis beziehen. Gibt es zu einem Ereignis 3 oder mehr Geschichten, **bündle sie**: Der Leser will keine zehn Karten zum selben Ereignis.
+
+Ein Großthema hat mindestens 3 und höchstens 20 Geschichten. Die meisten übrigen Geschichten gehören zu keinem Großthema.
 
 ## 2. Gesprächswert
 Gib jeder Geschichte einen Wert von 1 bis 3:
@@ -24,5 +26,5 @@ Bewerte nach dem Gesprächswert, nicht nach dem Sachgebiet. Politik ist nicht au
 
 ## Antwort
 Nur JSON:
-{"grossthemen": [{"name": "kurzer Name, höchstens 5 Wörter", "nr": [3, 7, 12]}], "gespraech": [2, 3, 1, …]}
-`gespraech` enthält genau einen Wert je Geschichte, in der Reihenfolge der Nummern (erste Zahl = Geschichte 1).
+{"grossthemen": [{"name": "kurzer Name, höchstens 5 Wörter", "nr": [3, 7, 12]}], "gespraech": {"3": [1, 4, 9], "1": [2, 5, 6, 8]}}
+Alle Nummern als Zahlen. In `gespraech` stehen nur die Geschichten mit Wert 3 und mit Wert 1; alle übrigen haben Wert 2.

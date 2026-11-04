@@ -106,8 +106,8 @@ dubletten_ki:
 # Kosten: 1 Anfrage je Bau (Gemini Flash Lite, ≈ 0,2 % des Tageskontingents).
 themen_ki:
   an: true
-  max_geschichten: 200   # die wichtigsten so vielen Geschichten werden bewertet, der Rest bleibt unverändert
+  max_geschichten: 400   # die wichtigsten so vielen Geschichten werden bewertet, der Rest bleibt unverändert
   min_teile: 3
-  max_teile: 12
+  max_teile: 20
   # Wichtigkeit × Faktor je Gesprächswert (1 = kaum Gesprächsstoff, 3 = darüber reden alle)
-  faktor: { 1: 0.6, 2: 1.0, 3: 1.35 }
+  faktor: { 1: 0.4, 2: 1.0, 3: 1.35 }   # 4.11. abends: 0,6 senkte zu wenig (Feedback: überladen)
