@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from . import bauen, kontrolle
+from .ki import KI, Zaehler
 from .score import jetzt_utc
 from .werkbank import berechne, schreibe_verteilung
 
@@ -26,11 +27,13 @@ def main() -> int:
     args = parser.parse_args()
     jetzt = (datetime.fromisoformat(args.jetzt.replace("Z", "+00:00")) if args.jetzt else jetzt_utc()).astimezone(timezone.utc)
 
-    st = berechne(args.daten, args.config, jetzt)
+    # Eine KI-Schicht für Dubletten und Kartenbau: ein gemeinsamer Kontingent-Zähler
+    ki = KI(args.config / "ki.config.json", Zaehler(args.daten / "metriken" / "ki-verbrauch.json"))
+    st = berechne(args.daten, args.config, jetzt, ki=ki)
     schreibe_verteilung(st, args.daten, bauen.ausgabe_id(jetzt)[0])
     bau_ok = True
     try:
-        bauen.drucke(bauen.bauen(args.daten, args.config, jetzt, st=st))
+        bauen.drucke(bauen.bauen(args.daten, args.config, jetzt, ki=ki, st=st))
     except Exception:
         bau_ok = False
         traceback.print_exc()
@@ -38,6 +41,7 @@ def main() -> int:
         (args.daten / "metriken").mkdir(parents=True, exist_ok=True)
         (args.daten / "metriken" / f"bau-fehler-{bauen.ausgabe_id(jetzt)[0]}.txt").write_text(
             traceback.format_exc(), encoding="utf-8")
+        ki.zaehler.speichere()  # Anfragen des Dubletten-Schritts trotzdem zählen
     b = kontrolle.kontrolle(args.daten, args.config, jetzt, args.daten / "pruefset", st=st)
     if not bau_ok:
         b["ampel"], b["ampel_gruende"] = "rot", ["Kartenbau fehlgeschlagen"] + b["ampel_gruende"]

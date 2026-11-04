@@ -75,3 +75,26 @@ dubletten:
   grauzone: 0.55
   gruppe: 0.62
   selten: 0.05
+
+# Dubletten mit KI (pipeline/dubletten.py), nur im Kartenbau, Gemini Flash Lite.
+# Kosten: höchstens max_anfragen je Bau (8 von 500 am Tag ≈ 1,6 % je Bau, ≈ 5 % am Tag), meist weniger,
+# weil frühere Urteile gemerkt werden.
+dubletten_ki:
+  an: true
+  max_anfragen: 8
+  speicher_tage: 2
+  # Aufteilen: Karten-Geschichten mit mindestens 3 verschiedenen Schlagzeilen, Kurzmeldungen nur, wenn
+  # eine Meldung im Mittel weniger als `einheitlich` ähnlich zum Rest ist
+  aufteilen_max: 40
+  aufteilen_pro_anfrage: 8
+  aufteilen_titel: 20      # so viele verschiedene Schlagzeilen je Geschichte sieht die KI
+  einheitlich: 0.5
+  # Zusammenlegen: Paare gezeigter Geschichten, Wertung = Ähnlichkeit der Mittelpunkte + Bonus für seltene
+  # gemeinsame Wörter (wie in cluster.py). Grauzonen-Paare aus cluster.py kommen immer dazu.
+  vorauswahl: 0.4
+  kandidat: 0.6
+  woerter_bonus: 0.25
+  woerter_voll: 12.0
+  selten: 0.02
+  max_paare: 120
+  paare_pro_anfrage: 40

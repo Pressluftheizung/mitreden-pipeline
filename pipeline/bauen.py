@@ -253,7 +253,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
     ausgabe, ausgabe_label = ausgabe_id(jetzt)
     ki = ki or KI(config / "ki.config.json", Zaehler(daten / "metriken" / "ki-verbrauch.json"))
 
-    st = st or berechne(daten, config, jetzt)
+    st = st or berechne(daten, config, jetzt, ki=ki)
     aktiv = [b for b in st.sortiert if b.format != "weg"]
     stories_datei = daten / "stories" / "stories.json"
     alt = lade_stories(stories_datei)
@@ -551,6 +551,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
         "datenkarten": {"zahlen": bool(zahlen), "ergebnisse": len(ergebnisse)},
         "volltext_versuche": {e: VOLLTEXT_VERSUCHE.count(e) for e in set(VOLLTEXT_VERSUCHE)},
         "volltexte": sum(1 for k in karten_voll.values() for q in k.get("_quellen_ki") or [] if q.get("volltext")),
+        "dubletten": st.dubletten,
         "ki": ki.protokoll, "fehler": fehler,
     }
 
@@ -591,6 +592,14 @@ def drucke(m: dict) -> None:
     print("  Prüfung: " + ", ".join(f"{k} {v}" for k, v in m["pruefung"].items()))
     print("  Bilder: " + ", ".join(f"{k} {v}" for k, v in m["bilder"].items()))
     print("  Mitreden-Satz: " + ", ".join(f"{k} {v}" for k, v in m["mitreden"].items()) + f" · Volltexte {m['volltexte']}")
+    d = m.get("dubletten") or {}
+    if d.get("aufteilen"):
+        a, z = d["aufteilen"], d["zusammenlegen"]
+        print(f"  Dubletten (KI, {d['anfragen']} Anfragen): {a['aufgeteilt']} Geschichten aufgeteilt "
+              f"({a['abgetrennt']} Meldungen abgetrennt), {z['gleich']} von {z['kandidaten']} Paaren zusammengelegt "
+              f"({z['aus_speicher']} aus dem Speicher)")
+    for f in d.get("fehler", []):
+        print(f"  ⚠ Dubletten: {f}")
     anfragen: dict[str, int] = {}
     for p in m["ki"]:
         anfragen[p["modell"]] = anfragen.get(p["modell"], 0) + 1

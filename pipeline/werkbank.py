@@ -14,7 +14,7 @@ import argparse
 import html
 import json
 import sys
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -44,39 +44,60 @@ class Stand:
     google: list[GoogleTreffer]
     gewichte: dict
     letzter_lauf: datetime
+    eigene_geschichten: list[list[int]] = field(default_factory=list)  # ohne die Google-Geschichten (hinten)
+    dubletten: dict = field(default_factory=dict)  # Bericht des KI-Schritts (pipeline/dubletten.py)
 
 
-def berechne(daten: Path, config: Path, jetzt: datetime) -> Stand:
+def berechne(daten: Path, config: Path, jetzt: datetime, ki=None) -> Stand:
+    """Rangliste berechnen. Mit `ki` (nur im Kartenbau) entscheidet zusätzlich die KI über Dubletten."""
     konfig = lade_konfiguration(config / "sources.yaml")
     quellen = {q.id: q for q in konfig.quellen}
     gewichte = yaml.safe_load((config / "gewichte.yaml").read_text(encoding="utf-8"))
 
     teaser = list(lade_teaser(daten / "teaser").values())
-    meldungen = baue_meldungen(teaser, quellen)
-    vektoren = bette_ein([m.text for m in meldungen])
-    ergebnis = finde_geschichten(meldungen, vektoren, Schwellen(**gewichte["dubletten"]))
+    eigene = baue_meldungen(teaser, quellen)
+    text_vektoren = bette_ein([m.text for m in eigene])
+    ergebnis = finde_geschichten(eigene, text_vektoren, Schwellen(**gewichte["dubletten"]))
 
     bewerter = Bewerter(config / "gewichte.yaml", config / "topics.yaml")
     signale = Signale.aus_dateien(daten / "signale")
-    titel_vektoren = bette_ein([m.titel for m in meldungen])
-    google: list[GoogleTreffer] = []
-    if signale.news:
-        formulierungen = bette_ein([t for n in signale.news for t in google_titel(n)])
-        google = gleiche_ab(signale.news, formulierungen, meldungen, vektoren, titel_vektoren,
-                            ergebnis.geschichten, gewichte["google_news"])
-    seltenheit = Seltenheit([m.woerter for m in meldungen])
-    if google and gewichte["google_news"]["eigene_geschichte"]:
-        vektoren, titel_vektoren = ergaenze_google_geschichten(
-            signale.news, formulierungen, google, meldungen, vektoren, titel_vektoren, ergebnis.geschichten,
-            gewichte["google_news"])
+    eigene_titel = bette_ein([m.titel for m in eigene])
+    formulierungen = bette_ein([t for n in signale.news for t in google_titel(n)]) if signale.news else None
     stand = max((datetime.strptime(t["zuletzt_gesehen"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
                  for t in teaser), default=jetzt)
-    bewertungen = [bewerter.bewerte(g, meldungen, vektoren, signale, jetzt,
-                                    [t for t in google if t.geschichte == n], seltenheit, stand)
-                   for n, g in enumerate(ergebnis.geschichten)]
-    in_reihenfolge = list(bewertungen)  # Index wie in ergebnis.geschichten, vor dem Sortieren
-    bewerter.formate_vergeben(bewertungen)
-    return Stand(meldungen, vektoren, titel_vektoren, ergebnis, in_reihenfolge, bewertungen, google, gewichte, stand)
+
+    def auswerten(geschichten_eigen: list[list[int]]) -> Stand:
+        """Google-Abgleich und Wichtigkeit für eine Einteilung der eigenen Meldungen (ohne neues Sprachmodell)."""
+        meldungen = list(eigene)  # Google-Geschichten hängen ihre Meldungen hinten an
+        geschichten = [list(g) for g in geschichten_eigen]
+        vektoren, titel_vektoren = text_vektoren, eigene_titel
+        google: list[GoogleTreffer] = []
+        if formulierungen is not None:
+            google = gleiche_ab(signale.news, formulierungen, meldungen, vektoren, titel_vektoren,
+                                geschichten, gewichte["google_news"])
+        seltenheit = Seltenheit([m.woerter for m in meldungen])
+        if google and gewichte["google_news"]["eigene_geschichte"]:
+            vektoren, titel_vektoren = ergaenze_google_geschichten(
+                signale.news, formulierungen, google, meldungen, vektoren, titel_vektoren, geschichten,
+                gewichte["google_news"])
+        bewertungen = [bewerter.bewerte(g, meldungen, vektoren, signale, jetzt,
+                                        [t for t in google if t.geschichte == n], seltenheit, stand)
+                       for n, g in enumerate(geschichten)]
+        in_reihenfolge = list(bewertungen)  # Index wie in geschichten, vor dem Sortieren
+        bewerter.formate_vergeben(bewertungen)
+        return Stand(meldungen, vektoren, titel_vektoren, Ergebnis(geschichten, ergebnis.paare), in_reihenfolge,
+                     bewertungen, google, gewichte, stand, [list(g) for g in geschichten_eigen])
+
+    st = auswerten(ergebnis.geschichten)
+    if ki is not None and gewichte.get("dubletten_ki", {}).get("an"):
+        from .dubletten import Speicher, pruefe_dubletten
+        cfg = gewichte["dubletten_ki"]
+        try:
+            st = pruefe_dubletten(st, ki, cfg, Speicher(daten / "stories" / "dubletten.json", jetzt,
+                                                        cfg["speicher_tage"]), auswerten)
+        except Exception as e:  # ein Fehler hier darf die Ausgabe nicht verhindern
+            st.dubletten = {"fehler": [f"{type(e).__name__}: {e}"]}
+    return st
 
 
 def schreibe_verteilung(st: Stand, daten: Path, name: str, aufheben: int = 9) -> Path:
