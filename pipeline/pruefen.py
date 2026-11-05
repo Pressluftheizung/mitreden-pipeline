@@ -54,22 +54,41 @@ def code_pruefung(karte: dict, quelltexte: list[str]) -> list[dict]:
     return probleme
 
 
-def pruef_anfrage(karte: dict, quellen: list[dict]) -> str:
-    """Eingabe für die Prüf-KI: Quellen (gekürzt) und nummerierte Aussagen."""
-    # Geprüft wird, was der Leser sieht. Die Faktenbox (steht am Ende der Nummerierung) prüft nur der Code;
-    # das hält die Anfrage klein genug für das Minutenlimit der Prüf-KI.
-    return json.dumps({
-        "quellen": [{"id": q["id"], "outlet": q["redaktion"], "leaning": q["lager"], "type": q["art"],
-                     "title": q["titel"], "text": (q.get("volltext") or q["text"])[:2500 if q.get("volltext") else 500]}
-                    # dieselben Quellen und Längen, die auch die schreibende KI hatte (Sammelkarten: bis 14)
-                    for q in quellen[:14 if karte.get("kapitel") else 8]],
+# Höchstlänge der Prüf-Anfrage in Zeichen: Groq nimmt 8000 Tokens pro Minute (Ein- plus Ausgabe). Abzüglich
+# Prompt (~3000 Zeichen) und Antwort (1500 Tokens) bleiben gut 16000 Zeichen; 14000 lässt Luft.
+PRUEF_MAX_ZEICHEN = 14000
+# Stufen (Quellen, Zeichen je Volltext, Zeichen je Anreißer), von voll bis knapp
+PRUEF_STUFEN = ((14, 2500, 500), (10, 1500, 400), (8, 1000, 300), (6, 600, 250), (5, 300, 200))
+
+
+def pruef_anfrage(karte: dict, quellen: list[dict], max_zeichen: int = PRUEF_MAX_ZEICHEN) -> str:
+    """Eingabe für die Prüf-KI: Quellen (gekürzt) und nummerierte Aussagen.
+
+    Die Quellen werden so weit gekürzt, bis die Anfrage ins Minutenlimit der Prüf-KI passt (Sammelkarten
+    mit 14 Quellen waren am 5.11. zu groß, der Bau hing deshalb).
+    """
+    # Geprüft wird, was der Leser sieht. Die Faktenbox (steht am Ende der Nummerierung) prüft nur der Code.
+    rest = {
         "aussagen": [{"nr": a["nr"], "feld": a["feld"], "text": a["text"]} for a in aussagen(karte)
                      if a["feld"] not in ("faktenbox", "mitreden")],
         # Der Mitreden-Satz darf Wissen und Spekulation enthalten: nur auf Falsches und Parteinahme geprüft
         "mitreden": karte.get("mitreden"),
         # Grundwissen und Nebenbei: eigenes Wissen erlaubt, nur auf Falsches und Parteinahme geprüft
         "einordnung": [{"id": i, "text": t} for i, t in einordnung(karte)],
-    }, ensure_ascii=False)
+    }
+    text = ""
+    for anzahl, voll, kurz in PRUEF_STUFEN:
+        # dieselben Quellen, die auch die schreibende KI hatte (Sammelkarten: bis 14, sonst 8)
+        anzahl = min(anzahl, 14 if karte.get("kapitel") else 8)
+        text = json.dumps({
+            "quellen": [{"id": q["id"], "outlet": q["redaktion"], "leaning": q["lager"], "type": q["art"],
+                         "title": q["titel"], "text": (q.get("volltext") or q["text"])[:voll if q.get("volltext") else kurz]}
+                        for q in quellen[:anzahl]],
+            **rest,
+        }, ensure_ascii=False)
+        if len(text) <= max_zeichen:
+            break
+    return text
 
 
 def einordnung(karte: dict) -> list[tuple[str, str]]:

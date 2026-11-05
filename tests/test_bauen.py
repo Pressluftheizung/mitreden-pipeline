@@ -150,6 +150,25 @@ class KISchicht(unittest.TestCase):
             finally:
                 os.environ.update({k: v for k, v in alt.items() if v})
 
+    def test_zu_grosse_anfrage_wartet_nicht_endlos(self):
+        # 15-Uhr-Bau 5.11.: Anfrage größer als das Minutenlimit → warte() hing 60 Minuten
+        with tempfile.TemporaryDirectory() as tmp:
+            ki = KI(CONFIG / "ki.config.json", Zaehler(Path(tmp) / "v.json"))
+            ki._frage = lambda *a: self.fail("darf nicht fragen")
+            with self.assertRaises(KeinModellFrei) as f:
+                ki.frage("pruefen", "x" * 40000)
+            self.assertIn("zu groß", str(f.exception))
+
+    def test_pruef_anfrage_passt_ins_minutenlimit(self):
+        from pipeline.pruefen import PRUEF_MAX_ZEICHEN, pruef_anfrage
+        qs = [{"id": f"q{i}", "redaktion": "R", "lager": "mitte", "art": "bericht", "titel": "T" * 80,
+               "text": "a" * 600, "volltext": "b" * 3000 if i < 2 else None} for i in range(14)]
+        karte = {"titel": "T", "satz": "S", "punkte": ["p"] * 3, "kapitel": [{"titel": "K", "punkte": ["x" * 90] * 5}] * 4,
+                 "grundwissen": [{"begriff": "B", "text": "t" * 250}], "nebenbei": "n" * 200}
+        text = pruef_anfrage(karte, qs)
+        self.assertLessEqual(len(text), PRUEF_MAX_ZEICHEN)
+        self.assertGreaterEqual(len(json.loads(text)["quellen"]), 5)
+
 
 class Wartezeit(unittest.TestCase):
     def test_groq_und_gemini(self):

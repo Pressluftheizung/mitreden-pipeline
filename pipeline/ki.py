@@ -188,6 +188,10 @@ class KI:
             if not self.zaehler.frei(modell, grenzen, self.k["je_bau"]["reserve_anteil"], geschaetzt):
                 letzte = f"{modell}: Tageskontingent erreicht"
                 continue
+            if geschaetzt > grenzen["tpm"]:  # passt nie ins Minutenlimit: sonst wartet warte() endlos (15-Uhr-Bau 5.11.)
+                letzte = f"{modell}: Anfrage zu groß fürs Minutenlimit ({geschaetzt} > {grenzen['tpm']})"
+                self.protokoll.append({"aufgabe": aufgabe, "modell": modell, "fehler": letzte, "sekunden": 0})
+                continue
             for versuch in (1, 2):
                 self.zaehler.warte(modell, grenzen, geschaetzt)
                 start = time.monotonic()
