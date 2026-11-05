@@ -6,7 +6,7 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
-from pipeline.bauen import ausgabe_id, lager_mix, slug
+from pipeline.bauen import ausgabe_id, kapitel_bereinigen, lager_mix, slug
 from pipeline.ki import KI, KeinModellFrei, Zaehler, lese_json
 from pipeline.pruefen import anwenden, code_pruefung, zahlen
 from pipeline.teaser import bild_url
@@ -52,6 +52,26 @@ class Anwenden(unittest.TestCase):
                   "seitentausch_ok": True}
         p = anwenden(k, [], urteil, "groq", "test")
         self.assertEqual((p["ergebnis"], k["mitreden"]), ("korrigiert", None))
+
+    def test_nicht_belegter_kapitelpunkt_fliegt_raus(self):
+        k = karte()
+        k["kapitel"] = [{"titel": "Die Strecken", "punkte": ["Köln betroffen.", "Hamburg betroffen."]},
+                        {"titel": "Leer danach", "punkte": ["Nur ein Punkt."]}]
+        urteil = {"aussagen": [{"nr": 6, "urteil": "nicht_belegt"}, {"nr": 8, "urteil": "nicht_belegt"}],
+                  "neutralitaet": "mitte", "seitentausch_ok": True}
+        p = anwenden(k, [], urteil, "groq", "test")
+        self.assertEqual(p["ergebnis"], "korrigiert")
+        self.assertEqual(k["kapitel"], [{"titel": "Die Strecken", "punkte": ["Hamburg betroffen."]}])
+        self.assertEqual(k["mitreden"], "Wer am Montag fährt, sollte die App prüfen.")  # Nummer 9, unberührt
+
+    def test_kapitel_bereinigen(self):
+        roh = [{"titel": " A ", "punkte": ["x", "", 3, "y", "z", "u", "v", "w"]}, {"titel": "B", "punkte": []},
+               "Unsinn", {"titel": "C", "punkte": ["c"]}, {"titel": "D", "punkte": ["d"]}, {"titel": "E", "punkte": ["e"]},
+               {"titel": "F", "punkte": ["f"]}]
+        self.assertEqual(kapitel_bereinigen(roh), [{"titel": "A", "punkte": ["x", "y", "z", "u", "v"]},
+                                                   {"titel": "C", "punkte": ["c"]}, {"titel": "D", "punkte": ["d"]},
+                                                   {"titel": "E", "punkte": ["e"]}])
+        self.assertEqual(kapitel_bereinigen(None), [])
 
     def test_mitreden_nur_bei_falsch_oder_parteiisch_weg(self):
         for problem, erwartet in ((None, "Wer am Montag fährt, sollte die App prüfen."), ("parteiisch", None)):

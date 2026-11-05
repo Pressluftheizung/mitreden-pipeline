@@ -234,6 +234,18 @@ def pruefe_karten(antwort: dict) -> None:
             raise ValueError(f"Karte unvollständig: {str(k)[:80]}")
 
 
+def kapitel_bereinigen(roh) -> list[dict]:
+    """Kapitel einer Sammelkarte (Themen-Stapel): höchstens 4, je Titel und 1–5 Punkte. Unbrauchbares fällt weg."""
+    kapitel = []
+    for k in roh if isinstance(roh, list) else []:
+        if not isinstance(k, dict) or not isinstance(k.get("titel"), str) or not isinstance(k.get("punkte"), list):
+            continue
+        punkte = [p.strip() for p in k["punkte"] if isinstance(p, str) and p.strip()][:5]
+        if k["titel"].strip() and punkte:
+            kapitel.append({"titel": k["titel"].strip()[:80], "punkte": punkte})
+    return kapitel[:4]
+
+
 def pruefe_zeilen(antwort: dict) -> None:
     if not isinstance(antwort, dict) or not isinstance(antwort.get("zeilen"), list) or not all(isinstance(z.get("text"), str) for z in antwort["zeilen"]):
         raise ValueError("zeilen fehlt")
@@ -321,7 +333,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
                 if aufgabe == "update":
                     k = alt[zuordnung[n]]["karte"]
                     eintrag["bisherige_karte"] = {f: k.get(f) for f in ("titel", "satz", "punkte", "mitreden", "faktenbox",
-                                                                          "ebenen", "erklaerung") if k.get(f)}
+                                                                          "ebenen", "erklaerung", "kapitel") if k.get(f)}
                 eingabe.append(eintrag)
             daten = {"geschichten": eingabe, "andere_themen": andere_themen}
             try:
@@ -375,7 +387,8 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
         karte = dict(vorher)
         if plan[n] in ("neu", "update"):
             t = texte[n]
-            for feld in ("titel", "satz", "punkte", "mitreden", "mitreden_art", "faktenbox", "ebenen", "erklaerung"):
+            for feld in ("titel", "satz", "punkte", "mitreden", "mitreden_art", "faktenbox", "ebenen", "erklaerung",
+                         "kapitel"):
                 if feld in t:
                     karte[feld] = t[feld]
             if plan[n] == "update":  # nicht mitgeliefertes Hintergrundwissen könnte dem neuen Stand widersprechen
@@ -383,10 +396,18 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
                     karte["ebenen"] = [e for e in karte.get("ebenen") or [] if e.get("typ") != "hintergrund"]
                 if "erklaerung" not in t:
                     karte["erklaerung"] = None
+                if "kapitel" not in t and not b.sammel:
+                    karte["kapitel"] = []
             karte["punkte"] = (karte.get("punkte") or [])[:3]
+            karte["kapitel"] = kapitel_bereinigen(karte.get("kapitel"))
+            if karte["kapitel"]:  # Themen-Stapel ersetzt die frühere Ebene „Im Überblick“
+                karte["ebenen"] = [e for e in karte.get("ebenen") or [] if e.get("titel") != "Im Überblick"]
             karte["version"] = vorher.get("version", 0) + 1
             karte["aktualisiert"] = iso(jetzt)
             karte["aenderung"] = t.get("aenderung") if plan[n] == "update" else None
+            # Kleines Update (weitere Reaktion, Wiederholung): die App zeigt die Karte nicht noch einmal (Feedback 05.11.2026)
+            karte["neuigkeit"] = ("klein" if plan[n] == "update" and t.get("neuigkeit") == "klein"
+                                  and t.get("aktion") != "korrigieren" else "gross")
             karte["_neu_geschrieben"] = True
             karte["_ki"] = {"modell": t.get("_modell"), "fehlt": t.get("fehlt") or [],
                             "bildbegriff": t.get("bildbegriff"), "bild_alt": t.get("bild_alt")}
@@ -414,6 +435,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
         karte.setdefault("aenderung", None)
         karte.setdefault("ebenen", [])
         karte.setdefault("erklaerung", None)
+        karte.setdefault("kapitel", [])
         karten_voll[n] = karte
 
     # Prüfen (nur neu geschriebene Karten; die übrigen behalten ihre Prüfung)

@@ -29,6 +29,7 @@ def aussagen(karte: dict) -> list[dict]:
     """Alle prüfbaren Aussagen der Karte, nummeriert."""
     liste = [("titel", None, karte.get("titel")), ("satz", None, karte.get("satz"))]
     liste += [("punkte", i, p) for i, p in enumerate(karte.get("punkte") or [])]
+    liste += [("kapitel", (j, i), p) for j, k in enumerate(karte.get("kapitel") or []) for i, p in enumerate(k["punkte"])]
     liste.append(("mitreden", None, karte.get("mitreden")))
     liste += [("faktenbox", i, f.get("fakt")) for i, f in enumerate(karte.get("faktenbox") or [])]
     return [{"nr": n, "feld": feld, "index": i, "text": text} for n, (feld, i, text) in enumerate(
@@ -60,7 +61,8 @@ def pruef_anfrage(karte: dict, quellen: list[dict]) -> str:
     return json.dumps({
         "quellen": [{"id": q["id"], "outlet": q["redaktion"], "leaning": q["lager"], "type": q["art"],
                      "title": q["titel"], "text": (q.get("volltext") or q["text"])[:2500 if q.get("volltext") else 500]}
-                    for q in quellen[:8]],  # dieselben Quellen und Längen, die auch die schreibende KI hatte
+                    # dieselben Quellen und Längen, die auch die schreibende KI hatte (Sammelkarten: bis 14)
+                    for q in quellen[:14 if karte.get("kapitel") else 8]],
         "aussagen": [{"nr": a["nr"], "feld": a["feld"], "text": a["text"]} for a in aussagen(karte)
                      if a["feld"] not in ("faktenbox", "mitreden")],
         # Der Mitreden-Satz darf Wissen und Spekulation enthalten: nur auf Falsches und Parteinahme geprüft
@@ -95,12 +97,15 @@ def anwenden(karte: dict, code: list[dict], ki: dict | None, anbieter: str | Non
                 unklar.append(f"{nach_nr[u['nr']]['text'][:60]}: {u.get('grund', '')}")
 
     hinweise, warnung, mitreden_weg = [], False, False
-    weg_punkte, weg_fakten = set(), set()
+    weg_punkte, weg_fakten, weg_kapitel = set(), set(), set()
     for nr, grund in schlecht.items():
         a = nach_nr[nr]
         if a["feld"] == "punkte":
             weg_punkte.add(a["index"])
             hinweise.append(f"Punkt entfernt ({grund}): {a['text']}")
+        elif a["feld"] == "kapitel":
+            weg_kapitel.add(a["index"])
+            hinweise.append(f"Kapitelpunkt entfernt ({grund}): {a['text']}")
         elif a["feld"] == "faktenbox":
             weg_fakten.add(a["index"])
             hinweise.append(f"Fakt entfernt ({grund}): {a['text']}")
@@ -117,6 +122,10 @@ def anwenden(karte: dict, code: list[dict], ki: dict | None, anbieter: str | Non
             karte["punkte"] = rest
         else:
             warnung = True  # nichts übrig: Punkte bleiben, Karte bekommt eine Warnung
+    if weg_kapitel:
+        karte["kapitel"] = [{**k, "punkte": [p for i, p in enumerate(k["punkte"]) if (j, i) not in weg_kapitel]}
+                            for j, k in enumerate(karte["kapitel"])]
+        karte["kapitel"] = [k for k in karte["kapitel"] if k["punkte"]]
     if weg_fakten:
         karte["faktenbox"] = [f for i, f in enumerate(karte["faktenbox"]) if i not in weg_fakten]
     problem = (ki or {}).get("mitreden_problem")
@@ -137,7 +146,7 @@ def anwenden(karte: dict, code: list[dict], ki: dict | None, anbieter: str | Non
     woerter = (ki or {}).get("wertende_woerter") or []
     hinweise += [f"wertendes Wort „{w.get('wort')}“ → „{w.get('ersatz')}“" for w in woerter if isinstance(w, dict)]
 
-    eingriffe = len(weg_punkte) + len(weg_fakten) + mitreden_weg
+    eingriffe = len(weg_punkte) + len(weg_fakten) + len(weg_kapitel) + mitreden_weg
     if ki is None:
         ergebnis = "ungeprueft"
     elif warnung:

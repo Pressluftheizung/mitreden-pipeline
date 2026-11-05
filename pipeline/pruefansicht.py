@@ -40,6 +40,9 @@ def _karte(k: dict) -> str:
     if k.get("erklaerung"):
         erklaerung = ("<details><summary>Erklär mir das</summary><ul>"
                       + "".join(f"<li>{E(x)}</li>" for x in k["erklaerung"]) + "</ul></details>")
+    for kap in k.get("kapitel") or []:  # Themen-Stapel: Kapitelkarten
+        erklaerung += (f"<details open><summary>Kapitel: {E(kap['titel'])}</summary><ul>"
+                       + "".join(f"<li>{E(x)}</li>" for x in kap["punkte"]) + "</ul></details>")
     fehlt =", ".join((k.get("_ki") or {}).get("fehlt") or [])
     return f"""
 <section class="paar {E(p.get('ergebnis', ''))}" data-id="{E(k['id'])}">

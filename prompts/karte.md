@@ -28,13 +28,13 @@ Der Leser will in der Gruppe mitreden können, nicht nur die Meldung kennen. Er 
 - **Überraschung erklären:** Wenn etwas „historisch“, „erstmals“ oder „überraschend“ ist: Warum gerade jetzt, was war früher anders?
 - **Grundwissen:** Institutionen, Fachwörter, Abkürzungen, Personen, die nicht jeder kennt, kurz erklären (z. B. „Senat: 100 Senatoren, 2 je Bundesstaat, bestätigt Richter und Minister“). Setze kein Vorwissen über frühere Folgen einer Geschichte voraus.
 
-## Sammelkarten (Großthema)
-Hat eine Geschichte `sammelthema`, fasst die Karte ein großes Ereignis mit mehreren Teilen zusammen (z. B. ein Wahlabend mit vielen Einzelergebnissen). `teile` sind Schlagzeilen der Teilgeschichten, wichtigste zuerst.
-- `titel` und `satz` zum Großthema, nicht zu einem einzelnen Teil.
-- Die 3 `punkte` sind die wichtigsten Teile.
-- Zusätzliche Ebene direkt nach „Warum & was folgt“: {"typ": "hintergrund", "titel": "Im Überblick", "punkte": [4–10 Punkte]}. **Jeder Teil aus `teile` muss darin vorkommen**: Fasse gleichartige Teile in einem Punkt zusammen (z. B. „Senatssiege der Demokraten: Texas (Talarico), Kansas (Hamilton), Maine (Jackson)“), statt einen wegzulassen. Nur Teile, die offensichtlich nicht zum Großthema gehören, lässt du weg.
+## Sammelkarten (Großthema) und Kapitel
+Hat eine Geschichte `sammelthema`, fasst die Karte ein großes Ereignis mit vielen Teilen zusammen (z. B. ein Wahlabend mit vielen Einzelergebnissen). `teile` sind Schlagzeilen der Teilgeschichten, wichtigste zuerst. In der App wird daraus ein **Themen-Stapel**: die Hauptkarte und direkt danach die Kapitelkarten, die der Leser nacheinander durchwischt.
+- Hauptkarte (`titel`, `satz`, `punkte`, `mitreden`): das Großthema als Ganzes, nicht ein einzelner Teil. Die 3 `punkte` sind das Wichtigste insgesamt.
+- `kapitel`: 2–4 Kapitel, je {"titel": "höchstens 6 Wörter", "punkte": [3–5 Punkte, je höchstens 16 Wörter]}. Sortiere die Teile nach Art, z. B. „Die Rennen im Einzelnen“, „Was das für Trump heißt“, „Reaktionen und Börse“, „Die Köpfe des Abends“. **Jeder Teil aus `teile` muss in einem Kapitel vorkommen**, mit seiner wichtigsten Einzelheit (wer, welches Ergebnis, warum bemerkenswert). Gleichartige Teile darfst du in einem Punkt bündeln („Senatssiege: Texas (Talarico), Kansas (Hamilton), Maine (Jackson)“). Nur Teile, die offensichtlich nicht zum Großthema gehören, lässt du weg. Nichts aus der Hauptkarte wiederholen.
+- Kapitel sind Wiedergabe (Regeln oben). Ein Kapitel „Was das bedeutet“ darf Einordnung sein; dann wie in der Einordnung Vermutungen kennzeichnen.
 - `erklaerung` und „Warum & was folgt“ beziehen sich auf das Großthema als Ganzes.
-- Für die Wiedergabe gelten die Regeln oben; `teile` und Quellen sind die Grundlage.
+- Bei Format „top“ ohne `sammelthema` darfst du 1–2 Kapitel schreiben, **wenn die Quellen deutlich mehr hergeben**, als auf die Karte passt (z. B. mehrere Beteiligte, ein Ablauf, wichtige Zahlen). Sonst `kapitel` weglassen. Keine Kapitel, nur um Platz zu füllen.
 
 ## Felder
 Die Karte muss auf einen Handybildschirm passen, ohne Scrollen. Halte die Längen strikt ein.
@@ -65,4 +65,5 @@ Die Karte muss auf einen Handybildschirm passen, ohne Scrollen. Halte die Länge
 
 ## Antwort
 Nur JSON, genau in dieser Form:
-{"karten": [{"story": "<Kennung der Geschichte>", "titel": "…", "satz": "…", "punkte": ["…", "…", "…"], "mitreden": "…", "mitreden_art": "fakt|wissen|spekulation", "faktenbox": [{"fakt": "…", "quellen": ["q1"]}], "fehlt": [], "bildbegriff": "…", "bild_alt": "…", "erklaerung": ["…"], "ebenen": [{"typ": "hintergrund", "titel": "Warum & was folgt", "punkte": ["…"]}]}]}
+{"karten": [{"story": "<Kennung der Geschichte>", "titel": "…", "satz": "…", "punkte": ["…", "…", "…"], "mitreden": "…", "mitreden_art": "fakt|wissen|spekulation", "faktenbox": [{"fakt": "…", "quellen": ["q1"]}], "fehlt": [], "bildbegriff": "…", "bild_alt": "…", "erklaerung": ["…"], "ebenen": [{"typ": "hintergrund", "titel": "Warum & was folgt", "punkte": ["…"]}], "kapitel": [{"titel": "…", "punkte": ["…"]}]}]}
+`kapitel` nur bei Sammelkarten (Pflicht) und bei „top“ (wenn es passt), sonst weglassen.
