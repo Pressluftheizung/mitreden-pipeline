@@ -1,1 +1,1 @@
-Probebau 2026-11-02: nach Fix Liste-statt-Objekt
+Probebau 2026-11-05: 15-Uhr-Bau nachholen (Fix Minutenlimit)
