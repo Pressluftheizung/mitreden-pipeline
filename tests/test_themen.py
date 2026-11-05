@@ -52,6 +52,12 @@ class Lesen(unittest.TestCase):
         self.assertEqual(werte, [3, 2, 2, 1])
 
 
+    def test_zu_grosses_thema_wird_gekuerzt(self):
+        themen, _ = lies_antwort({"grossthemen": [{"name": "Riesig", "nr": list(range(1, 9))}], "gespraech": {}},
+                                 8, {**CFG, "max_teile": 5})
+        self.assertEqual(themen, [("Riesig", [0, 1, 2, 3, 4])])
+
+
 class Buendeln(unittest.TestCase):
     def test_grossthema_wird_eine_geschichte(self):
         geschichten = [[0], [1], [2], [3]]

@@ -108,6 +108,6 @@ themen_ki:
   an: true
   max_geschichten: 400   # die wichtigsten so vielen Geschichten werden bewertet, der Rest bleibt unverändert
   min_teile: 3
-  max_teile: 20
+  max_teile: 50   # mehr Teile werden abgeschnitten, nicht verworfen
   # Wichtigkeit × Faktor je Gesprächswert (1 = kaum Gesprächsstoff, 3 = darüber reden alle)
   faktor: { 1: 0.4, 2: 1.0, 3: 1.35 }   # 4.11. abends: 0,6 senkte zu wenig (Feedback: überladen)

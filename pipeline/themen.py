@@ -52,7 +52,9 @@ def lies_antwort(antwort, anzahl: int, cfg: dict) -> tuple[list[tuple[str, list[
             x = als_nummer(x)
             if x is not None and 1 <= x <= anzahl and x - 1 not in vergeben and x - 1 not in nrs:
                 nrs.append(x - 1)
-        if cfg["min_teile"] <= len(nrs) <= cfg["max_teile"]:
+        # Zu groß heißt nicht falsch (8-Uhr-Bau 5.11.: 34 Midterms-Geschichten): dann nur die ersten max_teile
+        nrs = nrs[:cfg["max_teile"]]
+        if len(nrs) >= cfg["min_teile"]:
             vergeben.update(nrs)
             themen.append((str(t.get("name") or "")[:60].strip() or "Großthema", nrs))
     return themen, werte

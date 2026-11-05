@@ -14,7 +14,7 @@ Nicht bündeln:
 
 Zu einem Großthema gehören auch Reaktionen, Folgen (z. B. für Börse oder Wirtschaft), Analysen, Rücktritte und Gratulationen, wenn sie sich auf dasselbe große Ereignis beziehen. Gibt es zu einem Ereignis 3 oder mehr Geschichten, **bündle sie**: Der Leser will keine zehn Karten zum selben Ereignis.
 
-Ein Großthema hat mindestens 3 und höchstens 20 Geschichten. Die meisten übrigen Geschichten gehören zu keinem Großthema.
+Ein Großthema hat mindestens 3 Geschichten, nach oben gibt es keine Grenze. Die meisten übrigen Geschichten gehören zu keinem Großthema.
 
 ## 2. Gesprächswert
 Gib jeder Geschichte einen Wert von 1 bis 3:
