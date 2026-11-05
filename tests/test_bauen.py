@@ -6,7 +6,7 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
-from pipeline.bauen import ausgabe_id, kapitel_bereinigen, lager_mix, slug
+from pipeline.bauen import ausgabe_id, grundwissen_bereinigen, kapitel_bereinigen, lager_mix, slug
 from pipeline.ki import KI, KeinModellFrei, Zaehler, lese_json
 from pipeline.pruefen import anwenden, code_pruefung, zahlen
 from pipeline.teaser import bild_url
@@ -64,6 +64,16 @@ class Anwenden(unittest.TestCase):
         self.assertEqual(k["kapitel"], [{"titel": "Die Strecken", "punkte": ["Hamburg betroffen."]}])
         self.assertEqual(k["mitreden"], "Wer am Montag fährt, sollte die App prüfen.")  # Nummer 9, unberührt
 
+    def test_falsches_grundwissen_fliegt_raus(self):
+        k = karte()
+        k["grundwissen"] = [{"begriff": "Senat", "text": "Hat 50 Mitglieder."}, {"begriff": "Haus", "text": "435 Sitze."}]
+        k["nebenbei"] = "Eine Randnotiz."
+        urteil = {"aussagen": [], "neutralitaet": "mitte", "seitentausch_ok": True,
+                  "einordnung_falsch": ["g1", "n1"], "einordnung_grund": "falsch"}
+        p = anwenden(k, [], urteil, "groq", "test")
+        self.assertEqual((p["ergebnis"], k["grundwissen"], k["nebenbei"]),
+                         ("korrigiert", [{"begriff": "Haus", "text": "435 Sitze."}], None))
+
     def test_kapitel_bereinigen(self):
         roh = [{"titel": " A ", "punkte": ["x", "", 3, "y", "z", "u", "v", "w"]}, {"titel": "B", "punkte": []},
                "Unsinn", {"titel": "C", "punkte": ["c"]}, {"titel": "D", "punkte": ["d"]}, {"titel": "E", "punkte": ["e"]},
@@ -72,6 +82,12 @@ class Anwenden(unittest.TestCase):
                                                    {"titel": "C", "punkte": ["c"]}, {"titel": "D", "punkte": ["d"]},
                                                    {"titel": "E", "punkte": ["e"]}])
         self.assertEqual(kapitel_bereinigen(None), [])
+
+    def test_grundwissen_bereinigen(self):
+        roh = [{"begriff": "Senat", "text": "100 Senatoren."}, {"begriff": "", "text": "x"}, "Unsinn",
+               {"begriff": "Leitzins", "text": "Zins der Notenbank."}, {"begriff": "Drei", "text": "zu viel"}]
+        self.assertEqual([g["begriff"] for g in grundwissen_bereinigen(roh)], ["Senat", "Leitzins"])
+        self.assertEqual(grundwissen_bereinigen("kaputt"), [])
 
     def test_mitreden_nur_bei_falsch_oder_parteiisch_weg(self):
         for problem, erwartet in ((None, "Wer am Montag fährt, sollte die App prüfen."), ("parteiisch", None)):

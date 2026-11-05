@@ -18,6 +18,9 @@ This sentence is commentary that helps the reader join a conversation. It is **a
 - `parteiisch`: takes sides for or against a party, person or political camp.
 Otherwise `mitreden_problem` is null. Give a short reason in German in `mitreden_grund`.
 
+## Background items (`einordnung`, separate, not in `aussagen`)
+Short explanations of basic terms ("Kurz erklärt") and side notes ("Nebenbei") for young readers. They may use general knowledge and do not need to be in the sources. List the `id` of every item that is factually wrong or takes sides in `einordnung_falsch`, with a short German reason in `einordnung_grund`. Otherwise an empty list.
+
 ## Language check
 List evaluative or loaded words used without attribution (e.g. "dramatisch", "skandalös", "endlich", "gerade mal", "umstritten" without saying who disputes, "behauptet", "räumt ein", one-sided labels). Give a neutral replacement.
 
@@ -26,4 +29,4 @@ Rate the card's overall framing: `deutlich_links`, `eher_links`, `mitte`, `eher_
 
 ## Answer
 JSON only, in exactly this form (reasons in German, short):
-{"aussagen": [{"nr": 1, "urteil": "belegt|nicht_belegt|unklar", "grund": "…"}], "wertende_woerter": [{"wort": "…", "ersatz": "…"}], "neutralitaet": "mitte", "seitentausch_ok": true, "mitreden_problem": null, "mitreden_grund": ""}
+{"aussagen": [{"nr": 1, "urteil": "belegt|nicht_belegt|unklar", "grund": "…"}], "wertende_woerter": [{"wort": "…", "ersatz": "…"}], "neutralitaet": "mitte", "seitentausch_ok": true, "mitreden_problem": null, "mitreden_grund": "", "einordnung_falsch": [], "einordnung_grund": ""}

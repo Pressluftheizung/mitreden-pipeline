@@ -67,7 +67,17 @@ def pruef_anfrage(karte: dict, quellen: list[dict]) -> str:
                      if a["feld"] not in ("faktenbox", "mitreden")],
         # Der Mitreden-Satz darf Wissen und Spekulation enthalten: nur auf Falsches und Parteinahme geprüft
         "mitreden": karte.get("mitreden"),
+        # Grundwissen und Nebenbei: eigenes Wissen erlaubt, nur auf Falsches und Parteinahme geprüft
+        "einordnung": [{"id": i, "text": t} for i, t in einordnung(karte)],
     }, ensure_ascii=False)
+
+
+def einordnung(karte: dict) -> list[tuple[str, str]]:
+    """Grundwissen (g1, g2) und Nebenbei (n1) mit Kennung für die Prüf-KI."""
+    liste = [(f"g{i + 1}", f"{g['begriff']}: {g['text']}") for i, g in enumerate(karte.get("grundwissen") or [])]
+    if karte.get("nebenbei"):
+        liste.append(("n1", karte["nebenbei"]))
+    return liste
 
 
 def pruefe_antwort(antwort: dict) -> None:
@@ -135,6 +145,17 @@ def anwenden(karte: dict, code: list[dict], ki: dict | None, anbieter: str | Non
         hinweise.append(f"Mitreden-Satz entfernt ({problem}: {(ki or {}).get('mitreden_grund', '')}): {karte['mitreden']}")
         karte["mitreden"] = None
         mitreden_weg = True
+    falsch = {str(x) for x in (ki or {}).get("einordnung_falsch") or [] if isinstance(x, (str, int))}
+    grund_e = (ki or {}).get("einordnung_grund") or ""
+    weg_einordnung = 0
+    for i, t in einordnung(karte):
+        if i in falsch:
+            weg_einordnung += 1
+            hinweise.append(f"Einordnung entfernt ({grund_e}): {t}")
+    if weg_einordnung:
+        karte["grundwissen"] = [g for j, g in enumerate(karte.get("grundwissen") or []) if f"g{j + 1}" not in falsch]
+        if "n1" in falsch:
+            karte["nebenbei"] = None
     hinweise += [p["problem"] for p in code if p.get("form")]
     hinweise += [f"unklar: {u}" for u in unklar]
 
@@ -146,7 +167,7 @@ def anwenden(karte: dict, code: list[dict], ki: dict | None, anbieter: str | Non
     woerter = (ki or {}).get("wertende_woerter") or []
     hinweise += [f"wertendes Wort „{w.get('wort')}“ → „{w.get('ersatz')}“" for w in woerter if isinstance(w, dict)]
 
-    eingriffe = len(weg_punkte) + len(weg_fakten) + len(weg_kapitel) + mitreden_weg
+    eingriffe = len(weg_punkte) + len(weg_fakten) + len(weg_kapitel) + weg_einordnung + mitreden_weg
     if ki is None:
         ergebnis = "ungeprueft"
     elif warnung:

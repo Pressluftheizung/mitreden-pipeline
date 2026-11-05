@@ -246,6 +246,17 @@ def kapitel_bereinigen(roh) -> list[dict]:
     return kapitel[:4]
 
 
+def grundwissen_bereinigen(roh) -> list[dict]:
+    """Grundbegriffe für die „Kurz erklärt“-Karte (Feedback 05.11.2026): höchstens 2, je Begriff und Text."""
+    liste = []
+    for g in roh if isinstance(roh, list) else []:
+        if isinstance(g, dict) and isinstance(g.get("begriff"), str) and isinstance(g.get("text"), str):
+            begriff, text = g["begriff"].strip()[:60], g["text"].strip()[:400]
+            if begriff and text:
+                liste.append({"begriff": begriff, "text": text})
+    return liste[:2]
+
+
 def pruefe_zeilen(antwort: dict) -> None:
     if not isinstance(antwort, dict) or not isinstance(antwort.get("zeilen"), list) or not all(isinstance(z.get("text"), str) for z in antwort["zeilen"]):
         raise ValueError("zeilen fehlt")
@@ -388,7 +399,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
         if plan[n] in ("neu", "update"):
             t = texte[n]
             for feld in ("titel", "satz", "punkte", "mitreden", "mitreden_art", "faktenbox", "ebenen", "erklaerung",
-                         "kapitel"):
+                         "kapitel", "grundwissen", "nebenbei"):
                 if feld in t:
                     karte[feld] = t[feld]
             if plan[n] == "update":  # nicht mitgeliefertes Hintergrundwissen könnte dem neuen Stand widersprechen
@@ -400,6 +411,9 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
                     karte["kapitel"] = []
             karte["punkte"] = (karte.get("punkte") or [])[:3]
             karte["kapitel"] = kapitel_bereinigen(karte.get("kapitel"))
+            karte["grundwissen"] = grundwissen_bereinigen(karte.get("grundwissen"))
+            nb = karte.get("nebenbei")
+            karte["nebenbei"] = nb.strip()[:400] if isinstance(nb, str) and nb.strip() else None
             if karte["kapitel"]:  # Themen-Stapel ersetzt die frühere Ebene „Im Überblick“
                 karte["ebenen"] = [e for e in karte.get("ebenen") or [] if e.get("titel") != "Im Überblick"]
             karte["version"] = vorher.get("version", 0) + 1
