@@ -303,7 +303,9 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
             eingabe = []
             for n in portion:
                 b = aktiv[n]
-                qs = quellen_auswahl(st, b, 8 if b.format == "top" else 6, mit_meinung=b.format == "top")
+                # Sammelkarte: mehr Quellen, damit die Teile des Großthemas belegt sind (Auswahl-Regeln unverändert)
+                anzahl = 14 if b.sammel else 8 if b.format == "top" else 6
+                qs = quellen_auswahl(st, b, anzahl, mit_meinung=b.format == "top")
                 if b.format == "top":
                     lade_volltexte(qs)
                 quellen_ki[n] = qs
@@ -315,7 +317,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
                 eintrag = {"story": f"s{n}", "format": b.format, "thema": b.thema, "region": b.region,
                            "quellen": [{k: q[k] for k in felder if q.get(k)} for q in qs]}
                 if b.sammel:  # Sammelkarte: Schlagzeilen der Teilgeschichten, damit alle Teile vorkommen
-                    eintrag["sammelthema"] = {"name": b.sammel["name"], "teile": b.sammel["teile"][:12]}
+                    eintrag["sammelthema"] = {"name": b.sammel["name"], "teile": b.sammel["teile"][:50]}
                 if aufgabe == "update":
                     k = alt[zuordnung[n]]["karte"]
                     eintrag["bisherige_karte"] = {f: k.get(f) for f in ("titel", "satz", "punkte", "mitreden", "faktenbox",

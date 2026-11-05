@@ -32,7 +32,8 @@ Der Leser will in der Gruppe mitreden können, nicht nur die Meldung kennen. Er 
 Hat eine Geschichte `sammelthema`, fasst die Karte ein großes Ereignis mit mehreren Teilen zusammen (z. B. ein Wahlabend mit vielen Einzelergebnissen). `teile` sind Schlagzeilen der Teilgeschichten, wichtigste zuerst.
 - `titel` und `satz` zum Großthema, nicht zu einem einzelnen Teil.
 - Die 3 `punkte` sind die wichtigsten Teile.
-- Zusätzliche Ebene direkt nach „Warum & was folgt“: {"typ": "hintergrund", "titel": "Im Überblick", "punkte": [je Teil ein kurzer Punkt, höchstens 8]}.
+- Zusätzliche Ebene direkt nach „Warum & was folgt“: {"typ": "hintergrund", "titel": "Im Überblick", "punkte": [4–10 Punkte]}. **Jeder Teil aus `teile` muss darin vorkommen**: Fasse gleichartige Teile in einem Punkt zusammen (z. B. „Senatssiege der Demokraten: Texas (Talarico), Kansas (Hamilton), Maine (Jackson)“), statt einen wegzulassen. Nur Teile, die offensichtlich nicht zum Großthema gehören, lässt du weg.
+- `erklaerung` und „Warum & was folgt“ beziehen sich auf das Großthema als Ganzes.
 - Für die Wiedergabe gelten die Regeln oben; `teile` und Quellen sind die Grundlage.
 
 ## Felder
