@@ -246,15 +246,50 @@ def kapitel_bereinigen(roh) -> list[dict]:
     return kapitel[:4]
 
 
+def text_liste(roh, anzahl: int) -> list[str]:
+    """Liste kurzer Texte (Vorgeschichte, Fakten): nur nicht leere Zeichenketten, höchstens anzahl."""
+    return [x.strip()[:400] for x in roh if isinstance(x, str) and x.strip()][:anzahl] if isinstance(roh, list) else []
+
+
+def zusammenhang_bereinigen(roh) -> list[dict]:
+    """Verbindungen {text, thema (t5 oder None)} bzw. schon aufgelöst {text, karte}: höchstens 2."""
+    liste = []
+    for z in roh if isinstance(roh, list) else []:
+        if isinstance(z, str):
+            z = {"text": z}
+        if isinstance(z, dict) and isinstance(z.get("text"), str) and z["text"].strip():
+            eintrag = {"text": z["text"].strip()[:400]}
+            for feld in ("thema", "karte"):
+                if isinstance(z.get(feld), str) and z[feld].strip():
+                    eintrag[feld] = z[feld].strip()
+            liste.append(eintrag)
+    return liste[:2]
+
+
+def verweise_aufloesen(zusammenhang: list[dict], selbst: int, karten_voll: dict[int, dict]) -> list[dict]:
+    """„thema“: "t5" → „karte“: ID der fünften Geschichte, wenn sie eine eigene Karte hat (nicht sich selbst)."""
+    neu = []
+    for z in zusammenhang:
+        treffer = re.fullmatch(r"t(\d+)", str(z.get("thema") or "").strip())
+        eintrag = {k: v for k, v in z.items() if k != "thema"}
+        if treffer:
+            ziel = karten_voll.get(int(treffer.group(1)) - 1)
+            if ziel is not None and int(treffer.group(1)) - 1 != selbst:
+                eintrag["karte"] = ziel["id"]
+                eintrag["titel"] = ziel.get("titel") or ""
+        neu.append(eintrag)
+    return neu
+
+
 def grundwissen_bereinigen(roh) -> list[dict]:
-    """Grundbegriffe für die „Kurz erklärt“-Karte (Feedback 05.11.2026): höchstens 2, je Begriff und Text."""
+    """Grundbegriffe für die „Kurz erklärt“-Karte (Feedback 05.11.2026): höchstens 3, je Begriff und Text."""
     liste = []
     for g in roh if isinstance(roh, list) else []:
         if isinstance(g, dict) and isinstance(g.get("begriff"), str) and isinstance(g.get("text"), str):
             begriff, text = g["begriff"].strip()[:60], g["text"].strip()[:400]
             if begriff and text:
                 liste.append({"begriff": begriff, "text": text})
-    return liste[:2]
+    return liste[:3]
 
 
 def pruefe_zeilen(antwort: dict) -> None:
@@ -319,7 +354,8 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
     fehler: list[str] = []
 
     # Schlagzeilen der wichtigsten Geschichten: damit die KI im Mitreden-Satz Verbindungen herstellen kann
-    andere_themen = [b.titel for b in aktiv[:30]]
+    # Mit Kennung (t1 …): die KI kann im „Zusammenhang“ auf eine andere Karte verweisen, die App springt dorthin
+    andere_themen = [{"nr": f"t{i + 1}", "titel": b.titel} for i, b in enumerate(aktiv[:30])]
 
     def schreibe(aufgabe: str, auswahl: list[int], groesse: int) -> None:
         for portion in in_portionen(auswahl, groesse):
@@ -344,7 +380,8 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
                 if aufgabe == "update":
                     k = alt[zuordnung[n]]["karte"]
                     eintrag["bisherige_karte"] = {f: k.get(f) for f in ("titel", "satz", "punkte", "mitreden", "faktenbox",
-                                                                          "ebenen", "erklaerung", "kapitel") if k.get(f)}
+                                                                          "ebenen", "erklaerung", "kapitel", "grundwissen",
+                                                                          "vorgeschichte", "zusammenhang", "fakten") if k.get(f)}
                 eingabe.append(eintrag)
             daten = {"geschichten": eingabe, "andere_themen": andere_themen}
             try:
@@ -399,7 +436,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
         if plan[n] in ("neu", "update"):
             t = texte[n]
             for feld in ("titel", "satz", "punkte", "mitreden", "mitreden_art", "faktenbox", "ebenen", "erklaerung",
-                         "kapitel", "grundwissen", "nebenbei"):
+                         "kapitel", "grundwissen", "nebenbei", "vorgeschichte", "zusammenhang", "fakten"):
                 if feld in t:
                     karte[feld] = t[feld]
             if plan[n] == "update":  # nicht mitgeliefertes Hintergrundwissen könnte dem neuen Stand widersprechen
@@ -412,8 +449,13 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
             karte["punkte"] = (karte.get("punkte") or [])[:3]
             karte["kapitel"] = kapitel_bereinigen(karte.get("kapitel"))
             karte["grundwissen"] = grundwissen_bereinigen(karte.get("grundwissen"))
-            nb = karte.get("nebenbei")
-            karte["nebenbei"] = nb.strip()[:400] if isinstance(nb, str) and nb.strip() else None
+            karte["vorgeschichte"] = text_liste(karte.get("vorgeschichte"), 3)
+            karte["zusammenhang"] = zusammenhang_bereinigen(karte.get("zusammenhang"))
+            karte["fakten"] = text_liste(karte.get("fakten"), 3)
+            nb = karte.get("nebenbei")  # früheres Einzelfeld: wird zum ersten Fakt
+            if isinstance(nb, str) and nb.strip() and not karte["fakten"]:
+                karte["fakten"] = [nb.strip()[:400]]
+            karte["nebenbei"] = None
             if karte["kapitel"]:  # Themen-Stapel ersetzt die frühere Ebene „Im Überblick“
                 karte["ebenen"] = [e for e in karte.get("ebenen") or [] if e.get("titel") != "Im Überblick"]
             karte["version"] = vorher.get("version", 0) + 1
@@ -451,6 +493,11 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
         karte.setdefault("erklaerung", None)
         karte.setdefault("kapitel", [])
         karten_voll[n] = karte
+
+    # Zusammenhang: Kennung t5 → Karten-ID, wenn die andere Geschichte in dieser Ausgabe eine eigene Karte hat
+    for n, karte in karten_voll.items():
+        if karte.get("_neu_geschrieben"):
+            karte["zusammenhang"] = verweise_aufloesen(karte.get("zusammenhang") or [], n, karten_voll)
 
     # Prüfen (nur neu geschriebene Karten; die übrigen behalten ihre Prüfung)
     pruefungen = 0

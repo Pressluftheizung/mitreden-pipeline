@@ -74,6 +74,24 @@ class Anwenden(unittest.TestCase):
         self.assertEqual((p["ergebnis"], k["grundwissen"], k["nebenbei"]),
                          ("korrigiert", [{"begriff": "Haus", "text": "435 Sitze."}], None))
 
+    def test_falsche_vorgeschichte_und_fakten_fliegen_raus(self):
+        k = karte()
+        k["vorgeschichte"], k["fakten"] = ["Richtig.", "Falsch."], ["Fakt A.", "Fakt B."]
+        k["zusammenhang"] = [{"text": "Hängt zusammen.", "karte": "k-x"}]
+        urteil = {"aussagen": [], "neutralitaet": "mitte", "seitentausch_ok": True,
+                  "einordnung_falsch": ["v2", "f1", "z1"], "einordnung_grund": "falsch"}
+        anwenden(k, [], urteil, "groq", "test")
+        self.assertEqual((k["vorgeschichte"], k["fakten"], k["zusammenhang"]), (["Richtig."], ["Fakt B."], []))
+
+    def test_verweise_aufloesen(self):
+        from pipeline.bauen import verweise_aufloesen, zusammenhang_bereinigen
+        roh = zusammenhang_bereinigen([{"text": "Mit Börse", "thema": "t2"}, {"text": "Mit sich selbst", "thema": "t1"},
+                                       "Nur Text", {"text": "Gibt es nicht", "thema": "t9"}])
+        self.assertEqual(len(roh), 2)  # höchstens 2
+        voll = {0: {"id": "k-a", "titel": "A"}, 1: {"id": "k-b", "titel": "Börse"}}
+        self.assertEqual(verweise_aufloesen(roh, 0, voll),
+                         [{"text": "Mit Börse", "karte": "k-b", "titel": "Börse"}, {"text": "Mit sich selbst"}])
+
     def test_kapitel_bereinigen(self):
         roh = [{"titel": " A ", "punkte": ["x", "", 3, "y", "z", "u", "v", "w"]}, {"titel": "B", "punkte": []},
                "Unsinn", {"titel": "C", "punkte": ["c"]}, {"titel": "D", "punkte": ["d"]}, {"titel": "E", "punkte": ["e"]},
@@ -85,8 +103,9 @@ class Anwenden(unittest.TestCase):
 
     def test_grundwissen_bereinigen(self):
         roh = [{"begriff": "Senat", "text": "100 Senatoren."}, {"begriff": "", "text": "x"}, "Unsinn",
-               {"begriff": "Leitzins", "text": "Zins der Notenbank."}, {"begriff": "Drei", "text": "zu viel"}]
-        self.assertEqual([g["begriff"] for g in grundwissen_bereinigen(roh)], ["Senat", "Leitzins"])
+               {"begriff": "Leitzins", "text": "Zins der Notenbank."}, {"begriff": "Drei", "text": "ok"},
+               {"begriff": "Vier", "text": "zu viel"}]
+        self.assertEqual([g["begriff"] for g in grundwissen_bereinigen(roh)], ["Senat", "Leitzins", "Drei"])
         self.assertEqual(grundwissen_bereinigen("kaputt"), [])
 
     def test_mitreden_nur_bei_falsch_oder_parteiisch_weg(self):

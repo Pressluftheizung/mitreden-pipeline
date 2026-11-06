@@ -91,10 +91,18 @@ def pruef_anfrage(karte: dict, quellen: list[dict], max_zeichen: int = PRUEF_MAX
     return text
 
 
+# Hintergrund-Felder mit Kennbuchstabe für die Prüf-KI (Feedback 05./06.11.2026: mehr Hintergrund)
+EINORDNUNG = (("g", "grundwissen"), ("v", "vorgeschichte"), ("z", "zusammenhang"), ("f", "fakten"))
+
+
 def einordnung(karte: dict) -> list[tuple[str, str]]:
-    """Grundwissen (g1, g2) und Nebenbei (n1) mit Kennung für die Prüf-KI."""
-    liste = [(f"g{i + 1}", f"{g['begriff']}: {g['text']}") for i, g in enumerate(karte.get("grundwissen") or [])]
-    if karte.get("nebenbei"):
+    """Grundwissen (g1 …), Vorgeschichte (v1 …), Zusammenhang (z1 …), Fakten (f1 …), Nebenbei (n1) mit Kennung."""
+    liste = []
+    for zeichen, feld in EINORDNUNG:
+        for i, x in enumerate(karte.get(feld) or []):
+            text = f"{x['begriff']}: {x['text']}" if feld == "grundwissen" else x["text"] if isinstance(x, dict) else x
+            liste.append((f"{zeichen}{i + 1}", text))
+    if karte.get("nebenbei"):  # ältere Karten
         liste.append(("n1", karte["nebenbei"]))
     return liste
 
@@ -172,7 +180,9 @@ def anwenden(karte: dict, code: list[dict], ki: dict | None, anbieter: str | Non
             weg_einordnung += 1
             hinweise.append(f"Einordnung entfernt ({grund_e}): {t}")
     if weg_einordnung:
-        karte["grundwissen"] = [g for j, g in enumerate(karte.get("grundwissen") or []) if f"g{j + 1}" not in falsch]
+        for zeichen, feld in EINORDNUNG:
+            if karte.get(feld):
+                karte[feld] = [x for j, x in enumerate(karte[feld]) if f"{zeichen}{j + 1}" not in falsch]
         if "n1" in falsch:
             karte["nebenbei"] = None
     hinweise += [p["problem"] for p in code if p.get("form")]

@@ -181,10 +181,12 @@ class KI:
         if a.get("verteilen"):  # mehrere gleichwertige Modelle reihum, damit beide Kontingente genutzt werden
             self._reihum += 1
             kette = kette[self._reihum % len(kette):] + kette[:self._reihum % len(kette)]
-        geschaetzt = schaetze_tokens(system + nutzer) + a.get("max_ausgabe", schaetze_tokens(system + nutzer))  # Ein- plus Ausgabe
         letzte = None
         for modell in kette:
             grenzen = self.k["modelle"][modell]
+            # Antwortlänge: Aufgabe, höchstens aber die Grenze des Modells (qwen bei Groq: 1000 Tokens pro Minute)
+            max_ausgabe = min((x for x in (a.get("max_ausgabe"), grenzen.get("max_ausgabe")) if x), default=None)
+            geschaetzt = schaetze_tokens(system + nutzer) + (max_ausgabe or schaetze_tokens(system + nutzer))  # Ein- plus Ausgabe
             if not self.zaehler.frei(modell, grenzen, self.k["je_bau"]["reserve_anteil"], geschaetzt):
                 letzte = f"{modell}: Tageskontingent erreicht"
                 continue
@@ -196,7 +198,7 @@ class KI:
                 self.zaehler.warte(modell, grenzen, geschaetzt)
                 start = time.monotonic()
                 try:
-                    text, tokens = self._frage(modell, system, nutzer, a.get("max_ausgabe"))
+                    text, tokens = self._frage(modell, system, nutzer, max_ausgabe)
                     antwort = lese_json(text)
                     if pruefe:
                         pruefe(antwort)

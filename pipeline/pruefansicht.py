@@ -47,6 +47,13 @@ def _karte(k: dict) -> str:
         erklaerung += f"<details><summary>Kurz erklärt: {E(g['begriff'])}</summary><p>{E(g['text'])}</p></details>"
     if k.get("nebenbei"):
         erklaerung += f"<details><summary>Nebenbei</summary><p>{E(k['nebenbei'])}</p></details>"
+    for titel, punkte in (("Wie es dazu kam", k.get("vorgeschichte") or []),
+                          ("Hängt zusammen mit", [z["text"] + (f" → {z['titel']}" if z.get("karte") else "")
+                                                  for z in k.get("zusammenhang") or []]),
+                          ("Gut zu wissen", k.get("fakten") or [])):
+        if punkte:
+            erklaerung += (f"<details><summary>{titel}</summary><ul>"
+                           + "".join(f"<li>{E(x)}</li>" for x in punkte) + "</ul></details>")
     fehlt =", ".join((k.get("_ki") or {}).get("fehlt") or [])
     return f"""
 <section class="paar {E(p.get('ergebnis', ''))}" data-id="{E(k['id'])}">

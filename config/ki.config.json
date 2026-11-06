@@ -11,7 +11,7 @@
     "gemini-3.1-flash-lite": { "anbieter": "gemini", "rpm": 15, "rpd": 500, "tpm": 250000 },
     "gemma-4-31b-it": { "anbieter": "gemini", "rpm": 30, "rpd": 14400, "tpm": 16000 },
     "openai/gpt-oss-120b": { "anbieter": "groq", "rpm": 30, "rpd": 1000, "tpm": 8000, "tpd": 200000 },
-    "qwen/qwen3.8-27b": { "anbieter": "groq", "rpm": 30, "rpd": 1000, "tpm": 8000, "tpd": 200000 }
+    "qwen/qwen3.8-27b": { "anbieter": "groq", "rpm": 30, "rpd": 1000, "tpm": 8000, "tpd": 200000, "max_ausgabe": 1000 }
   },
   "aufgaben": {
     "top": { "kette": ["gemini-3.8-flash", "gemini-3.6-flash", "gemini-3.5-flash-lite"], "prompt": "prompts/karte.md" },
