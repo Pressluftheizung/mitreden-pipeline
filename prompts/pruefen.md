@@ -8,6 +8,7 @@ You receive:
 ## For each statement decide (`urteil`)
 - `belegt`: every fact in the statement is stated in at least one source (paraphrase is fine, numbers/names/dates must match exactly).
 - `nicht_belegt`: contains a fact, number, name, date or claim that no source states, or contradicts a source.
+  This includes a **stronger or later status** than the sources say (won an election → "sworn in", plans → "decided", suspected → "did") and "first …", records or superlatives the sources do not state.
 - `unklar`: sources are ambiguous or only partly support it.
 Opinion or analysis articles do not count as evidence for facts. A title may be shortened or catchy, but it must not claim more than the sources.
 
