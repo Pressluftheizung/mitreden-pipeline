@@ -320,7 +320,7 @@ ERKLAERE_ARTEN = {"person", "begriff", "ort", "organisation"}
 
 
 def erklaere_bereinigen(roh) -> list[dict]:
-    """Antippbare Wörter fürs Pop-up (Feedback 06.11.2026): höchstens 8 {wort, art, text, wiki?}, jedes Wort einmal."""
+    """Antippbare Wörter fürs Pop-up (Feedback 06.11.2026): höchstens 12 {wort, art, text, wiki?}, jedes Wort einmal."""
     liste, gesehen = [], set()
     for e in roh if isinstance(roh, list) else []:
         if not (isinstance(e, dict) and isinstance(e.get("wort"), str) and isinstance(e.get("text"), str)):
@@ -335,7 +335,7 @@ def erklaere_bereinigen(roh) -> list[dict]:
         elif isinstance(e.get("wiki"), str) and e["wiki"].strip():
             eintrag["_wiki_titel"] = e["wiki"].strip()[:120]
         liste.append(eintrag)
-    return liste[:8]
+    return liste[:12]
 
 
 def wiki_ergaenzen(karten: list[dict]) -> None:
