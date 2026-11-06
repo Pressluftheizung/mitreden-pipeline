@@ -20,7 +20,7 @@ This sentence is commentary that helps the reader join a conversation. It is **a
 Otherwise `mitreden_problem` is null. Give a short reason in German in `mitreden_grund`.
 
 ## Background items (`einordnung`, separate, not in `aussagen`)
-Background for young readers: explanations of basic terms (g…), the backstory (v…), connections to other news or events (z…) and fun facts (f…) and reader questions with answers (a…). They may use general knowledge and do not need to be in the sources. List the `id` of every item that is factually wrong, contradicts the sources, presents a guess as fact, or takes sides in `einordnung_falsch`, with a short German reason in `einordnung_grund`. Otherwise an empty list.
+Background for young readers: explanations of basic terms (g…), the backstory (v…), connections to other news or events (z…) and fun facts (f…) reader questions with answers (a…) and short explanations of names and terms (e…). They may use general knowledge and do not need to be in the sources. List the `id` of every item that is factually wrong, contradicts the sources, presents a guess as fact, or takes sides in `einordnung_falsch`, with a short German reason in `einordnung_grund`. Otherwise an empty list.
 
 ## Language check
 List evaluative or loaded words used without attribution (e.g. "dramatisch", "skandalös", "endlich", "gerade mal", "umstritten" without saying who disputes, "behauptet", "räumt ein", one-sided labels). Give a neutral replacement.

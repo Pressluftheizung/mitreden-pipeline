@@ -261,3 +261,21 @@ class BildAdresse(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PopUp(unittest.TestCase):
+    def test_erklaere_bereinigen_und_wiki(self):
+        from unittest import mock
+        from pipeline import bauen
+        roh = [{"wort": "Dmitrijew", "art": "person", "text": "Putins Gesandter.", "wiki": "Kirill Dmitrijew"},
+               {"wort": "dmitrijew", "art": "person", "text": "doppelt"}, {"wort": "X", "text": "zu kurz"},
+               {"wort": "Proklamation", "art": "quatsch", "text": "Erlass.", "wiki": "Gibt es nicht"}]
+        k = {"erklaere": bauen.erklaere_bereinigen(roh)}
+        self.assertEqual([(e["wort"], e["art"]) for e in k["erklaere"]], [("Dmitrijew", "person"), ("Proklamation", "begriff")])
+        treffer = {"Kirill Dmitrijew": {"url": "https://de.m.wikipedia.org/wiki/Kirill_Dmitrijew", "beschreibung": "Manager"},
+                   "Gibt es nicht": None}
+        with mock.patch.object(bauen, "wiki_abgleich", return_value=treffer):
+            bauen.wiki_ergaenzen([k])
+        self.assertEqual(k["erklaere"][0]["wiki"]["beschreibung"], "Manager")
+        self.assertNotIn("wiki", k["erklaere"][1])
+        self.assertFalse(any("_wiki_titel" in e for e in k["erklaere"]))

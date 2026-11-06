@@ -83,3 +83,26 @@ def waehle_bilder(auftraege: list[dict], parallel: int = 8) -> list[dict | None]
 
     with ThreadPoolExecutor(parallel) as pool:
         return list(pool.map(eins, auftraege))
+
+
+def wiki_kurz(titel: str, sprache: str = "de") -> dict | None:
+    """Kurzinfo eines Wikipedia-Artikels für das Pop-up (Feedback 06.11.2026): Link und Kurzbeschreibung.
+    Nur wenn der Artikel existiert und keine Begriffsklärung ist. Kostenlos, ohne Schlüssel."""
+    try:
+        info = json.loads(_lade(f"https://{sprache}.wikipedia.org/api/rest_v1/page/summary/"
+                                + urllib.parse.quote(titel.strip().replace(" ", "_"))))
+        if info.get("type") != "standard":
+            return None
+        url = (info.get("content_urls") or {}).get("mobile", {}).get("page") or ""
+        if not url.startswith("https://"):
+            return None
+        return {"url": url, "beschreibung": (info.get("description") or "")[:120] or None}
+    except Exception:
+        return None
+
+
+def wiki_abgleich(titel: list[str], parallel: int = 8) -> dict[str, dict | None]:
+    """Mehrere Titel gleichzeitig nachschlagen (je Titel einmal)."""
+    eindeutig = sorted({t for t in titel if t})
+    with ThreadPoolExecutor(parallel) as pool:
+        return dict(zip(eindeutig, pool.map(wiki_kurz, eindeutig)))

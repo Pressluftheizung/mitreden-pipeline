@@ -95,7 +95,8 @@ def pruef_anfrage(karte: dict, quellen: list[dict], max_zeichen: int = PRUEF_MAX
 
 
 # Hintergrund-Felder mit Kennbuchstabe für die Prüf-KI (Feedback 05./06.11.2026: mehr Hintergrund)
-EINORDNUNG = (("g", "grundwissen"), ("v", "vorgeschichte"), ("z", "zusammenhang"), ("f", "fakten"), ("a", "fragen"))
+EINORDNUNG = (("g", "grundwissen"), ("v", "vorgeschichte"), ("z", "zusammenhang"), ("f", "fakten"), ("a", "fragen"),
+              ("e", "erklaere"))
 
 
 def einordnung(karte: dict) -> list[tuple[str, str]]:
@@ -104,7 +105,8 @@ def einordnung(karte: dict) -> list[tuple[str, str]]:
     for zeichen, feld in EINORDNUNG:
         for i, x in enumerate(karte.get(feld) or []):
             text = (f"{x['begriff']}: {x['text']}" if feld == "grundwissen" else f"{x['frage']} {x['antwort']}"
-                    if feld == "fragen" else x["text"] if isinstance(x, dict) else x)
+                    if feld == "fragen" else f"{x['wort']}: {x['text']}" if feld == "erklaere"
+                    else x["text"] if isinstance(x, dict) else x)
             liste.append((f"{zeichen}{i + 1}", text))
     if karte.get("nebenbei"):  # ältere Karten
         liste.append(("n1", karte["nebenbei"]))

@@ -36,7 +36,7 @@ from pathlib import Path
 
 import yaml
 
-from .bilder import waehle_bilder
+from .bilder import waehle_bilder, wiki_abgleich
 from .daten import ergebnis_karten, lade_ergebnisse, lade_zahlen, zahlen_karte
 from .volltext import lies_volltext
 from .ki import KI, KeinModellFrei, Zaehler
@@ -316,6 +316,41 @@ def fragen_bereinigen(roh) -> list[dict]:
     return liste[:3]
 
 
+ERKLAERE_ARTEN = {"person", "begriff", "ort", "organisation"}
+
+
+def erklaere_bereinigen(roh) -> list[dict]:
+    """Antippbare Wörter fürs Pop-up (Feedback 06.11.2026): höchstens 8 {wort, art, text, wiki?}, jedes Wort einmal."""
+    liste, gesehen = [], set()
+    for e in roh if isinstance(roh, list) else []:
+        if not (isinstance(e, dict) and isinstance(e.get("wort"), str) and isinstance(e.get("text"), str)):
+            continue
+        wort, text = e["wort"].strip()[:60], e["text"].strip()[:400]
+        if len(wort) < 2 or not text or wort.lower() in gesehen:
+            continue
+        gesehen.add(wort.lower())
+        eintrag = {"wort": wort, "art": e.get("art") if e.get("art") in ERKLAERE_ARTEN else "begriff", "text": text}
+        if isinstance(e.get("wiki"), dict) and str(e["wiki"].get("url", "")).startswith("https://"):
+            eintrag["wiki"] = e["wiki"]  # schon nachgeschlagen (bisherige Karte)
+        elif isinstance(e.get("wiki"), str) and e["wiki"].strip():
+            eintrag["_wiki_titel"] = e["wiki"].strip()[:120]
+        liste.append(eintrag)
+    return liste[:8]
+
+
+def wiki_ergaenzen(karten: list[dict]) -> None:
+    """Wikipedia-Titel der Pop-up-Wörter nachschlagen: Link und Kurzbeschreibung, sonst ohne Link."""
+    titel = [e["_wiki_titel"] for k in karten for e in k.get("erklaere") or [] if e.get("_wiki_titel")]
+    if not titel:
+        return
+    gefunden = wiki_abgleich(titel)
+    for k in karten:
+        for e in k.get("erklaere") or []:
+            t = e.pop("_wiki_titel", None)
+            if t and gefunden.get(t):
+                e["wiki"] = gefunden[t]
+
+
 STIMMEN_ARTEN = {"umfrage", "ausland", "fachleute", "politik", "betroffene"}
 
 
@@ -432,7 +467,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
                     eintrag["bisherige_karte"] = {f: k.get(f) for f in ("titel", "satz", "punkte", "mitreden", "faktenbox",
                                                                           "ebenen", "erklaerung", "kapitel", "grundwissen",
                                                                           "vorgeschichte", "zusammenhang", "fakten",
-                                                                          "fragen", "stimmen") if k.get(f)}
+                                                                          "fragen", "stimmen", "erklaere") if k.get(f)}
                 eingabe.append(eintrag)
             daten = {"geschichten": eingabe, "andere_themen": andere_themen}
             try:
@@ -488,7 +523,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
             t = texte[n]
             for feld in ("titel", "satz", "punkte", "mitreden", "mitreden_art", "faktenbox", "ebenen", "erklaerung",
                          "kapitel", "grundwissen", "nebenbei", "vorgeschichte", "zusammenhang", "fakten",
-                         "fragen", "stimmen"):
+                         "fragen", "stimmen", "erklaere"):
                 if feld in t:
                     karte[feld] = t[feld]
             if plan[n] == "update":  # nicht mitgeliefertes Hintergrundwissen könnte dem neuen Stand widersprechen
@@ -506,6 +541,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
             karte["fakten"] = text_liste(karte.get("fakten"), 3)
             karte["fragen"] = fragen_bereinigen(karte.get("fragen"))
             karte["stimmen"] = stimmen_bereinigen(karte.get("stimmen"))
+            karte["erklaere"] = erklaere_bereinigen(karte.get("erklaere"))
             nb = karte.get("nebenbei")  # früheres Einzelfeld: wird zum ersten Fakt
             if isinstance(nb, str) and nb.strip() and not karte["fakten"]:
                 karte["fakten"] = [nb.strip()[:400]]
@@ -552,6 +588,8 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
     for n, karte in karten_voll.items():
         if karte.get("_neu_geschrieben"):
             karte["zusammenhang"] = verweise_aufloesen(karte.get("zusammenhang") or [], n, karten_voll)
+    # Pop-up-Wörter: Wikipedia-Link und Kurzbeschreibung (kostenlos, parallel)
+    wiki_ergaenzen([k for k in karten_voll.values() if k.get("_neu_geschrieben")])
 
     # Prüfen (nur neu geschriebene Karten; die übrigen behalten ihre Prüfung)
     pruefungen = 0
