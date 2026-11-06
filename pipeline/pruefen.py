@@ -30,6 +30,8 @@ def aussagen(karte: dict) -> list[dict]:
     liste = [("titel", None, karte.get("titel")), ("satz", None, karte.get("satz"))]
     liste += [("punkte", i, p) for i, p in enumerate(karte.get("punkte") or [])]
     liste += [("kapitel", (j, i), p) for j, k in enumerate(karte.get("kapitel") or []) for i, p in enumerate(k["punkte"])]
+    # „Was sagen andere“ ist Wiedergabe: jede Stimme muss in den Quellen stehen
+    liste += [("stimmen", i, f"{s['wer']}: {s['text']}") for i, s in enumerate(karte.get("stimmen") or [])]
     liste.append(("mitreden", None, karte.get("mitreden")))
     liste += [("faktenbox", i, f.get("fakt")) for i, f in enumerate(karte.get("faktenbox") or [])]
     return [{"nr": n, "feld": feld, "index": i, "text": text} for n, (feld, i, text) in enumerate(
@@ -56,9 +58,10 @@ def code_pruefung(karte: dict, quelltexte: list[str]) -> list[dict]:
 
 # Höchstlänge der Prüf-Anfrage in Zeichen: Groq nimmt 8000 Tokens pro Minute (Ein- plus Ausgabe). Abzüglich
 # Prompt (~3000 Zeichen) und Antwort (1500 Tokens) bleiben gut 16000 Zeichen; 14000 lässt Luft.
-PRUEF_MAX_ZEICHEN = 14000
-# Stufen (Quellen, Zeichen je Volltext, Zeichen je Anreißer), von voll bis knapp
-PRUEF_STUFEN = ((14, 2500, 500), (10, 1500, 400), (8, 1000, 300), (6, 600, 250), (5, 300, 200))
+PRUEF_MAX_ZEICHEN = 12000
+# Stufen (Quellen, Zeichen je Volltext, Zeichen je Anreißer), von voll bis knapp. Seit 6.11. hat fast jede Karte
+# Volltexte: höchstens 1500 Zeichen je Volltext, damit das Tageskontingent der Prüf-KI reicht (tpd 200k je Modell)
+PRUEF_STUFEN = ((14, 1500, 500), (10, 1200, 400), (8, 1000, 300), (6, 600, 250), (5, 300, 200))
 
 
 def pruef_anfrage(karte: dict, quellen: list[dict], max_zeichen: int = PRUEF_MAX_ZEICHEN) -> str:
@@ -92,7 +95,7 @@ def pruef_anfrage(karte: dict, quellen: list[dict], max_zeichen: int = PRUEF_MAX
 
 
 # Hintergrund-Felder mit Kennbuchstabe für die Prüf-KI (Feedback 05./06.11.2026: mehr Hintergrund)
-EINORDNUNG = (("g", "grundwissen"), ("v", "vorgeschichte"), ("z", "zusammenhang"), ("f", "fakten"))
+EINORDNUNG = (("g", "grundwissen"), ("v", "vorgeschichte"), ("z", "zusammenhang"), ("f", "fakten"), ("a", "fragen"))
 
 
 def einordnung(karte: dict) -> list[tuple[str, str]]:
@@ -100,7 +103,8 @@ def einordnung(karte: dict) -> list[tuple[str, str]]:
     liste = []
     for zeichen, feld in EINORDNUNG:
         for i, x in enumerate(karte.get(feld) or []):
-            text = f"{x['begriff']}: {x['text']}" if feld == "grundwissen" else x["text"] if isinstance(x, dict) else x
+            text = (f"{x['begriff']}: {x['text']}" if feld == "grundwissen" else f"{x['frage']} {x['antwort']}"
+                    if feld == "fragen" else x["text"] if isinstance(x, dict) else x)
             liste.append((f"{zeichen}{i + 1}", text))
     if karte.get("nebenbei"):  # ältere Karten
         liste.append(("n1", karte["nebenbei"]))
@@ -134,7 +138,7 @@ def anwenden(karte: dict, code: list[dict], ki: dict | None, anbieter: str | Non
                 unklar.append(f"{nach_nr[u['nr']]['text'][:60]}: {u.get('grund', '')}")
 
     hinweise, warnung, mitreden_weg = [], False, False
-    weg_punkte, weg_fakten, weg_kapitel = set(), set(), set()
+    weg_punkte, weg_fakten, weg_kapitel, weg_stimmen = set(), set(), set(), set()
     for nr, grund in schlecht.items():
         a = nach_nr[nr]
         if a["feld"] == "punkte":
@@ -143,6 +147,9 @@ def anwenden(karte: dict, code: list[dict], ki: dict | None, anbieter: str | Non
         elif a["feld"] == "kapitel":
             weg_kapitel.add(a["index"])
             hinweise.append(f"Kapitelpunkt entfernt ({grund}): {a['text']}")
+        elif a["feld"] == "stimmen":
+            weg_stimmen.add(a["index"])
+            hinweise.append(f"Stimme entfernt ({grund}): {a['text']}")
         elif a["feld"] == "faktenbox":
             weg_fakten.add(a["index"])
             hinweise.append(f"Fakt entfernt ({grund}): {a['text']}")
@@ -163,6 +170,8 @@ def anwenden(karte: dict, code: list[dict], ki: dict | None, anbieter: str | Non
         karte["kapitel"] = [{**k, "punkte": [p for i, p in enumerate(k["punkte"]) if (j, i) not in weg_kapitel]}
                             for j, k in enumerate(karte["kapitel"])]
         karte["kapitel"] = [k for k in karte["kapitel"] if k["punkte"]]
+    if weg_stimmen:
+        karte["stimmen"] = [s for i, s in enumerate(karte["stimmen"]) if i not in weg_stimmen]
     if weg_fakten:
         karte["faktenbox"] = [f for i, f in enumerate(karte["faktenbox"]) if i not in weg_fakten]
     problem = (ki or {}).get("mitreden_problem")

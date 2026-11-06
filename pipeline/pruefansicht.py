@@ -48,6 +48,8 @@ def _karte(k: dict) -> str:
     if k.get("nebenbei"):
         erklaerung += f"<details><summary>Nebenbei</summary><p>{E(k['nebenbei'])}</p></details>"
     for titel, punkte in (("Wie es dazu kam", k.get("vorgeschichte") or []),
+                          ("Du fragst dich vielleicht", [f"{f['frage']} – {f['antwort']}" for f in k.get("fragen") or []]),
+                          ("Was sagen andere", [f"{s['wer']} ({s['art']}): {s['text']}" for s in k.get("stimmen") or []]),
                           ("Hängt zusammen mit", [z["text"] + (f" → {z['titel']}" if z.get("karte") else "")
                                                   for z in k.get("zusammenhang") or []]),
                           ("Gut zu wissen", k.get("fakten") or [])):

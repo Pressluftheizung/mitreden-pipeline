@@ -17,7 +17,7 @@ from pathlib import Path
 
 AUSGABE_FELDER = ("hinweis", "ausgabe", "ausgabe_label", "erzeugt", "stand_text", "themen")
 KARTEN_FELDER = ("id", "format", "thema", "unterthema", "region", "labels", "titel", "satz", "punkte", "mitreden",
-                 "bild", "quellen", "lager_mix", "lager_hinweis", "ebenen", "erklaerung", "version", "aenderung", "neuigkeit", "kapitel", "sammel", "grundwissen", "nebenbei", "vorgeschichte", "zusammenhang", "fakten",
+                 "bild", "quellen", "lager_mix", "lager_hinweis", "ebenen", "erklaerung", "version", "aenderung", "neuigkeit", "kapitel", "sammel", "grundwissen", "nebenbei", "vorgeschichte", "zusammenhang", "fakten", "fragen", "stimmen",
                  "aktualisiert", "meldungen", "werte", "tabelle", "termine")
 BILD_FELDER = ("url", "alt", "art")
 QUELLEN_FELDER = ("name", "lager", "url", "art", "bezahlschranke")

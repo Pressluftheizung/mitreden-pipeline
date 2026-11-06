@@ -123,24 +123,48 @@ def quellen_auswahl(st: Stand, b: Bewertung, anzahl: int = 6, mit_meinung: bool 
     return [{"id": f"q{n}", "redaktion": m.quelle.name, "lager": m.quelle.lager,
              "art": "meinung" if m.teaser.get("ist_meinung") else "bericht",
              "titel": m.titel, "text": (m.teaser.get("teaser") or "")[:500], "url": m.teaser.get("url"),
-             "volltext_ok": m.quelle.volltext_erlaubt and not m.teaser.get("bezahlschranke")
-             and "news.google.com" not in (m.teaser.get("url") or "")}
+             # Volltext (Feedback 06.11.2026): jede Quelle, deren Artikel nachweislich frei ist (Feed ohne Bezahlschranke
+             # oder als frei markiert), nicht nur die alte Liste volltext_erlaubt
+             "volltext_ok": (m.quelle.volltext_erlaubt or m.teaser.get("bezahlschranke") is False)
+             and m.teaser.get("bezahlschranke") is not True
+             and "news.google.com" not in (m.teaser.get("url") or ""),
+             "neutral": m.quelle.art in FAKTENQUELLEN or m.quelle.lager in {"mitte", "international"}}
             for n, m in enumerate(gewaehlt, start=1)]
 
 
 VOLLTEXT_VERSUCHE: list[str] = []  # je Versuch: Ergebnis, für die Kennzahlen des Laufs
 
 
+def volltext_reihenfolge(quellen: list[dict]) -> list[dict]:
+    """Welche Artikel zuerst ganz gelesen werden: erst neutrale (Agentur, öffentlich-rechtlich, Mitte), danach
+    abwechselnd links und rechts, damit die Tiefe nicht aus einem Lager kommt.
+
+    ⚠ Teil des Bias-Algorithmus (PLAN.md 8, B3), bis zum Review nur Testbetrieb.
+    """
+    frei = [q for q in quellen if q.get("volltext_ok") and q.get("url")]
+    neutral = [q for q in frei if q.get("neutral")]
+    links = [q for q in frei if not q.get("neutral") and q.get("lager") in ("links", "mitte_links")]
+    rechts = [q for q in frei if not q.get("neutral") and q.get("lager") in ("rechts", "mitte_rechts")]
+    seiten = [q for paar in zip(links, rechts) for q in paar]
+    rest = [q for q in links + rechts if q not in seiten]
+    return neutral + seiten + rest
+
+
 def lade_volltexte(quellen: list[dict], anzahl: int = 2) -> None:
-    """Volltext für bis zu `anzahl` frei zugängliche Quellen (nur im Arbeitsspeicher, nie gespeichert)."""
-    kandidaten = [q for q in quellen if q.get("volltext_ok") and q.get("url")][:anzahl]
+    """Volltext für bis zu `anzahl` frei zugängliche Quellen (nur im Arbeitsspeicher, nie gespeichert).
+    Klappt ein Artikel nicht (nicht lesbar, nur Kurzmeldung), wird der nächste versucht."""
+    kandidaten = volltext_reihenfolge(quellen)
     if not kandidaten:
         VOLLTEXT_VERSUCHE.append("keine freie Quelle")
-    for q in kandidaten:
+    geladen = 0
+    for q in kandidaten[:anzahl + 2]:  # höchstens zwei Fehlversuche
+        if geladen >= anzahl:
+            break
         text = lies_volltext(q["url"])
         VOLLTEXT_VERSUCHE.append("ok" if text and len(text) > len(q["text"]) + 300 else ("zu kurz" if text else "nicht lesbar"))
         if text and len(text) > len(q["text"]) + 300:  # nur wenn es wirklich mehr ist als der Anrisstext
             q["volltext"] = text
+            geladen += 1
 
 
 def quellen_liste(st: Stand, b: Bewertung) -> list[dict]:
@@ -281,6 +305,32 @@ def verweise_aufloesen(zusammenhang: list[dict], selbst: int, karten_voll: dict[
     return neu
 
 
+def fragen_bereinigen(roh) -> list[dict]:
+    """„Du fragst dich vielleicht“ (Feedback 06.11.2026): höchstens 3 {frage, antwort}."""
+    liste = []
+    for f in roh if isinstance(roh, list) else []:
+        if isinstance(f, dict) and isinstance(f.get("frage"), str) and isinstance(f.get("antwort"), str):
+            frage, antwort = f["frage"].strip()[:200], f["antwort"].strip()[:500]
+            if frage and antwort:
+                liste.append({"frage": frage, "antwort": antwort})
+    return liste[:3]
+
+
+STIMMEN_ARTEN = {"umfrage", "ausland", "fachleute", "politik", "betroffene"}
+
+
+def stimmen_bereinigen(roh) -> list[dict]:
+    """„Was sagen andere“ (Feedback 06.11.2026): höchstens 4 {art, wer, text}, immer mit Absender."""
+    liste = []
+    for s in roh if isinstance(roh, list) else []:
+        if isinstance(s, dict) and isinstance(s.get("wer"), str) and isinstance(s.get("text"), str):
+            wer, text = s["wer"].strip()[:120], s["text"].strip()[:400]
+            art = s.get("art") if s.get("art") in STIMMEN_ARTEN else "politik"
+            if wer and text:
+                liste.append({"art": art, "wer": wer, "text": text})
+    return liste[:4]
+
+
 def grundwissen_bereinigen(roh) -> list[dict]:
     """Grundbegriffe für die „Kurz erklärt“-Karte (Feedback 05.11.2026): höchstens 3, je Begriff und Text."""
     liste = []
@@ -365,8 +415,8 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
                 # Sammelkarte: mehr Quellen, damit die Teile des Großthemas belegt sind (Auswahl-Regeln unverändert)
                 anzahl = 14 if b.sammel else 8 if b.format == "top" else 6
                 qs = quellen_auswahl(st, b, anzahl, mit_meinung=b.format == "top")
-                if b.format == "top":
-                    lade_volltexte(qs)
+                # Volltexte für alle großen Karten (Feedback 06.11.2026: Teaser allein sind zu dünn für Tiefe)
+                lade_volltexte(qs, 3 if b.format == "top" or b.sammel else 2)
                 quellen_ki[n] = qs
                 if aufgabe == "update":  # nur die neuen Meldungen schicken
                     neue_urls = {st.meldungen[i].teaser.get("url") for i in b.mitglieder
@@ -381,7 +431,8 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
                     k = alt[zuordnung[n]]["karte"]
                     eintrag["bisherige_karte"] = {f: k.get(f) for f in ("titel", "satz", "punkte", "mitreden", "faktenbox",
                                                                           "ebenen", "erklaerung", "kapitel", "grundwissen",
-                                                                          "vorgeschichte", "zusammenhang", "fakten") if k.get(f)}
+                                                                          "vorgeschichte", "zusammenhang", "fakten",
+                                                                          "fragen", "stimmen") if k.get(f)}
                 eingabe.append(eintrag)
             daten = {"geschichten": eingabe, "andere_themen": andere_themen}
             try:
@@ -436,7 +487,8 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
         if plan[n] in ("neu", "update"):
             t = texte[n]
             for feld in ("titel", "satz", "punkte", "mitreden", "mitreden_art", "faktenbox", "ebenen", "erklaerung",
-                         "kapitel", "grundwissen", "nebenbei", "vorgeschichte", "zusammenhang", "fakten"):
+                         "kapitel", "grundwissen", "nebenbei", "vorgeschichte", "zusammenhang", "fakten",
+                         "fragen", "stimmen"):
                 if feld in t:
                     karte[feld] = t[feld]
             if plan[n] == "update":  # nicht mitgeliefertes Hintergrundwissen könnte dem neuen Stand widersprechen
@@ -452,6 +504,8 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
             karte["vorgeschichte"] = text_liste(karte.get("vorgeschichte"), 3)
             karte["zusammenhang"] = zusammenhang_bereinigen(karte.get("zusammenhang"))
             karte["fakten"] = text_liste(karte.get("fakten"), 3)
+            karte["fragen"] = fragen_bereinigen(karte.get("fragen"))
+            karte["stimmen"] = stimmen_bereinigen(karte.get("stimmen"))
             nb = karte.get("nebenbei")  # früheres Einzelfeld: wird zum ersten Fakt
             if isinstance(nb, str) and nb.strip() and not karte["fakten"]:
                 karte["fakten"] = [nb.strip()[:400]]

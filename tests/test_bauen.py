@@ -83,6 +83,31 @@ class Anwenden(unittest.TestCase):
         anwenden(k, [], urteil, "groq", "test")
         self.assertEqual((k["vorgeschichte"], k["fakten"], k["zusammenhang"]), (["Richtig."], ["Fakt B."], []))
 
+    def test_falsche_stimme_und_antwort_fliegen_raus(self):
+        from pipeline.pruefen import aussagen
+        k = karte()
+        k["stimmen"] = [{"art": "ausland", "wer": "Polen", "text": "Warnt."}, {"art": "fachleute", "wer": "X", "text": "Erfunden."}]
+        k["fragen"] = [{"frage": "Warum?", "antwort": "Darum."}, {"frage": "Wie?", "antwort": "Falsch."}]
+        nr = next(a["nr"] for a in aussagen(k) if a["feld"] == "stimmen" and a["index"] == 1)
+        urteil = {"aussagen": [{"nr": nr, "urteil": "nicht_belegt", "grund": "steht nirgends"}], "neutralitaet": "mitte",
+                  "seitentausch_ok": True, "einordnung_falsch": ["a2"], "einordnung_grund": "falsch"}
+        anwenden(k, [], urteil, "groq", "test")
+        self.assertEqual([s["wer"] for s in k["stimmen"]], ["Polen"])
+        self.assertEqual([f["frage"] for f in k["fragen"]], ["Warum?"])
+
+    def test_fragen_und_stimmen_bereinigen(self):
+        from pipeline.bauen import fragen_bereinigen, stimmen_bereinigen
+        self.assertEqual(fragen_bereinigen([{"frage": " Warum? ", "antwort": "Darum."}, {"frage": "Leer", "antwort": ""}, "x"]),
+                         [{"frage": "Warum?", "antwort": "Darum."}])
+        self.assertEqual(stimmen_bereinigen([{"art": "quatsch", "wer": "Polen", "text": "Warnt."}, {"wer": "", "text": "y"}]),
+                         [{"art": "politik", "wer": "Polen", "text": "Warnt."}])
+
+    def test_volltext_reihenfolge_ausgewogen(self):
+        from pipeline.bauen import volltext_reihenfolge
+        q = lambda i, lager, neutral=False, ok=True: {"id": i, "lager": lager, "neutral": neutral, "volltext_ok": ok, "url": "https://x/" + i}
+        quellen = [q("l1", "links"), q("l2", "mitte_links"), q("r1", "rechts"), q("m", "mitte", True), q("bezahlt", "mitte", True, False)]
+        self.assertEqual([x["id"] for x in volltext_reihenfolge(quellen)], ["m", "l1", "r1", "l2"])
+
     def test_verweise_aufloesen(self):
         from pipeline.bauen import verweise_aufloesen, zusammenhang_bereinigen
         roh = zusammenhang_bereinigen([{"text": "Mit Börse", "thema": "t2"}, {"text": "Mit sich selbst", "thema": "t1"},
