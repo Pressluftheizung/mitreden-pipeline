@@ -104,6 +104,12 @@ class Anwenden(unittest.TestCase):
         vage = [{"wer": w, "text": "Zu hoch."} for w in ("Wirtschaftsexperten", "Viele Beobachter", "Kritiker", "Ifo-Ökonom Clemens Fuest")]
         self.assertEqual([s["wer"] for s in stimmen_bereinigen(vage)], ["Ifo-Ökonom Clemens Fuest"])
 
+    def test_wiki_auszug_am_satzende(self):
+        from pipeline.bilder import wiki_auszug
+        self.assertEqual(wiki_auszug("Kurz."), "Kurz.")
+        lang = wiki_auszug("Erster Satz ist hier etwas laenger geschrieben worden. " * 12)
+        self.assertTrue(lang.endswith(".") and len(lang) <= 360)
+
     def test_volltext_reihenfolge_ausgewogen(self):
         from pipeline.bauen import volltext_reihenfolge
         q = lambda i, lager, neutral=False, ok=True: {"id": i, "lager": lager, "neutral": neutral, "volltext_ok": ok, "url": "https://x/" + i}

@@ -85,8 +85,17 @@ def waehle_bilder(auftraege: list[dict], parallel: int = 8) -> list[dict | None]
         return list(pool.map(eins, auftraege))
 
 
+def wiki_auszug(text: str, laenge: int = 360) -> str | None:
+    """Die ersten Sätze eines Wikipedia-Artikels, an einem Satzende gekürzt."""
+    text = " ".join(text.split())
+    if len(text) <= laenge:
+        return text or None
+    schnitt = text.rfind(". ", 0, laenge)
+    return text[:schnitt + 1] if schnitt > 80 else text[:laenge].rsplit(" ", 1)[0] + " …"
+
+
 def wiki_kurz(titel: str, sprache: str = "de") -> dict | None:
-    """Kurzinfo eines Wikipedia-Artikels für das Pop-up (Feedback 06.11.2026): Link und Kurzbeschreibung.
+    """Kurzinfo eines Wikipedia-Artikels für das Pop-up (Feedback 06.11.2026): Link, Kurzbeschreibung, Auszug und Bild.
     Nur wenn der Artikel existiert und keine Begriffsklärung ist. Kostenlos, ohne Schlüssel."""
     try:
         info = json.loads(_lade(f"https://{sprache}.wikipedia.org/api/rest_v1/page/summary/"
@@ -96,7 +105,11 @@ def wiki_kurz(titel: str, sprache: str = "de") -> dict | None:
         url = (info.get("content_urls") or {}).get("mobile", {}).get("page") or ""
         if not url.startswith("https://"):
             return None
-        return {"url": url, "beschreibung": (info.get("description") or "")[:120] or None}
+        bild = ((info.get("thumbnail") or {}).get("source") or "").split("?")[0]
+        return {"url": url, "beschreibung": (info.get("description") or "")[:120] or None,
+                # Feedback 06.11.2026 („Personen zu kurz“): Anfang des Artikels und das freie Bild aus Wikimedia
+                "auszug": wiki_auszug(info.get("extract") or ""),
+                "bild": bild if re.match(r"https://(upload|thumb)\.wikimedia\.org/", bild) else None}
     except Exception:
         return None
 
