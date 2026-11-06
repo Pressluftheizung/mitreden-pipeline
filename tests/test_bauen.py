@@ -101,6 +101,8 @@ class Anwenden(unittest.TestCase):
                          [{"frage": "Warum?", "antwort": "Darum."}])
         self.assertEqual(stimmen_bereinigen([{"art": "quatsch", "wer": "Polen", "text": "Warnt."}, {"wer": "", "text": "y"}]),
                          [{"art": "politik", "wer": "Polen", "text": "Warnt."}])
+        vage = [{"wer": w, "text": "Zu hoch."} for w in ("Wirtschaftsexperten", "Viele Beobachter", "Kritiker", "Ifo-Ökonom Clemens Fuest")]
+        self.assertEqual([s["wer"] for s in stimmen_bereinigen(vage)], ["Ifo-Ökonom Clemens Fuest"])
 
     def test_volltext_reihenfolge_ausgewogen(self):
         from pipeline.bauen import volltext_reihenfolge

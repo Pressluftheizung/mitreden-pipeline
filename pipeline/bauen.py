@@ -354,6 +354,12 @@ def wiki_ergaenzen(karten: list[dict]) -> None:
 STIMMEN_ARTEN = {"umfrage", "ausland", "fachleute", "politik", "betroffene"}
 
 
+# Sammelabsender ohne Namen (Feedback 06.11.2026: „wer genau?“) fliegen raus
+VAGER_ABSENDER = re.compile(r"^(viele |einige |manche |andere |zahlreiche |die |internationale |führende )?"
+                            r"[\wäöüß-]*(experten|expertinnen|fachleute|beobachter|kritiker|analysten|ökonomen|kenner|"
+                            r"insider|kreise|stimmen|befürworter|gegner|verbündete|investoren|anleger)$", re.I)
+
+
 def stimmen_bereinigen(roh) -> list[dict]:
     """„Was sagen andere“ (Feedback 06.11.2026): höchstens 4 {art, wer, text}, immer mit Absender."""
     liste = []
@@ -361,7 +367,7 @@ def stimmen_bereinigen(roh) -> list[dict]:
         if isinstance(s, dict) and isinstance(s.get("wer"), str) and isinstance(s.get("text"), str):
             wer, text = s["wer"].strip()[:120], s["text"].strip()[:400]
             art = s.get("art") if s.get("art") in STIMMEN_ARTEN else "politik"
-            if wer and text:
+            if wer and text and not VAGER_ABSENDER.match(wer):
                 liste.append({"art": art, "wer": wer, "text": text})
     return liste[:4]
 
