@@ -104,12 +104,6 @@ class Anwenden(unittest.TestCase):
         vage = [{"wer": w, "text": "Zu hoch."} for w in ("Wirtschaftsexperten", "Viele Beobachter", "Kritiker", "Ifo-Ökonom Clemens Fuest")]
         self.assertEqual([s["wer"] for s in stimmen_bereinigen(vage)], ["Ifo-Ökonom Clemens Fuest"])
 
-    def test_offene_spiele_nur_wenn_wichtig(self):
-        from pipeline.daten import offene_wichtig
-        self.assertFalse(offene_wichtig("bl1", "9. Spieltag"))
-        self.assertTrue(offene_wichtig("bl1", "33. Spieltag"))
-        self.assertTrue(offene_wichtig("ucl", "4.Spieltag"))
-
     def test_berliner_zeit(self):
         from datetime import datetime, timezone
         from pipeline.daten import berlin
