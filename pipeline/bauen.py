@@ -325,7 +325,7 @@ def erklaere_bereinigen(roh) -> list[dict]:
     for e in roh if isinstance(roh, list) else []:
         if not (isinstance(e, dict) and isinstance(e.get("wort"), str) and isinstance(e.get("text"), str)):
             continue
-        wort, text = e["wort"].strip()[:60], e["text"].strip()[:400]
+        wort, text = e["wort"].strip()[:60], e["text"].strip()[:600]
         if len(wort) < 2 or not text or wort.lower() in gesehen:
             continue
         gesehen.add(wort.lower())

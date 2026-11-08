@@ -10,6 +10,7 @@
 """
 
 import json
+import re
 import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
@@ -32,6 +33,10 @@ LIGEN = [("bl1", "1. Bundesliga", "deutschland"), ("ucl", "Champions League", "e
          ("uel2026", "Europa League", "europa"), ("dfb", "DFB-Pokal", "deutschland"),
          ("pl", "Premier League", "europa"), ("la1", "La Liga", "europa"), ("bl2", "2. Bundesliga", "deutschland")]
 WOCHENTAG = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
+# Feedback 08.11.2026: offene Spiele nur, wenn sie wichtig sind – Europapokal und Pokal immer,
+# Ligen erst in den letzten Spieltagen der Saison (Meisterschaft, Abstieg)
+IMMER_OFFEN = {"ucl", "uel2026", "dfb"}
+SAISON_ENDE = {"bl1": 31, "bl2": 31, "pl": 35, "la1": 35}  # ab diesem Spieltag auch offene Spiele
 
 
 def _json(url: str):
@@ -139,6 +144,14 @@ def _anstoss(s: dict) -> str:
     return f"{WOCHENTAG[beginn.weekday()]} {beginn:%H:%M}"
 
 
+def offene_wichtig(liga: str, runde: str) -> bool:
+    """Noch nicht gespielte Spiele zeigen? Pokal und Europapokal immer, Ligen nur zum Saisonende."""
+    if liga in IMMER_OFFEN:
+        return True
+    nr = re.match(r"\s*(\d+)", runde or "")
+    return bool(nr) and liga in SAISON_ENDE and int(nr.group(1)) >= SAISON_ENDE[liga]
+
+
 def lade_ergebnisse(jetzt: datetime, stunden: int = 36) -> list[dict]:
     """Je Wettbewerb der ganze aktuelle Spieltag, wenn darin in den letzten `stunden` ein Spiel zu Ende ging
     (Feedback 07.11.2026: nicht nur ein Ergebnis und sonst leer; auch Champions League, Premier League, La Liga)."""
@@ -164,6 +177,8 @@ def lade_ergebnisse(jetzt: datetime, stunden: int = 36) -> list[dict]:
                          "tore": (end["pointsTeam1"], end["pointsTeam2"]) if end else None,
                          "anstoss": _anstoss(s), "heim_logo": _logo(s["team1"]), "gast_logo": _logo(s["team2"]),
                          "runde": (s.get("group") or {}).get("groupName", "")})
+        if not offene_wichtig(kurz, alle[0]["runde"] if alle else ""):
+            alle = [s for s in alle if s["tore"] is not None]
         if frisch:
             ergebnis.append({"liga": kurz, "wettbewerb": name, "region": region, "runde": alle[0]["runde"], "spiele": alle})
     return ergebnis

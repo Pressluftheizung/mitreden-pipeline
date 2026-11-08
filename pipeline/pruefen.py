@@ -179,7 +179,8 @@ def anwenden(karte: dict, code: list[dict], ki: dict | None, anbieter: str | Non
     problem = (ki or {}).get("mitreden_problem")
     if problem == "spekulation_als_fakt" and karte.get("mitreden"):  # nur beobachten (Wunsch des Nutzers: Freiheit)
         hinweise.append(f"Mitreden-Satz beobachten (Spekulation als Fakt? {(ki or {}).get('mitreden_grund', '')})")
-    if problem in {"falsch", "parteiisch"} and karte.get("mitreden"):
+    # Feedback 08.11.2026: Allgemeinplätze lieber weglassen als zeigen
+    if problem in {"falsch", "parteiisch", "binsenweisheit"} and karte.get("mitreden"):
         hinweise.append(f"Mitreden-Satz entfernt ({problem}: {(ki or {}).get('mitreden_grund', '')}): {karte['mitreden']}")
         karte["mitreden"] = None
         mitreden_weg = True

@@ -16,7 +16,8 @@ Opinion or analysis articles do not count as evidence for facts. A title may be 
 This sentence is commentary that helps the reader join a conversation. It is **allowed** to use general knowledge that is not in the sources, to connect the story to other news or earlier events, and to speculate. Do NOT judge it against the sources. Only report a problem in `mitreden_problem` if it
 - `falsch`: states something you know to be false, or contradicts what the sources report,
 - `spekulation_als_fakt`: presents a guess as an established fact,
-- `parteiisch`: takes sides for or against a party, person or political camp.
+- `parteiisch`: takes sides for or against a party, person or political camp,
+- `binsenweisheit`: says nothing a reasonably informed person does not already know, or is a generic statement that would fit many stories (e.g. "Many people don't want data centres in their neighbourhood", "This is likely to spark debate"), or has nothing to do with the main news of the card.
 Otherwise `mitreden_problem` is null. Give a short reason in German in `mitreden_grund`.
 
 ## Background items (`einordnung`, separate, not in `aussagen`)
