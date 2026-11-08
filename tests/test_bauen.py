@@ -104,6 +104,21 @@ class Anwenden(unittest.TestCase):
         vage = [{"wer": w, "text": "Zu hoch."} for w in ("Wirtschaftsexperten", "Viele Beobachter", "Kritiker", "Ifo-Ökonom Clemens Fuest")]
         self.assertEqual([s["wer"] for s in stimmen_bereinigen(vage)], ["Ifo-Ökonom Clemens Fuest"])
 
+    def test_berliner_zeit(self):
+        from datetime import datetime, timezone
+        from pipeline.daten import berlin
+        self.assertEqual(berlin(datetime(2026, 11, 8, 14, 30, tzinfo=timezone.utc)).hour, 15)  # Winterzeit
+        self.assertEqual(berlin(datetime(2026, 7, 1, 14, 30, tzinfo=timezone.utc)).hour, 16)   # Sommerzeit
+        self.assertEqual(berlin(datetime(2026, 10, 25, 0, 59, tzinfo=timezone.utc)).hour, 2)   # kurz vor Umstellung
+        self.assertEqual(berlin(datetime(2026, 10, 25, 1, 0, tzinfo=timezone.utc)).hour, 2)    # danach MEZ
+
+    def test_fremdschrift_und_leere_zeilen(self):
+        from pipeline.bauen import ohne_fremdschrift, LEERE_ZEILE
+        self.assertEqual(ohne_fremdschrift({"t": ["Mitte einer Präsidentschafts美国的 stattfinden"]}),
+                         {"t": ["Mitte einer Präsidentschafts stattfinden"]})
+        self.assertTrue(LEERE_ZEILE.search("Die Schlagzeilen behandeln verschiedene, nicht zusammenhängende Themen rund um den Fußball."))
+        self.assertFalse(LEERE_ZEILE.search("Pistorius sieht keinen Grund für eine Wiedereinführung der Wehrpflicht."))
+
     def test_wiki_auszug_am_satzende(self):
         from pipeline.bilder import wiki_auszug
         self.assertEqual(wiki_auszug("Kurz."), "Kurz.")

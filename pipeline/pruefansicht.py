@@ -96,7 +96,7 @@ def als_html(ergebnis: dict, karten_voll: dict, metriken: dict) -> str:
                 for w in k["werte"]) + "</ul>"
         elif k["format"] == "ergebnisse":
             datenkarten += f"<h3>{E(k['titel'])} <span class='klein'>{E(k['tabelle']['wettbewerb'])}</span></h3><ul>" + "".join(
-                f"<li>{E(sp['heim'])} – {E(sp['gast'])} {E(sp['ergebnis'])}</li>" for sp in k["tabelle"]["spiele"]) + "</ul>"
+                f"<li>{E(sp['heim'])} – {E(sp['gast'])} {E(sp['ergebnis'] or sp.get('anstoss') or '')}</li>" for sp in k["tabelle"]["spiele"]) + "</ul>"
     kurz = "".join(f"<li>{E(z['text'])} <a class='klein' href='{E(z.get('url') or '#')}' target='_blank' rel='noopener'>Quelle</a></li>"
                    for k in ergebnis["karten"] if k["format"] == "kurz" for z in k["meldungen"])
     return f"""<!doctype html>

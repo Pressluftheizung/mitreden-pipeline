@@ -4,8 +4,9 @@
   Quelle: Yahoo Finance (Kursdaten), Ersatz: EZB-Referenzkurs (Euro/Dollar), CoinGecko (Bitcoin).
   Den Satz „warum“ schreibt die KI aus den Schlagzeilen der Ausgabe; ein Programm verwirft ihn, wenn er
   Zahlen enthält, die weder in den Daten noch in den Schlagzeilen stehen.
-- Ergebnisse: Bundesliga, 2. Bundesliga und DFB-Pokal von OpenLigaDB (frei, ohne Schlüssel), nur Spiele,
-  die in den letzten 36 Stunden zu Ende gegangen sind. Titel aus Vorlagen.
+- Ergebnisse: Bundesliga, Champions League, Europa League, DFB-Pokal, Premier League, La Liga und 2. Bundesliga
+  von OpenLigaDB (frei, ohne Schlüssel). Je Wettbewerb der ganze Spieltag (gespielte Spiele mit Ergebnis,
+  offene mit Anstoßzeit), wenn in den letzten 36 Stunden ein Spiel zu Ende ging. Logos nur von Wikimedia.
 """
 
 import json
@@ -26,7 +27,11 @@ WERTE = [  # Name, Yahoo-Symbol, Einheit, Nachkommastellen
     ("Euro/Dollar", "EURUSD=X", "$", 4),
 ]
 
-LIGEN = [("bl1", "Bundesliga"), ("bl2", "2. Bundesliga"), ("dfb", "DFB-Pokal")]
+# Reihenfolge = Reihenfolge der Seiten in der App (erste Liga mit neuen Ergebnissen ist die Hauptkarte)
+LIGEN = [("bl1", "1. Bundesliga", "deutschland"), ("ucl", "Champions League", "europa"),
+         ("uel2026", "Europa League", "europa"), ("dfb", "DFB-Pokal", "deutschland"),
+         ("pl", "Premier League", "europa"), ("la1", "La Liga", "europa"), ("bl2", "2. Bundesliga", "deutschland")]
+WOCHENTAG = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
 
 
 def _json(url: str):
@@ -113,31 +118,54 @@ def zahlen_karte(werte: list[dict], schlagzeilen: list[str], ki, ausgabe: str) -
             "lager_mix": {}, "werte": [{**w, "warum": warum.get(w["name"]) or vorlage_warum(w)} for w in werte]}
 
 
+def _logo(team: dict) -> str | None:
+    """Vereinslogo nur von Wikimedia (freie Lizenz, CLAUDE.md: Bilder nur frei); sonst zeigt die App ein Kürzel."""
+    url = team.get("teamIconUrl") or ""
+    return url if url.startswith("https://upload.wikimedia.org/") else None
+
+
+def berlin(utc: datetime) -> datetime:
+    """Deutsche Uhrzeit ohne Zeitzonen-Datenbank (fehlt unter Windows): Sommerzeit vom letzten Sonntag im März
+    bis zum letzten Sonntag im Oktober, jeweils 01:00 UTC."""
+    def letzter_sonntag(monat: int) -> datetime:
+        tag = datetime(utc.year, monat, 31, 1, tzinfo=timezone.utc)
+        return tag - timedelta(days=(tag.weekday() + 1) % 7)
+    sommer = letzter_sonntag(3) <= utc < letzter_sonntag(10)
+    return (utc + timedelta(hours=2 if sommer else 1)).replace(tzinfo=None)
+
+
+def _anstoss(s: dict) -> str:
+    beginn = berlin(datetime.fromisoformat(s["matchDateTimeUTC"].replace("Z", "+00:00")))
+    return f"{WOCHENTAG[beginn.weekday()]} {beginn:%H:%M}"
+
+
 def lade_ergebnisse(jetzt: datetime, stunden: int = 36) -> list[dict]:
-    """Je Wettbewerb die Spiele, die in den letzten `stunden` beendet wurden."""
+    """Je Wettbewerb der ganze aktuelle Spieltag, wenn darin in den letzten `stunden` ein Spiel zu Ende ging
+    (Feedback 07.11.2026: nicht nur ein Ergebnis und sonst leer; auch Champions League, Premier League, La Liga)."""
     ergebnis = []
-    for kurz, name in LIGEN:
+    for kurz, name, region in LIGEN:
         try:
             spiele = _json(f"https://api.openligadb.de/getmatchdata/{kurz}")
         except Exception:
             continue
-        fertig = []
-        for s in spiele:
-            if not s.get("matchIsFinished") or not s.get("matchDateTimeUTC"):
+        alle, frisch = [], False
+        for s in sorted(spiele, key=lambda s: s.get("matchDateTimeUTC") or ""):
+            if not s.get("matchDateTimeUTC"):
                 continue
             beginn = datetime.fromisoformat(s["matchDateTimeUTC"].replace("Z", "+00:00"))
-            if not timedelta(0) <= jetzt - beginn <= timedelta(hours=stunden):
-                continue
-            end = next((r for r in s.get("matchResults", []) if r.get("resultTypeID") == 2), None) or \
-                (s.get("matchResults") or [None])[-1]
-            if not end:
-                continue
-            fertig.append({"heim": s["team1"]["shortName"] or s["team1"]["teamName"],
-                           "gast": s["team2"]["shortName"] or s["team2"]["teamName"],
-                           "tore": (end["pointsTeam1"], end["pointsTeam2"]),
-                           "runde": (s.get("group") or {}).get("groupName", "")})
-        if fertig:
-            ergebnis.append({"liga": kurz, "wettbewerb": name, "runde": fertig[0]["runde"], "spiele": fertig})
+            end = None
+            if s.get("matchIsFinished"):
+                end = next((r for r in s.get("matchResults", []) if r.get("resultTypeID") == 2), None) or \
+                    (s.get("matchResults") or [None])[-1]
+            if end and timedelta(0) <= jetzt - beginn <= timedelta(hours=stunden):
+                frisch = True
+            alle.append({"heim": s["team1"]["shortName"] or s["team1"]["teamName"],
+                         "gast": s["team2"]["shortName"] or s["team2"]["teamName"],
+                         "tore": (end["pointsTeam1"], end["pointsTeam2"]) if end else None,
+                         "anstoss": _anstoss(s), "heim_logo": _logo(s["team1"]), "gast_logo": _logo(s["team2"]),
+                         "runde": (s.get("group") or {}).get("groupName", "")})
+        if frisch:
+            ergebnis.append({"liga": kurz, "wettbewerb": name, "region": region, "runde": alle[0]["runde"], "spiele": alle})
     return ergebnis
 
 
@@ -157,15 +185,22 @@ def vorlage_titel(spiele: list[dict]) -> str:
 def ergebnis_karten(ligen: list[dict], ausgabe: str, schon_gezeigt: set[str]) -> list[dict]:
     karten = []
     for liga in ligen:
-        neu = [s for s in liga["spiele"] if f"{liga['liga']}:{s['heim']}:{s['gast']}:{s['runde']}" not in schon_gezeigt]
+        gespielt = [s for s in liga["spiele"] if s.get("tore") is not None]
+        neu = [s for s in gespielt if f"{liga['liga']}:{s['heim']}:{s['gast']}:{s['runde']}" not in schon_gezeigt]
         if not neu:
             continue
+        hoehepunkt = vorlage_titel(gespielt)
         karten.append({
             "id": f"ergebnisse-{liga['liga']}-{liga['runde'].lower().replace('.', '').replace(' ', '-')}", "format": "ergebnisse", "thema": "sport", "unterthema": "fussball",
-            "region": "deutschland", "titel": vorlage_titel(neu), "labels": [],
+            # Feedback 07.11.2026: Wettbewerb als Überschrift, Höhepunkt darunter
+            "region": liga.get("region", "deutschland"), "titel": liga["wettbewerb"], "labels": [],
+            "satz": hoehepunkt if hoehepunkt != "Die Ergebnisse" else None,
             "quellen": [{"name": "OpenLigaDB", "lager": "international", "url": "https://www.openligadb.de"}], "lager_mix": {},
-            "tabelle": {"wettbewerb": f"{liga['wettbewerb']} · {liga['runde']}",
-                        "spiele": [{"heim": s["heim"], "gast": s["gast"], "ergebnis": f"{s['tore'][0]}:{s['tore'][1]}"} for s in neu]},
-            "_gezeigt": [f"{liga['liga']}:{s['heim']}:{s['gast']}:{s['runde']}" for s in neu],
+            "tabelle": {"wettbewerb": liga["runde"],
+                        "spiele": [{"heim": s["heim"], "gast": s["gast"],
+                                    "ergebnis": f"{s['tore'][0]}:{s['tore'][1]}" if s.get("tore") is not None else None,
+                                    "anstoss": s.get("anstoss"), "heim_logo": s.get("heim_logo"), "gast_logo": s.get("gast_logo")}
+                                   for s in liga["spiele"]]},
+            "_gezeigt": [f"{liga['liga']}:{s['heim']}:{s['gast']}:{s['runde']}" for s in gespielt],
         })
     return karten

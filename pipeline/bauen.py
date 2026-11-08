@@ -360,6 +360,23 @@ VAGER_ABSENDER = re.compile(r"^(viele |einige |manche |andere |zahlreiche |die |
                             r"insider|kreise|stimmen|befürworter|gegner|verbündete|investoren|anleger)$", re.I)
 
 
+# Feedback 07.11.2026: Das Modell rutscht gelegentlich in chinesische Schriftzeichen („Präsidentschafts美国的“)
+FREMDSCHRIFT = re.compile(r"[⺀-鿿가-힯豈-﫿＀-￯]+")
+# Kurz-Zeilen ohne Nachricht („Die Schlagzeilen behandeln verschiedene, nicht zusammenhängende Themen …“)
+LEERE_ZEILE = re.compile(r"Schlagzeilen|nicht zusammenhängend|verschiedene,? .{0,30}Themen|keine gemeinsame", re.I)
+
+
+def ohne_fremdschrift(wert):
+    """Entfernt CJK-Zeichen aus allen Texten einer KI-Antwort (die App ist deutsch)."""
+    if isinstance(wert, str):
+        return re.sub(r"  +", " ", FREMDSCHRIFT.sub("", wert)) if FREMDSCHRIFT.search(wert) else wert
+    if isinstance(wert, list):
+        return [ohne_fremdschrift(x) for x in wert]
+    if isinstance(wert, dict):
+        return {k: ohne_fremdschrift(v) for k, v in wert.items()}
+    return wert
+
+
 def stimmen_bereinigen(roh) -> list[dict]:
     """„Was sagen andere“ (Feedback 06.11.2026): höchstens 4 {art, wer, text}, immer mit Absender."""
     liste = []
@@ -485,7 +502,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
                 treffer = re.fullmatch(r"s(\d+)", str(k.get("story", "")))
                 if treffer and int(treffer.group(1)) in portion:
                     k["_modell"] = modell
-                    texte[int(treffer.group(1))] = k
+                    texte[int(treffer.group(1))] = ohne_fremdschrift(k)
 
     schreibe("top", [n for n in neu_voll if aktiv[n].format == "top"], jb["top_pro_anfrage"])
     schreibe("karte", [n for n in neu_voll if aktiv[n].format == "karte"], jb["karten_pro_anfrage"])
@@ -509,7 +526,8 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
             for z in antwort["zeilen"]:
                 treffer = re.fullmatch(r"s(\d+)", str(z.get("story", "")))
                 if treffer:
-                    zeilen[int(treffer.group(1))] = z["text"].strip()
+                    text = ohne_fremdschrift(z["text"]).strip()
+                    zeilen[int(treffer.group(1))] = "" if LEERE_ZEILE.search(text) else text  # leer: Zeile fällt weg
         except KeinModellFrei as e:
             fehler.append(f"kurz: {e}")
     for n in kurz_neu:
@@ -645,6 +663,8 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
         elif plan[n] == "kurz_neu":
             text = zeilen[n]
         else:
+            continue
+        if not text or LEERE_ZEILE.search(text):
             continue
         sid = zuordnung.get(n) or neue_story_id(st, b, jetzt)
         url = next((st.meldungen[i].teaser.get("url") for i in b.mitglieder), None)
