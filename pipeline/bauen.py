@@ -275,6 +275,22 @@ def text_liste(roh, anzahl: int) -> list[str]:
     return [x.strip()[:400] for x in roh if isinstance(x, str) and x.strip()][:anzahl] if isinstance(roh, list) else []
 
 
+def erklaerung_bereinigen(roh) -> list[str] | None:
+    """„Erklär mir das“: Liste kurzer Texte. Das Modell liefert manchmal Objekte ({"begriff", "text"}) oder einen
+    einzelnen Text; das brachte vom 6. bis 8.11.2026 vier Bauten zum Absturz (Prüfansicht)."""
+    if isinstance(roh, str):
+        roh = [roh]
+    liste = []
+    for x in roh if isinstance(roh, list) else []:
+        if isinstance(x, dict):
+            kopf = next((x[f] for f in ("begriff", "wort", "titel") if isinstance(x.get(f), str)), "")
+            text = next((x[f] for f in ("text", "erklaerung", "inhalt") if isinstance(x.get(f), str)), "")
+            x = f"{kopf}: {text}" if kopf and text else (text or kopf)
+        if isinstance(x, str) and x.strip():
+            liste.append(x.strip()[:500])
+    return liste[:6] or None
+
+
 def zusammenhang_bereinigen(roh) -> list[dict]:
     """Verbindungen {text, thema (t5 oder None)} bzw. schon aufgelöst {text, karte}: höchstens 2."""
     liste = []
@@ -563,6 +579,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
             karte["vorgeschichte"] = text_liste(karte.get("vorgeschichte"), 3)
             karte["zusammenhang"] = zusammenhang_bereinigen(karte.get("zusammenhang"))
             karte["fakten"] = text_liste(karte.get("fakten"), 3)
+            karte["erklaerung"] = erklaerung_bereinigen(karte.get("erklaerung"))
             karte["fragen"] = fragen_bereinigen(karte.get("fragen"))
             karte["stimmen"] = stimmen_bereinigen(karte.get("stimmen"))
             karte["erklaere"] = erklaere_bereinigen(karte.get("erklaere"))
@@ -769,7 +786,10 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
     ordner.mkdir(parents=True, exist_ok=True)
     (ordner / f"{ausgabe}.json").write_text(json.dumps(ergebnis, ensure_ascii=False, separators=(",", ":")) + "\n",
                                            encoding="utf-8")
-    (ordner / "pruefansicht.html").write_text(als_html(ergebnis, karten_voll, metriken), encoding="utf-8")
+    try:  # die Prüfansicht ist nur zum Nachschauen: ein Fehler darin darf den Bau nicht abbrechen
+        (ordner / "pruefansicht.html").write_text(als_html(ergebnis, karten_voll, metriken), encoding="utf-8")
+    except Exception as e:
+        fehler.append(f"pruefansicht: {type(e).__name__}: {e}")
     for datei in ordner.glob("*.json"):  # Testausgaben 3 Tage aufheben
         if datei.stem < (jetzt - timedelta(days=3)).strftime("%Y-%m-%d"):
             datei.unlink()

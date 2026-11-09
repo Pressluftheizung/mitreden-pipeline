@@ -104,6 +104,13 @@ class Anwenden(unittest.TestCase):
         vage = [{"wer": w, "text": "Zu hoch."} for w in ("Wirtschaftsexperten", "Viele Beobachter", "Kritiker", "Ifo-Ökonom Clemens Fuest")]
         self.assertEqual([s["wer"] for s in stimmen_bereinigen(vage)], ["Ifo-Ökonom Clemens Fuest"])
 
+    def test_erklaerung_bereinigen(self):
+        from pipeline.bauen import erklaerung_bereinigen
+        self.assertEqual(erklaerung_bereinigen([{"begriff": "Senat", "text": "Obere Kammer."}, " Satz. ", 3]),
+                         ["Senat: Obere Kammer.", "Satz."])
+        self.assertEqual(erklaerung_bereinigen("Nur ein Text."), ["Nur ein Text."])
+        self.assertIsNone(erklaerung_bereinigen(None))
+
     def test_berliner_zeit(self):
         from datetime import datetime, timezone
         from pipeline.daten import berlin
