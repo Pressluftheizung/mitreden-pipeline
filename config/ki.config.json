@@ -22,6 +22,7 @@
     "dubletten": { "kette": ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemma-4-31b-it"], "prompt": "prompts/dubletten.md" },
     "themen": { "kette": ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemma-4-31b-it"], "prompt": "prompts/themen.md" },
     "zahlen": { "kette": ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite"], "prompt": "prompts/zahlen.md" },
+    "popups": { "kette": ["gemma-4-31b-it", "gemini-3.1-flash-lite", "gemini-3.5-flash-lite"], "max_ausgabe": 3000, "prompt": "prompts/popups.md" },
     "pruefen": { "kette": ["openai/gpt-oss-120b", "qwen/qwen3.8-27b"], "max_ausgabe": 1500, "prompt": "prompts/pruefen.md" }
   },
   "je_bau": {
@@ -29,6 +30,7 @@
     "top_pro_anfrage": 2,
     "karten_pro_anfrage": 5,
     "kurz_pro_anfrage": 20,
+    "popups_pro_anfrage": 2,
     "max_pruefungen": 80,
     "reserve_anteil": 0.1
   }

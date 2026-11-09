@@ -104,6 +104,36 @@ class Anwenden(unittest.TestCase):
         vage = [{"wer": w, "text": "Zu hoch."} for w in ("Wirtschaftsexperten", "Viele Beobachter", "Kritiker", "Ifo-Ökonom Clemens Fuest")]
         self.assertEqual([s["wer"] for s in stimmen_bereinigen(vage)], ["Ifo-Ökonom Clemens Fuest"])
 
+    def test_popups_ergaenzen(self):
+        from pipeline import bauen
+
+        class FalscheKI:
+            def frage(self, aufgabe, nutzer, pruefe=None):
+                self.aufgabe = aufgabe
+                antwort = {"karten": [
+                    {"karte": "k1", "erklaere": [
+                        {"wort": "Exekutive", "art": "begriff", "text": "Die ausführende Gewalt.", "wiki": "Exekutive"},
+                        {"wort": "Justizausschuss", "art": "organisation", "text": "Ausschuss im Kongress.", "wiki": None},
+                        {"wort": "Dmitrijew", "art": "person", "text": "Russischer Unterhändler.", "wiki": None},
+                        {"wort": "Erfunden", "art": "begriff", "text": "Steht nicht im Text.", "wiki": None}]},
+                    {"karte": "k2", "erklaere": []}]}
+                pruefe(antwort)
+                return antwort, "gemma-test"
+
+        k1 = {"format": "karte", "titel": "Trump und Dmitrijew", "punkte": ["Der Justizausschuss tagt."],
+              "fragen": [{"frage": "Darf er das?", "antwort": "Das Ministerium untersteht der Exekutive."}],
+              "erklaere": [{"wort": "Dmitrijew", "art": "person", "text": "alt", "wiki": {"url": "https://de.wikipedia.org/wiki/X"}}]}
+        k2 = {"format": "karte", "titel": "B", "erklaere": [{"wort": "B", "art": "begriff", "text": "bleibt"}]}
+        ki = FalscheKI()
+        stat = bauen.popups_ergaenzen([k1, k2, {"format": "kurz"}], ki, 2, [])
+        self.assertEqual(ki.aufgabe, "popups")
+        self.assertEqual([e["wort"] for e in k1["erklaere"]], ["Exekutive", "Justizausschuss", "Dmitrijew"])
+        self.assertEqual(k1["erklaere"][2]["wiki"]["url"], "https://de.wikipedia.org/wiki/X")  # Wikipedia behalten
+        self.assertEqual(k2["erklaere"][0]["text"], "bleibt")  # leere Antwort: alte Liste bleibt
+        self.assertEqual(stat, {"karten": 1, "vorher": 1, "nachher": 3})
+        self.assertTrue(bauen.wort_im_text("El Niño", "Der El-Niño-Effekt"))
+        self.assertFalse(bauen.wort_im_text("Niño", "ElNiño"))
+
     def test_erklaerung_bereinigen(self):
         from pipeline.bauen import erklaerung_bereinigen
         self.assertEqual(erklaerung_bereinigen([{"begriff": "Senat", "text": "Obere Kammer."}, " Satz. ", 3]),

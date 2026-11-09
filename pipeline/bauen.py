@@ -354,6 +354,65 @@ def erklaere_bereinigen(roh) -> list[dict]:
     return liste[:12]
 
 
+def karten_volltext(k: dict) -> str:
+    """Der ganze sichtbare Text einer Karte (für den Pop-up-Schritt und die Wortprüfung)."""
+    teile = [k.get("titel"), k.get("satz"), k.get("mitreden"), *(k.get("punkte") or []), *(k.get("vorgeschichte") or []),
+             *(p for c in k.get("kapitel") or [] for p in c.get("punkte") or []),
+             *(p for e in k.get("ebenen") or [] for p in e.get("punkte") or []),
+             *(x for f in k.get("fragen") or [] for x in (f.get("frage"), f.get("antwort"))),
+             *(z.get("text") for z in k.get("zusammenhang") or []), *(k.get("fakten") or []),
+             *(f"{s.get('wer')}: {s.get('text')}" for s in k.get("stimmen") or []),
+             *(f"{g.get('begriff')}: {g.get('text')}" for g in k.get("grundwissen") or [])]
+    return "\n".join(t for t in teile if isinstance(t, str) and t.strip())
+
+
+def wort_im_text(wort: str, text: str) -> bool:
+    """Wie die App: Wortanfang, Leerzeichen und Bindestrich gelten als gleich („El Niño“ in „El-Niño-Effekt“)."""
+    teile = [re.escape(t) for t in re.split(r"[\s-]+", wort.strip()) if t]
+    return bool(teile) and re.search(r"(?<![^\W\d_])(?<!\d)" + r"[\s-]".join(teile), text) is not None
+
+
+def popups_ergaenzen(karten: list[dict], ki, pro_anfrage: int, fehler: list[str]) -> dict:
+    """Eigener Pop-up-Schritt (Wunsch des Nutzers 09.11.2026): Das Schreibmodell lieferte meist nur 1–5 Wörter,
+    fast nur Personen. Ein zweites Modell liest den ganzen Kartentext und wählt und erklärt die Pop-up-Wörter.
+    Nur Wörter, die wörtlich im Text stehen, werden übernommen; ohne Antwort bleibt die bisherige Liste."""
+    stat = {"karten": 0, "vorher": 0, "nachher": 0}
+    kandidaten = [k for k in karten if k.get("format") in ("top", "karte")]
+    for start in range(0, len(kandidaten), pro_anfrage):
+        portion = kandidaten[start:start + pro_anfrage]
+        eingabe = [{"karte": f"k{i + 1}", "text": karten_volltext(k),
+                    "bisherige_popups": [{"wort": e["wort"], "text": e["text"]} for e in k.get("erklaere") or []]}
+                   for i, k in enumerate(portion)]
+        try:
+            antwort, modell = ki.frage("popups", json.dumps({"karten": eingabe}, ensure_ascii=False), pruefe_popups)
+        except KeinModellFrei as e:
+            fehler.append(f"popups: {e}")
+            continue
+        for a in antwort["karten"]:
+            treffer = re.fullmatch(r"k(\d+)", str(a.get("karte", "")))
+            if not treffer or not 1 <= int(treffer.group(1)) <= len(portion):
+                continue
+            k = portion[int(treffer.group(1)) - 1]
+            text = karten_volltext(k)
+            alt = {e["wort"].lower(): e for e in k.get("erklaere") or []}
+            neu = [e for e in erklaere_bereinigen(a.get("erklaere")) if wort_im_text(e["wort"], text)]
+            for e in neu:  # schon nachgeschlagene Wikipedia-Daten nicht wegwerfen
+                if e["wort"].lower() in alt and alt[e["wort"].lower()].get("wiki") and "_wiki_titel" not in e:
+                    e["wiki"] = alt[e["wort"].lower()]["wiki"]
+            if len(neu) >= max(1, len(alt)):  # nur übernehmen, wenn es nicht weniger werden
+                stat["karten"] += 1
+                stat["vorher"] += len(alt)
+                stat["nachher"] += len(neu)
+                k["erklaere"] = neu
+                k.setdefault("_ki", {})["popups"] = modell
+    return stat
+
+
+def pruefe_popups(antwort: dict) -> None:
+    if not isinstance(antwort, dict) or not isinstance(antwort.get("karten"), list):
+        raise ValueError("karten fehlt")
+
+
 def wiki_ergaenzen(karten: list[dict]) -> None:
     """Wikipedia-Titel der Pop-up-Wörter nachschlagen: Link und Kurzbeschreibung, sonst ohne Link."""
     titel = [e["_wiki_titel"] for k in karten for e in k.get("erklaere") or [] if e.get("_wiki_titel")]
@@ -629,7 +688,9 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
     for n, karte in karten_voll.items():
         if karte.get("_neu_geschrieben"):
             karte["zusammenhang"] = verweise_aufloesen(karte.get("zusammenhang") or [], n, karten_voll)
-    # Pop-up-Wörter: Wikipedia-Link und Kurzbeschreibung (kostenlos, parallel)
+    # Pop-up-Wörter: eigener KI-Schritt über den ganzen Kartentext, dann Wikipedia (kostenlos, parallel)
+    popups = popups_ergaenzen([k for k in karten_voll.values() if k.get("_neu_geschrieben")], ki,
+                              jb.get("popups_pro_anfrage", 2), fehler)
     wiki_ergaenzen([k for k in karten_voll.values() if k.get("_neu_geschrieben")])
 
     # Prüfen (nur neu geschriebene Karten; die übrigen behalten ihre Prüfung)
@@ -775,6 +836,7 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
                     | {"gestrichen": sum(1 for k in karten_voll.values() if k.get("_neu_geschrieben") and not k.get("mitreden"))},
         "datenkarten": {"zahlen": bool(zahlen), "ergebnisse": len(ergebnisse)},
         "volltext_versuche": {e: VOLLTEXT_VERSUCHE.count(e) for e in set(VOLLTEXT_VERSUCHE)},
+        "popups": popups,
         "volltexte": sum(1 for k in karten_voll.values() for q in k.get("_quellen_ki") or [] if q.get("volltext")),
         "dubletten": st.dubletten,
         "themen": st.themen,
