@@ -141,6 +141,24 @@ class Anwenden(unittest.TestCase):
         self.assertEqual(erklaerung_bereinigen("Nur ein Text."), ["Nur ein Text."])
         self.assertIsNone(erklaerung_bereinigen(None))
 
+    def test_logos_ergaenzen(self):
+        from datetime import datetime, timezone
+        from unittest import mock
+        from pipeline import daten
+        jetzt = datetime(2026, 11, 9, tzinfo=timezone.utc)
+        ligen = [{"spiele": [{"heim": "Leipzig", "heim_name": "RB Leipzig", "heim_logo": None,
+                              "gast": "HSV", "gast_name": "Hamburger SV", "gast_logo": "https://upload.wikimedia.org/x.svg"}]}]
+        speicher = {"RB Leipzig": {"url": None, "zeit": "2026-11-08T00:00:00+00:00"}}  # gestern nicht gefunden
+        with mock.patch.object(daten, "vereinslogo", return_value="https://thumb.wikimedia.org/l.png") as such:
+            daten.logos_ergaenzen(ligen, speicher, jetzt)
+        such.assert_not_called()  # erst nach 7 Tagen erneut suchen
+        self.assertIsNone(ligen[0]["spiele"][0]["heim_logo"])
+        speicher["RB Leipzig"]["zeit"] = "2026-10-01T00:00:00+00:00"
+        with mock.patch.object(daten, "vereinslogo", return_value="https://thumb.wikimedia.org/l.png"):
+            daten.logos_ergaenzen(ligen, speicher, jetzt)
+        self.assertEqual(ligen[0]["spiele"][0]["heim_logo"], "https://thumb.wikimedia.org/l.png")
+        self.assertEqual(ligen[0]["spiele"][0]["gast_logo"], "https://upload.wikimedia.org/x.svg")
+
     def test_berliner_zeit(self):
         from datetime import datetime, timezone
         from pipeline.daten import berlin

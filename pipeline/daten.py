@@ -10,6 +10,7 @@
 """
 
 import json
+import re
 import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
@@ -38,6 +39,75 @@ def _json(url: str):
     anfrage = urllib.request.Request(url, headers={"User-Agent": KENNUNG, "Accept": "application/json"})
     with urllib.request.urlopen(anfrage, timeout=15) as antwort:
         return json.loads(antwort.read())
+
+
+# Vereinslogos (Wunsch des Nutzers 09.11.2026: alle wichtigen Logos zeigen). OpenLigaDB liefert für viele
+# Vereine nur Bilder von fremden Seiten; dann wird das freie Logo aus dem Wikipedia-Artikel des Vereins genommen
+# (liegt bei Wikimedia, wie alle Bilder der App). Ergebnis je Verein im Zwischenspeicher, damit jeder nur einmal
+# nachgeschlagen wird.
+WIKIMEDIA = re.compile(r"https://(upload|thumb)\.wikimedia\.org/")
+LOGO_WORT = re.compile(r"logo|wappen|emblem|crest|badge|escudo", re.I)
+LOGO_MUSTER = re.compile(r"logo|wappen|emblem|crest|badge|escudo|\.svg$", re.I)
+KEIN_LOGO = re.compile(r"commons-logo|wiktionary|wikidata|wikiquote|flag|flagge|icon|disambig|pictogram|symbol|stub|"
+                       r"portal|ball|trikot|kit_|stadion|stadium|captain|kapitän|liga|league|ligue|serie_a|premier|eredivisie|primeira|super_lig|süper_lig|uefa|fifa|dfb_|dfl_|\d{4}-\d{2}-\d{2}", re.I)
+
+
+def vereinslogo(name: str, breite: int = 96) -> str | None:
+    """Freies Vereinslogo aus der deutschen Wikipedia (Seitenbild, sonst ein Logo unter den Bildern des Artikels)."""
+    api = "https://de.wikipedia.org/w/api.php?"
+    try:
+        d = _json(api + urllib.parse.urlencode({
+            "action": "query", "format": "json", "generator": "search", "gsrsearch": f"{name.strip()} Fußball",
+            "gsrlimit": 1, "prop": "pageimages|images", "piprop": "thumbnail|name", "pithumbsize": breite,
+            "imlimit": 50, "redirects": 1}))
+        seite = next(iter(((d.get("query") or {}).get("pages") or {}).values()), None)
+        if not seite:
+            return None
+        bild = seite.get("pageimage") or ""
+        daumen = ((seite.get("thumbnail") or {}).get("source") or "").split("?")[0]
+        if LOGO_MUSTER.search(bild) and not KEIN_LOGO.search(bild) and WIKIMEDIA.match(daumen):
+            return daumen
+        # Ersatz nur mit ausdrücklichem Logo-Wort im Dateinamen (eine beliebige SVG kann ein Symbol oder eine Grafik sein)
+        kandidaten = [i["title"] for i in seite.get("images") or []
+                      if LOGO_WORT.search(i.get("title", "")) and not KEIN_LOGO.search(i.get("title", ""))]
+        if not kandidaten:
+            return None
+        info = _json(api + urllib.parse.urlencode({
+            "action": "query", "format": "json", "titles": kandidaten[0], "prop": "imageinfo",
+            "iiprop": "url", "iiurlwidth": breite}))
+        for s in ((info.get("query") or {}).get("pages") or {}).values():
+            url = (((s.get("imageinfo") or [{}])[0]).get("thumburl") or "").split("?")[0]
+            if WIKIMEDIA.match(url):
+                return url
+    except Exception:
+        return None
+    return None
+
+
+def logos_ergaenzen(ligen: list[dict], speicher: dict, jetzt: datetime, parallel: int = 6) -> dict:
+    """Fehlende Logos (nicht von Wikimedia) über Wikipedia ergänzen. `speicher`: {Vereinsname: {url, zeit}};
+    nicht gefundene werden nach 7 Tagen erneut gesucht."""
+    grenze = (jetzt - timedelta(days=7)).isoformat()
+    fehlt = set()
+    for liga in ligen:
+        for s in liga["spiele"]:
+            for seite in ("heim", "gast"):
+                name = (s.get(f"{seite}_name") or s[seite]).strip()
+                eintrag = speicher.get(name)
+                if not s.get(f"{seite}_logo") and not (eintrag and (eintrag.get("url") or eintrag.get("zeit", "") > grenze)):
+                    fehlt.add(name)
+    if fehlt:
+        from concurrent.futures import ThreadPoolExecutor
+        namen = sorted(fehlt)
+        with ThreadPoolExecutor(parallel) as pool:
+            for name, url in zip(namen, pool.map(vereinslogo, namen)):
+                speicher[name] = {"url": url, "zeit": jetzt.isoformat()}
+    for liga in ligen:
+        for s in liga["spiele"]:
+            for seite in ("heim", "gast"):
+                if not s.get(f"{seite}_logo"):
+                    s[f"{seite}_logo"] = (speicher.get((s.get(f"{seite}_name") or s[seite]).strip()) or {}).get("url")
+    return speicher
 
 
 def deutsch(zahl: float, stellen: int) -> str:
@@ -122,7 +192,7 @@ def zahlen_karte(werte: list[dict], schlagzeilen: list[str], ki, ausgabe: str) -
 def _logo(team: dict) -> str | None:
     """Vereinslogo nur von Wikimedia (freie Lizenz, CLAUDE.md: Bilder nur frei); sonst zeigt die App ein Kürzel."""
     url = team.get("teamIconUrl") or ""
-    return url if url.startswith("https://upload.wikimedia.org/") else None
+    return url.split("?")[0] if WIKIMEDIA.match(url) else None
 
 
 def berlin(utc: datetime) -> datetime:
@@ -160,7 +230,8 @@ def lade_ergebnisse(jetzt: datetime, stunden: int = 36) -> list[dict]:
                     (s.get("matchResults") or [None])[-1]
             if end and timedelta(0) <= jetzt - beginn <= timedelta(hours=stunden):
                 frisch = True
-            alle.append({"heim": s["team1"]["shortName"] or s["team1"]["teamName"],
+            alle.append({"heim_name": s["team1"]["teamName"], "gast_name": s["team2"]["teamName"],
+                         "heim": s["team1"]["shortName"] or s["team1"]["teamName"],
                          "gast": s["team2"]["shortName"] or s["team2"]["teamName"],
                          "tore": (end["pointsTeam1"], end["pointsTeam2"]) if end else None,
                          "anstoss": _anstoss(s), "heim_logo": _logo(s["team1"]), "gast_logo": _logo(s["team2"]),

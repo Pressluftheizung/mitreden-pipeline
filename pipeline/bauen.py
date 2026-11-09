@@ -37,7 +37,7 @@ from pathlib import Path
 import yaml
 
 from .bilder import waehle_bilder, wiki_abgleich
-from .daten import ergebnis_karten, lade_ergebnisse, lade_zahlen, zahlen_karte
+from .daten import ergebnis_karten, lade_ergebnisse, lade_zahlen, logos_ergaenzen, zahlen_karte
 from .volltext import lies_volltext
 from .ki import KI, KeinModellFrei, Zaehler
 from .pruefen import anwenden, code_pruefung, pruef_anfrage, pruefe_antwort
@@ -770,7 +770,15 @@ def bauen(daten: Path, config: Path, jetzt: datetime, ki: KI | None = None, st: 
     schlagzeilen = [b.titel for b in aktiv if b.thema == "geld"][:25] + andere_themen[:15]
     zahlen = zahlen_karte(lade_zahlen(), schlagzeilen, ki, ausgabe)
     # Feste Karten-ID je Spieltag: die App zeigt sie einmal und bei neuen Spielen als „Aktualisiert“ (höhere Version)
-    ergebnisse = ergebnis_karten(lade_ergebnisse(jetzt), ausgabe, set())
+    ligen = lade_ergebnisse(jetzt)
+    logo_datei = daten / "stories" / "vereinslogos.json"
+    try:
+        logo_speicher = json.loads(logo_datei.read_text(encoding="utf-8")) if logo_datei.exists() else {}
+        logo_datei.write_text(json.dumps(logos_ergaenzen(ligen, logo_speicher, jetzt), ensure_ascii=False, indent=0) + "\n",
+                              encoding="utf-8")
+    except Exception as e:  # Logos sind schön, aber kein Grund, den Bau abzubrechen
+        fehler.append(f"vereinslogos: {type(e).__name__}: {e}")
+    ergebnisse = ergebnis_karten(ligen, ausgabe, set())
     for k in ergebnisse:
         alt_k = gezeigt.setdefault("karten", {}).get(k["id"], {"version": 0, "spiele": []})
         neu = sorted(k["_gezeigt"])
