@@ -2,7 +2,9 @@
 
 Ablauf je Lauf (läuft nach jeder Ausgabe mit, ein paar Themen pro Lauf):
   1. Nächste offene Themen aus config/lehrplan.json (erst Stufe 1, dann 2, dann 3).
-  2. Quelle: Text und freies Bild des deutschen Wikipedia-Artikels (Wikipedia/Wikimedia, frei).
+  2. Quellen: Text des deutschen Wikipedia-Artikels, als zweite Quelle der englische Artikel zum selben Thema
+     (andere Autoren, Wunsch des Nutzers 09.11.2026), dazu erklärende Bilder aus dem Artikel (Schemata,
+     Animationen, Karten; frei bei Wikimedia).
   3. KI schreibt die Karte: Satz, Punkte, Mini-Fakten und 2–3 Fragen (Auswahl, Schätzen, Wahr/Falsch).
   4. Programm prüft: Schätzwerte müssen als Zahl in der Quelle stehen, Antworten im gültigen Bereich.
   5. Zweite KI (andere Firma) prüft jede Aussage und Frage gegen die Quelle; ohne Prüfung wird nichts gespeichert.
@@ -21,7 +23,12 @@ from .ki import KeinModellFrei
 WIKI = "https://de.wikipedia.org/w/api.php?"
 WIKIMEDIA = re.compile(r"https://(upload|thumb)\.wikimedia\.org/")
 QUELLE_ZEICHEN = 9000
-PRUEF_ZEICHEN = 7000
+QUELLE_EN_ZEICHEN = 6000
+PRUEF_ZEICHEN = 4500
+PRUEF_EN_ZEICHEN = 3000
+# Dateien, die nichts erklären (Symbole der Schwesterprojekte, Flaggen, Logos)
+KEIN_ERKLAERBILD = re.compile(r"commons-logo|wiki(books|quote|source|versity|data|species|voyage|tionary|news)|wiktfavicon|"
+                              r"icon|flag|flagge|disambig|symbol_|pictogram|stub|logo|ambox|question_book|edit-clear", re.I)
 
 
 # ---------- Lehrplan ----------
@@ -46,12 +53,12 @@ def offene_themen(themen: list[dict], fertig: set[str], anzahl: int) -> list[dic
 # ---------- Quelle ----------
 
 def quelle(titel: str) -> dict | None:
-    """Text (ohne Wiki-Markup) und Seitenbild des deutschen Wikipedia-Artikels."""
+    """Text (ohne Wiki-Markup), Seitenbild und Erklärbilder des deutschen Artikels, dazu der englische Artikel."""
     try:
         d = _json(WIKI + urllib.parse.urlencode({
             "action": "query", "format": "json", "titles": titel, "redirects": 1,
-            "prop": "extracts|pageimages|info", "explaintext": 1, "exsectionformat": "plain",
-            "piprop": "thumbnail", "pithumbsize": 800, "inprop": "url"}))
+            "prop": "extracts|pageimages|info|images|langlinks", "explaintext": 1, "exsectionformat": "plain",
+            "piprop": "thumbnail", "pithumbsize": 800, "inprop": "url", "imlimit": 50, "lllang": "en"}))
     except Exception:
         return None
     for s in ((d.get("query") or {}).get("pages") or {}).values():
@@ -59,12 +66,69 @@ def quelle(titel: str) -> dict | None:
         if "missing" in s or len(text) < 400:
             return None
         bild = ((s.get("thumbnail") or {}).get("source") or "").split("?")[0]
+        en_titel = ((s.get("langlinks") or [{}])[0]).get("*")
+        dateien = [i["title"] for i in s.get("images") or [] if not KEIN_ERKLAERBILD.search(i.get("title", ""))]
         return {"titel": s.get("title") or titel, "url": s.get("fullurl") or "", "text": text[:QUELLE_ZEICHEN],
-                "bild": bild if WIKIMEDIA.match(bild) else None}
+                "bild": bild if WIKIMEDIA.match(bild) else None,
+                "en": englisch(en_titel) if en_titel else None,
+                "bilder": erklaerbilder(dateien[:12])}
     return None
 
 
+def englisch(titel: str) -> dict | None:
+    """Zweite Quelle: der englische Wikipedia-Artikel zum selben Thema (andere Autoren)."""
+    try:
+        d = _json("https://en.wikipedia.org/w/api.php?" + urllib.parse.urlencode({
+            "action": "query", "format": "json", "titles": titel, "redirects": 1,
+            "prop": "extracts|info", "explaintext": 1, "exsectionformat": "plain", "inprop": "url"}))
+    except Exception:
+        return None
+    for s in ((d.get("query") or {}).get("pages") or {}).values():
+        text = (s.get("extract") or "").strip()
+        if "missing" in s or len(text) < 300:
+            return None
+        return {"titel": s.get("title") or titel, "url": s.get("fullurl") or "", "text": text[:QUELLE_EN_ZEICHEN]}
+    return None
+
+
+def erklaerbilder(dateien: list[str]) -> list[dict]:
+    """Bilder des Artikels mit Beschreibung (Wikimedia, frei): Kandidaten, aus denen die KI erklärende auswählt."""
+    if not dateien:
+        return []
+    try:
+        d = _json(WIKI + urllib.parse.urlencode({
+            "action": "query", "format": "json", "titles": "|".join(dateien), "prop": "imageinfo",
+            "iiprop": "url|extmetadata", "iiurlwidth": 720, "iiextmetadatafilter": "ImageDescription"}))
+    except Exception:
+        return []
+    bilder = []
+    for s in ((d.get("query") or {}).get("pages") or {}).values():
+        info = (s.get("imageinfo") or [{}])[0]
+        url = (info.get("thumburl") or info.get("url") or "").split("?")[0]
+        if not WIKIMEDIA.match(url):
+            continue
+        roh = ((info.get("extmetadata") or {}).get("ImageDescription") or {}).get("value") or ""
+        beschreibung = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", roh)).strip()[:300]
+        bilder.append({"datei": s.get("title", "").split(":", 1)[-1], "url": url, "beschreibung": beschreibung,
+                       "seite": "https://commons.wikimedia.org/wiki/File:" + urllib.parse.quote(s.get("title", "").split(":", 1)[-1].replace(" ", "_"))})
+    return bilder
+
+
 # ---------- Prüfen im Code ----------
+
+def zahlen_en(text: str) -> set[float]:
+    """Zahlen eines englischen Textes („8,849“, „2.5“)."""
+    werte = set()
+    for roh in re.findall(r"\d[\d,]*(?:\.\d+)?", text):
+        z = roh.rstrip(",")
+        if re.fullmatch(r"\d{1,3}(,\d{3})+(\.\d+)?", z):
+            z = z.replace(",", "")
+        try:
+            werte.add(float(z))
+        except ValueError:
+            pass
+    return werte
+
 
 def zahlen(text: str) -> set[float]:
     """Alle Zahlen eines deutschen Textes („8.849“, „6.650“, „2,5“, „1949“)."""
@@ -80,9 +144,9 @@ def zahlen(text: str) -> set[float]:
     return werte
 
 
-def fragen_bereinigen(roh, quelltext: str) -> list[dict]:
-    """Nur vollständige Fragen; Schätzwerte müssen als Zahl in der Quelle stehen (sonst könnte die KI sie erfinden)."""
-    in_quelle = zahlen(quelltext)
+def fragen_bereinigen(roh, quelltext: str, quelltext_en: str = "") -> list[dict]:
+    """Nur vollständige Fragen; Schätzwerte müssen als Zahl in einer der Quellen stehen (sonst könnte die KI sie erfinden)."""
+    in_quelle = zahlen(quelltext) | zahlen_en(quelltext_en)
     fragen = []
     for f in roh if isinstance(roh, list) else []:
         if not isinstance(f, dict) or not isinstance(f.get("frage"), str) or not f["frage"].strip():
@@ -113,7 +177,7 @@ def karte_bereinigen(roh: dict, thema: dict, q: dict) -> dict | None:
     texte = lambda xs, n, z: [str(x).strip()[:z] for x in xs if str(x).strip()][:n] if isinstance(xs, list) else []
     satz = str(roh.get("satz") or "").strip()[:400]
     punkte = texte(roh.get("punkte"), 6, 300)
-    fragen = fragen_bereinigen(roh.get("fragen"), q["text"])
+    fragen = fragen_bereinigen(roh.get("fragen"), q["text"], (q.get("en") or {}).get("text", ""))
     if not satz or len(punkte) < 2 or not fragen:
         return None
     return {
@@ -121,9 +185,30 @@ def karte_bereinigen(roh: dict, thema: dict, q: dict) -> dict | None:
         "auch": thema.get("auch", []), "stufe": thema["stufe"], "braucht": thema["braucht"],
         "titel": str(roh.get("titel") or thema["titel"]).strip()[:120], "satz": satz, "punkte": punkte,
         "mini": texte(roh.get("mini"), 2, 250), "fragen": fragen,
+        "bilder": bilder_bereinigen(roh.get("bilder"), q.get("bilder") or [], len(punkte)),
         "bild": {"url": q["bild"], "alt": thema["titel"], "art": "frei"} if q.get("bild") else None,
         "quelle": {"name": "Wikipedia", "titel": q["titel"], "url": q["url"]},
+        "quelle_2": {"name": "Wikipedia (englisch)", "titel": q["en"]["titel"], "url": q["en"]["url"]} if q.get("en") else None,
     }
+
+
+def bilder_bereinigen(roh, kandidaten: list[dict], anzahl_punkte: int) -> list[dict]:
+    """Erklärbilder (Wunsch des Nutzers 09.11.2026): höchstens 2, je an einen Punkt gehängt, mit Bildunterschrift."""
+    bilder, schon = [], set()
+    for b in roh if isinstance(roh, list) else []:
+        if not isinstance(b, dict) or not isinstance(b.get("nr"), int):
+            continue
+        nr, punkt = b["nr"], b.get("punkt")
+        if not 1 <= nr <= len(kandidaten) or nr in schon:
+            continue
+        unterschrift = str(b.get("unterschrift") or "").strip()[:200]
+        if not unterschrift:
+            continue
+        k = kandidaten[nr - 1]
+        schon.add(nr)
+        bilder.append({"url": k["url"], "seite": k["seite"], "unterschrift": unterschrift,
+                       "punkt": punkt if isinstance(punkt, int) and 0 <= punkt < anzahl_punkte else None})
+    return bilder[:2]
 
 
 def pruefung_anwenden(karte: dict, urteil: dict) -> dict | None:
@@ -131,12 +216,14 @@ def pruefung_anwenden(karte: dict, urteil: dict) -> dict | None:
     falsche_fragen = {i for i in urteil.get("fragen_falsch") or [] if isinstance(i, int)}
     falsche_punkte = {i for i in urteil.get("punkte_falsch") or [] if isinstance(i, int)}
     falsche_mini = {i for i in urteil.get("mini_falsch") or [] if isinstance(i, int)}
+    falsche_bilder = {i for i in urteil.get("bilder_falsch") or [] if isinstance(i, int)}
     if urteil.get("satz_falsch") is True:
         return None
     karte = {**karte,
              "fragen": [f for i, f in enumerate(karte["fragen"]) if i not in falsche_fragen],
              "punkte": [p for i, p in enumerate(karte["punkte"]) if i not in falsche_punkte],
-             "mini": [m for i, m in enumerate(karte["mini"]) if i not in falsche_mini]}
+             "mini": [m for i, m in enumerate(karte["mini"]) if i not in falsche_mini],
+             "bilder": [b for i, b in enumerate(karte.get("bilder") or []) if i not in falsche_bilder]}
     return karte if karte["fragen"] and len(karte["punkte"]) >= 2 else None
 
 
@@ -170,7 +257,10 @@ def baue(daten: Path, config: Path, ki, jetzt: datetime, anzahl: int, pro_anfrag
         if not portion:
             continue
         eingabe = {"themen": [{"thema": t["id"], "titel": t["titel"], "stufe": t["stufe"], "modul": t["modul_titel"],
-                               "quelle": q["text"]} for t, q in portion]}
+                               "quelle": q["text"], "quelle_en": (q.get("en") or {}).get("text", ""),
+                               "bilder": [{"nr": i + 1, "datei": b["datei"], "beschreibung": b["beschreibung"]}
+                                          for i, b in enumerate(q.get("bilder") or [])]}
+                              for t, q in portion]}
         try:
             antwort, modell = ki.frage("wissen", json.dumps(eingabe, ensure_ascii=False), pruefe_karten)
         except KeinModellFrei as e:
@@ -182,8 +272,9 @@ def baue(daten: Path, config: Path, ki, jetzt: datetime, anzahl: int, pro_anfrag
             if not karte:
                 stat["verworfen"] += 1
                 continue
-            pruef = {"quelle": q["text"][:PRUEF_ZEICHEN], "satz": karte["satz"], "punkte": karte["punkte"],
-                     "mini": karte["mini"], "fragen": karte["fragen"]}
+            pruef = {"quelle": q["text"][:PRUEF_ZEICHEN], "quelle_en": (q.get("en") or {}).get("text", "")[:PRUEF_EN_ZEICHEN],
+                     "satz": karte["satz"], "punkte": karte["punkte"], "mini": karte["mini"], "fragen": karte["fragen"],
+                     "bilder": [b["unterschrift"] for b in karte["bilder"]]}
             try:
                 urteil, pruefer = ki.frage("wissen_pruefen", json.dumps(pruef, ensure_ascii=False), pruefe_urteil)
             except KeinModellFrei as e:  # ohne Prüfung nichts speichern; das Thema kommt im nächsten Lauf wieder

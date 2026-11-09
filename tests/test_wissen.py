@@ -35,6 +35,18 @@ class Wissen(unittest.TestCase):
         self.assertEqual([x["art"] for x in f], ["schaetzen", "auswahl", "wahr_falsch"])
         self.assertEqual(f[0]["toleranz_art"], "prozent")
 
+    def test_bilder_und_englische_zahlen(self):
+        kandidaten = [{"url": "https://upload.wikimedia.org/a.gif", "seite": "https://commons.wikimedia.org/wiki/File:A.gif"},
+                      {"url": "https://upload.wikimedia.org/b.jpg", "seite": "https://commons.wikimedia.org/wiki/File:B.jpg"}]
+        b = wissen.bilder_bereinigen([{"nr": 1, "punkt": 1, "unterschrift": "Die vier Takte."},
+                                      {"nr": 1, "punkt": 0, "unterschrift": "doppelt"},
+                                      {"nr": 7, "punkt": 0, "unterschrift": "gibt es nicht"},
+                                      {"nr": 2, "punkt": 9, "unterschrift": "Punkt fehlt"}], kandidaten, 3)
+        self.assertEqual([(x["url"][-5:], x["punkt"]) for x in b], [("a.gif", 1), ("b.jpg", None)])
+        f = wissen.fragen_bereinigen([{"art": "schaetzen", "frage": "Wie hoch?", "wert": 8849}], "kein Wert hier " * 40,
+                                     "Mount Everest is 8,849 metres high.")
+        self.assertEqual(len(f), 1)  # Zahl steht nur in der englischen Quelle
+
     def test_pruefung_anwenden(self):
         karte = {"satz": "s", "punkte": ["a", "b", "c"], "mini": ["m"], "fragen": [{"art": "x"}, {"art": "y"}]}
         neu = wissen.pruefung_anwenden(karte, {"fragen_falsch": [0], "punkte_falsch": [2], "mini_falsch": [0]})
