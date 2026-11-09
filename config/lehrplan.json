@@ -1,0 +1,95 @@
+{
+  "_hinweis": "Lehrplan Allgemeinwissen (PLAN.md 18). Jedes Thema wird einmal als Wissenskarte gebaut und dann nur gepflegt. stufe: 1 Basis (verstehen), 2 Aufbau (mitreden), 3 Vertiefung (Experte). braucht: Themen-IDs, die vorher sitzen sollen (auch modulübergreifend, z. B. eu.ezb). auch: Nebenbereiche. wiki: Titel des deutschen Wikipedia-Artikels als Hauptquelle. grafik: Vorschlag (ablauf, karte, sitzverteilung, diagramm:<daten>, schaubild) oder null.",
+  "bereiche": {
+    "politik": "Politik", "geld": "Geld & Arbeit", "tech": "Tech", "mobilitaet": "Mobilität", "reisen": "Reisen",
+    "panorama": "Panorama", "wissen": "Wissen", "popkultur": "Popkultur", "sport": "Sport",
+    "geschichte": "Geschichte", "geografie": "Geografie", "recht": "Recht im Alltag", "kultur": "Kultur & Kunst",
+    "religion": "Religion & Philosophie", "gesundheit": "Körper & Gesundheit", "sprache": "Sprache", "sonstiges": "Sonstiges"
+  },
+  "module": [
+    {
+      "id": "deutschland",
+      "titel": "So funktioniert Deutschland",
+      "bereich": "politik",
+      "themen": [
+        {"id": "grundgesetz", "titel": "Das Grundgesetz", "stufe": 1, "braucht": [], "auch": ["recht", "geschichte"], "wiki": "Grundgesetz für die Bundesrepublik Deutschland", "grafik": null},
+        {"id": "gewaltenteilung", "titel": "Gewaltenteilung", "stufe": 1, "braucht": [], "auch": ["recht"], "wiki": "Gewaltenteilung", "grafik": "schaubild"},
+        {"id": "bundestag", "titel": "Der Bundestag", "stufe": 1, "braucht": [], "auch": [], "wiki": "Deutscher Bundestag", "grafik": "sitzverteilung"},
+        {"id": "bundesregierung", "titel": "Bundesregierung: Kanzler und Ministerien", "stufe": 1, "braucht": [], "auch": [], "wiki": "Bundesregierung (Deutschland)", "grafik": null},
+        {"id": "bundesrat", "titel": "Der Bundesrat", "stufe": 1, "braucht": [], "auch": [], "wiki": "Bundesrat (Deutschland)", "grafik": "sitzverteilung"},
+        {"id": "bundespraesident", "titel": "Der Bundespräsident", "stufe": 1, "braucht": [], "auch": [], "wiki": "Bundespräsident (Deutschland)", "grafik": null},
+        {"id": "bverfg", "titel": "Das Bundesverfassungsgericht", "stufe": 1, "braucht": ["grundgesetz"], "auch": ["recht"], "wiki": "Bundesverfassungsgericht", "grafik": null},
+        {"id": "bundeslaender", "titel": "Die 16 Bundesländer", "stufe": 1, "braucht": [], "auch": ["geografie"], "wiki": "Land (Deutschland)", "grafik": "karte"},
+        {"id": "parteien", "titel": "Die Parteien im Bundestag", "stufe": 1, "braucht": ["bundestag"], "auch": [], "wiki": "Liste der politischen Parteien in Deutschland", "grafik": "sitzverteilung"},
+        {"id": "bundestagswahl", "titel": "Bundestagswahl: Erst- und Zweitstimme", "stufe": 1, "braucht": ["bundestag"], "auch": [], "wiki": "Bundestagswahlrecht", "grafik": "schaubild"},
+        {"id": "gesetzgebung", "titel": "Wie ein Gesetz entsteht", "stufe": 2, "braucht": ["bundestag", "bundesrat"], "auch": ["recht"], "wiki": "Gesetzgebungsverfahren (Deutschland)", "grafik": "ablauf"},
+        {"id": "koalition", "titel": "Koalition und Koalitionsvertrag", "stufe": 2, "braucht": ["bundestag", "parteien"], "auch": [], "wiki": "Koalition (Politik)", "grafik": null},
+        {"id": "opposition", "titel": "Die Rolle der Opposition", "stufe": 2, "braucht": ["bundestag", "koalition"], "auch": [], "wiki": "Opposition (Politik)", "grafik": null},
+        {"id": "fuenf-prozent", "titel": "Die Fünf-Prozent-Hürde", "stufe": 2, "braucht": ["bundestagswahl"], "auch": [], "wiki": "Sperrklausel", "grafik": null},
+        {"id": "kanzlerwahl", "titel": "Kanzlerwahl und konstruktives Misstrauensvotum", "stufe": 2, "braucht": ["bundesregierung", "bundestag"], "auch": ["geschichte"], "wiki": "Konstruktives Misstrauensvotum", "grafik": "ablauf"},
+        {"id": "haushalt", "titel": "Bundeshaushalt und Schuldenbremse", "stufe": 2, "braucht": ["bundestag"], "auch": ["geld"], "wiki": "Schuldenbremse (Deutschland)", "grafik": "diagramm:destatis-schulden"},
+        {"id": "laender-finanzen", "titel": "Länderfinanzausgleich", "stufe": 2, "braucht": ["bundeslaender"], "auch": ["geld"], "wiki": "Länderfinanzausgleich", "grafik": "karte"},
+        {"id": "landespolitik", "titel": "Landtage und Ministerpräsidenten", "stufe": 2, "braucht": ["bundeslaender"], "auch": [], "wiki": "Landtag", "grafik": null},
+        {"id": "wahlrechtsreform", "titel": "Wahlrechtsreform und Überhangmandate", "stufe": 3, "braucht": ["bundestagswahl", "fuenf-prozent"], "auch": [], "wiki": "Überhangmandat", "grafik": "schaubild"},
+        {"id": "vertrauensfrage", "titel": "Vertrauensfrage und Neuwahl", "stufe": 3, "braucht": ["kanzlerwahl"], "auch": ["geschichte"], "wiki": "Vertrauensfrage", "grafik": "ablauf"},
+        {"id": "vermittlungsausschuss", "titel": "Der Vermittlungsausschuss", "stufe": 3, "braucht": ["gesetzgebung"], "auch": [], "wiki": "Vermittlungsausschuss", "grafik": "ablauf"},
+        {"id": "gg-aenderung", "titel": "Grundgesetz ändern: Zwei-Drittel-Mehrheit und Ewigkeitsklausel", "stufe": 3, "braucht": ["grundgesetz", "bundesrat"], "auch": ["recht"], "wiki": "Ewigkeitsklausel", "grafik": null},
+        {"id": "parteiverbot", "titel": "Parteiverbot", "stufe": 3, "braucht": ["parteien", "bverfg"], "auch": ["recht"], "wiki": "Parteiverbot", "grafik": "ablauf"}
+      ]
+    },
+    {
+      "id": "eu",
+      "titel": "Die EU",
+      "bereich": "politik",
+      "themen": [
+        {"id": "eu-ueberblick", "titel": "Was ist die EU?", "stufe": 1, "braucht": [], "auch": ["geografie"], "wiki": "Europäische Union", "grafik": "karte"},
+        {"id": "parlament", "titel": "Das Europäische Parlament", "stufe": 1, "braucht": ["eu-ueberblick"], "auch": [], "wiki": "Europäisches Parlament", "grafik": "sitzverteilung"},
+        {"id": "kommission", "titel": "Die EU-Kommission", "stufe": 1, "braucht": ["eu-ueberblick"], "auch": [], "wiki": "Europäische Kommission", "grafik": null},
+        {"id": "rat-der-eu", "titel": "Rat der EU und Europäischer Rat", "stufe": 1, "braucht": ["eu-ueberblick"], "auch": [], "wiki": "Rat der Europäischen Union", "grafik": "schaubild"},
+        {"id": "euro", "titel": "Der Euro und die Eurozone", "stufe": 1, "braucht": ["eu-ueberblick"], "auch": ["geld"], "wiki": "Euro", "grafik": "karte"},
+        {"id": "binnenmarkt", "titel": "Der Binnenmarkt", "stufe": 1, "braucht": ["eu-ueberblick"], "auch": ["geld"], "wiki": "Europäischer Binnenmarkt", "grafik": null},
+        {"id": "schengen", "titel": "Schengen: Reisen ohne Grenzkontrollen", "stufe": 1, "braucht": ["eu-ueberblick"], "auch": ["reisen"], "wiki": "Schengener Abkommen", "grafik": "karte"},
+        {"id": "eu-gesetz", "titel": "Wie ein EU-Gesetz entsteht: Verordnung und Richtlinie", "stufe": 2, "braucht": ["parlament", "kommission", "rat-der-eu"], "auch": ["recht"], "wiki": "Ordentliches Gesetzgebungsverfahren", "grafik": "ablauf"},
+        {"id": "eugh", "titel": "Der Europäische Gerichtshof", "stufe": 2, "braucht": ["eu-ueberblick"], "auch": ["recht"], "wiki": "Gerichtshof der Europäischen Union", "grafik": null},
+        {"id": "ezb", "titel": "Die Europäische Zentralbank", "stufe": 2, "braucht": ["euro"], "auch": ["geld"], "wiki": "Europäische Zentralbank", "grafik": "diagramm:ezb-leitzins"},
+        {"id": "eu-haushalt", "titel": "Der EU-Haushalt: wer zahlt, wer bekommt", "stufe": 2, "braucht": ["eu-ueberblick"], "auch": ["geld"], "wiki": "Haushalt der Europäischen Union", "grafik": "diagramm:eu-haushalt"},
+        {"id": "einstimmigkeit", "titel": "Einstimmigkeit oder Mehrheit", "stufe": 2, "braucht": ["rat-der-eu"], "auch": [], "wiki": "Qualifizierte Mehrheit", "grafik": "schaubild"},
+        {"id": "europawahl", "titel": "Die Europawahl", "stufe": 2, "braucht": ["parlament"], "auch": [], "wiki": "Europawahl", "grafik": "sitzverteilung"},
+        {"id": "erweiterung", "titel": "Neue Mitglieder: Beitritt und Kandidaten", "stufe": 2, "braucht": ["eu-ueberblick"], "auch": ["geografie"], "wiki": "Erweiterung der Europäischen Union", "grafik": "karte"},
+        {"id": "lissabon", "titel": "Der Vertrag von Lissabon", "stufe": 3, "braucht": ["eu-gesetz"], "auch": ["recht", "geschichte"], "wiki": "Vertrag von Lissabon", "grafik": null},
+        {"id": "artikel-7", "titel": "Rechtsstaatsverfahren nach Artikel 7", "stufe": 3, "braucht": ["einstimmigkeit"], "auch": ["recht"], "wiki": "Suspendierung der EU-Mitgliedschaft", "grafik": "ablauf"},
+        {"id": "austritt", "titel": "Austritt aus der EU: Artikel 50 und Brexit", "stufe": 3, "braucht": ["eu-ueberblick"], "auch": ["geschichte"], "wiki": "Brexit", "grafik": "ablauf"},
+        {"id": "stabilitaetspakt", "titel": "Stabilitäts- und Wachstumspakt", "stufe": 3, "braucht": ["euro"], "auch": ["geld"], "wiki": "Stabilitäts- und Wachstumspakt", "grafik": "diagramm:eurostat-schulden"},
+        {"id": "asylpolitik", "titel": "Gemeinsame Asylpolitik", "stufe": 3, "braucht": ["schengen", "eu-gesetz"], "auch": [], "wiki": "Gemeinsames Europäisches Asylsystem", "grafik": null}
+      ]
+    },
+    {
+      "id": "geld",
+      "titel": "Geld und Wirtschaft",
+      "bereich": "geld",
+      "themen": [
+        {"id": "inflation", "titel": "Inflation", "stufe": 1, "braucht": [], "auch": [], "wiki": "Inflation", "grafik": "diagramm:destatis-vpi"},
+        {"id": "leitzins", "titel": "Der Leitzins", "stufe": 1, "braucht": [], "auch": [], "wiki": "Leitzins", "grafik": "diagramm:ezb-leitzins"},
+        {"id": "bip", "titel": "Bruttoinlandsprodukt und Wachstum", "stufe": 1, "braucht": [], "auch": [], "wiki": "Bruttoinlandsprodukt", "grafik": "diagramm:owid-bip"},
+        {"id": "aktie", "titel": "Aktie und Börse", "stufe": 1, "braucht": [], "auch": [], "wiki": "Aktie", "grafik": null},
+        {"id": "steuern", "titel": "Steuern: Einkommen- und Mehrwertsteuer", "stufe": 1, "braucht": [], "auch": ["recht"], "wiki": "Steuer", "grafik": "diagramm:destatis-steuern"},
+        {"id": "arbeitslosigkeit", "titel": "Arbeitslosigkeit", "stufe": 1, "braucht": [], "auch": [], "wiki": "Arbeitslosigkeit", "grafik": "diagramm:destatis-arbeitslose"},
+        {"id": "sozialversicherung", "titel": "Die Sozialversicherung", "stufe": 1, "braucht": [], "auch": ["gesundheit"], "wiki": "Sozialversicherung (Deutschland)", "grafik": "schaubild"},
+        {"id": "mindestlohn", "titel": "Der Mindestlohn", "stufe": 1, "braucht": [], "auch": ["recht"], "wiki": "Mindestlohngesetz (Deutschland)", "grafik": "diagramm:mindestlohn"},
+        {"id": "inflation-bekaempfen", "titel": "Wie Zinsen die Inflation bremsen", "stufe": 2, "braucht": ["inflation", "leitzins", "eu.ezb"], "auch": [], "wiki": "Geldpolitik", "grafik": "schaubild"},
+        {"id": "konjunktur", "titel": "Konjunktur und Rezession", "stufe": 2, "braucht": ["bip"], "auch": [], "wiki": "Rezession", "grafik": "diagramm:owid-bip"},
+        {"id": "staatsschulden", "titel": "Staatsschulden und Staatsanleihen", "stufe": 2, "braucht": ["bip"], "auch": ["politik"], "wiki": "Staatsverschuldung", "grafik": "diagramm:eurostat-schulden"},
+        {"id": "rente", "titel": "Die gesetzliche Rente: das Umlageverfahren", "stufe": 2, "braucht": ["sozialversicherung"], "auch": ["politik"], "wiki": "Gesetzliche Rentenversicherung (Deutschland)", "grafik": "diagramm:destatis-altersaufbau"},
+        {"id": "dax", "titel": "DAX und andere Börsenindizes", "stufe": 2, "braucht": ["aktie"], "auch": [], "wiki": "DAX", "grafik": "diagramm:dax"},
+        {"id": "tarif", "titel": "Tarifverhandlungen und Streik", "stufe": 2, "braucht": [], "auch": ["recht"], "wiki": "Tarifverhandlung", "grafik": "ablauf"},
+        {"id": "zoelle", "titel": "Handel und Zölle", "stufe": 2, "braucht": ["bip"], "auch": ["politik"], "wiki": "Zoll (Abgabe)", "grafik": "diagramm:owid-handel"},
+        {"id": "wechselkurs", "titel": "Wechselkurse", "stufe": 2, "braucht": ["eu.euro"], "auch": ["reisen"], "wiki": "Wechselkurs", "grafik": "diagramm:euro-dollar"},
+        {"id": "schuldenbremse-streit", "titel": "Der Streit um die Schuldenbremse", "stufe": 3, "braucht": ["staatsschulden", "deutschland.haushalt"], "auch": ["politik"], "wiki": "Schuldenbremse (Deutschland)", "grafik": null},
+        {"id": "anleihekaeufe", "titel": "Anleihekäufe der Notenbanken", "stufe": 3, "braucht": ["inflation-bekaempfen", "staatsschulden"], "auch": [], "wiki": "Quantitative Lockerung", "grafik": null},
+        {"id": "stagflation", "titel": "Stagflation", "stufe": 3, "braucht": ["inflation", "konjunktur"], "auch": ["geschichte"], "wiki": "Stagflation", "grafik": null},
+        {"id": "rentenreform", "titel": "Wege für die Rente: Rentenalter, Aktienrente, Beiträge", "stufe": 3, "braucht": ["rente", "aktie"], "auch": ["politik"], "wiki": "Rentenreform", "grafik": null},
+        {"id": "etf", "titel": "ETFs und Geldanlage", "stufe": 3, "braucht": ["dax"], "auch": [], "wiki": "Exchange-traded fund", "grafik": null}
+      ]
+    }
+  ]
+}
