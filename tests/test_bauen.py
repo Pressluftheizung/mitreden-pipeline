@@ -304,7 +304,7 @@ class Datenkarten(unittest.TestCase):
         werte = [{"name": "DAX", "wert": "25.874 Punkte", "veraenderung_prozent": 0.5},
                  {"name": "Gold", "wert": "3.910 $ je Unze", "veraenderung_prozent": 1.0}]
         k = zahlen_karte(werte, ["Gold gefragt wie nie"], KI(), "x")
-        self.assertEqual(k["werte"][0]["warum"], "DAX legt zu: +0,5 %.")  # 42 steht nirgends: Vorlage
+        self.assertIsNone(k["werte"][0]["warum"])  # 42 steht nirgends: kein Satz
         self.assertEqual(k["werte"][1]["warum"], "Anleger suchen Sicherheit.")
 
 

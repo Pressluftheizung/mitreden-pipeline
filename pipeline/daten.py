@@ -97,6 +97,7 @@ def vorlage_warum(w: dict) -> str:
     return f"{w['name']} {richtung}: {'+' if p > 0 else '−'}{deutsch(abs(p), 1)} %."
 
 
+# Ohne geprüften KI-Grund kein Satz: die Vorlage wiederholte nur die Zahl (Design-Review 09.11.2026)
 def zahlen_karte(werte: list[dict], schlagzeilen: list[str], ki, ausgabe: str) -> dict | None:
     """Karte „Zahlen“: Werte vom Programm, „warum“ von der KI mit Prüfung, sonst aus der Vorlage."""
     if not werte:
@@ -115,7 +116,7 @@ def zahlen_karte(werte: list[dict], schlagzeilen: list[str], ki, ausgabe: str) -
             pass
     return {"id": f"zahlen-{ausgabe}", "format": "zahlen", "thema": "geld", "region": "welt", "titel": "Die Zahlen",
             "labels": [], "quellen": [{"name": "Yahoo Finance", "lager": "international", "url": "https://finance.yahoo.com"}],
-            "lager_mix": {}, "werte": [{**w, "warum": warum.get(w["name"]) or vorlage_warum(w)} for w in werte]}
+            "lager_mix": {}, "werte": [{**w, "warum": warum.get(w["name"])} for w in werte]}
 
 
 def _logo(team: dict) -> str | None:
