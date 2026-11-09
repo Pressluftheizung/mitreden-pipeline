@@ -13,7 +13,7 @@ import traceback
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import bauen, kontrolle
+from . import bauen, kontrolle, wissen
 from .ki import KI, Zaehler
 from .score import jetzt_utc
 from .werkbank import berechne, schreibe_verteilung
@@ -42,6 +42,14 @@ def main() -> int:
         (args.daten / "metriken" / f"bau-fehler-{bauen.ausgabe_id(jetzt)[0]}.txt").write_text(
             traceback.format_exc(), encoding="utf-8")
         ki.zaehler.speichere()  # Anfragen des Dubletten-Schritts trotzdem zählen
+    # Allgemeinwissen (PLAN.md 18): ein paar neue Wissenskarten je Lauf; Fehler hier stoppen nichts
+    try:
+        w = wissen.baue(args.daten, args.config, ki, jetzt, ki.k["je_bau"].get("wissen_je_lauf", 6))
+        print(f"Wissen: {w['gebaut']} neu, {w['gesamt']} von {w['lehrplan']} Themen fertig"
+              f" (verworfen {w['verworfen']}, ohne Quelle {w['ohne_quelle']}){' · ' + '; '.join(w['fehler']) if w['fehler'] else ''}")
+        ki.zaehler.speichere()
+    except Exception:
+        traceback.print_exc()
     b = kontrolle.kontrolle(args.daten, args.config, jetzt, args.daten / "pruefset", st=st)
     if not bau_ok:
         b["ampel"], b["ampel_gruende"] = "rot", ["Kartenbau fehlgeschlagen"] + b["ampel_gruende"]

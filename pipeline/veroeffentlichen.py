@@ -55,6 +55,13 @@ def main() -> int:
     daten = fuer_app(json.loads(datei.read_text(encoding="utf-8")))
     ziel.write_text(json.dumps(daten, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
     print(f"Ausgabe {datei.stem} mit {len(daten['karten'])} Karten in die App gelegt.")  # keine Inhalte ins Log
+    # Allgemeinwissen (PLAN.md 18): die ganze Wissens-Datenbank, ohne Modell-Protokoll
+    wissen_datei = args.daten / "wissen" / "wissen.json"
+    if wissen_datei.exists():
+        from .wissen import fuer_app as wissen_fuer_app
+        w = wissen_fuer_app(json.loads(wissen_datei.read_text(encoding="utf-8")))
+        (ziel.parent / "wissen.json").write_text(json.dumps(w, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
+        print(f"Wissen: {len(w['karten'])} Karten in die App gelegt.")
     return 0
 
 
