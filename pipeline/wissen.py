@@ -23,6 +23,21 @@ from .ki import KeinModellFrei
 
 WIKI = "https://de.wikipedia.org/w/api.php?"
 WIKIMEDIA = re.compile(r"https://(upload|thumb)\.wikimedia\.org/")
+# Vorbild für die Schreib-KI (Entscheidung 10.11.2026): eine von Claude geschriebene Karte aus der privaten
+# Datenbank wird bei jeder Anfrage mitgeschickt. Hier steht nur die Kennung, nie der Inhalt (öffentliches Repo).
+MUSTERKARTE = "querbeet.viertaktmotor"
+
+
+def musterkarte(db: dict, ausser: set[str]) -> dict | None:
+    k = db.get("karten", {}).get(MUSTERKARTE)
+    if not k or MUSTERKARTE in ausser:
+        return None
+    return {"untertitel": k.get("untertitel"), "satz": k.get("satz"), "punkte": k.get("punkte"),
+            "abschnitte": (k.get("abschnitte") or [])[:2], "mini": k.get("mini"),
+            "erklaere": [{f: e.get(f) for f in ("wort", "art", "text")} for e in (k.get("erklaere") or [])[:3]],
+            "fragen": (k.get("fragen") or [])[:2]}
+
+
 QUELLE_ZEICHEN = 9000
 QUELLE_EN_ZEICHEN = 6000
 PRUEF_ZEICHEN = 4500
@@ -311,6 +326,10 @@ def baue(daten: Path, config: Path, ki, jetzt: datetime, anzahl: int, pro_anfrag
                                "bilder": [{"nr": i + 1, "datei": b["datei"], "beschreibung": b["beschreibung"]}
                                           for i, b in enumerate(q.get("bilder") or [])]}
                               for t, q in portion]}
+        # Vorbild-Karte aus der privaten Datenbank (Inhalt nie im öffentlichen Repo)
+        vorbild = musterkarte(db, {t["id"] for t, _ in portion})
+        if vorbild:
+            eingabe["beispiel"] = vorbild
         try:
             antwort, modell = ki.frage("wissen", json.dumps(eingabe, ensure_ascii=False), pruefe_karten)
         except KeinModellFrei as e:

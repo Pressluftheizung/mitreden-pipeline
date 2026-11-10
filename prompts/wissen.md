@@ -27,6 +27,9 @@ Du bekommst je Thema den Titel, die Stufe, das Modul, den Text des deutschen Wik
 - **Wiedergabe:** Alles muss durch die Quellen gedeckt sein. Keine Zahlen, Namen oder Jahre, die nicht in der Quelle stehen. Was veraltet sein könnte (Amtsinhaber, aktuelle Zahlen), mit Stand angeben („Stand 2025“) oder weglassen.
 - Neutral, keine Parteinahme, Streitfragen mit beiden Seiten.
 
+## Vorbild
+Falls die Anfrage ein Feld  enthält: Das ist eine gelungene Karte zu einem anderen Thema. Orientiere dich an ihrer Tiefe, ihrem Ton und ihrem Aufbau (Abschnitte, Pop-up-Texte, Fragen). Übernimm nie ihren Inhalt.
+
 ## Antwort
 Nur JSON:
 {"karten": [{"thema": "<Kennung>", "untertitel": "…", "satz": "…", "punkte": ["…"], "abschnitte": [{"titel": "…", "punkte": ["…"]}], "bilder": [{"nr": 1, "punkt": 0, "unterschrift": "…"}], "mini": ["…"], "erklaere": [{"wort": "…", "art": "begriff", "text": "…", "wiki": "…"}], "fragen": [ … ]}]}
