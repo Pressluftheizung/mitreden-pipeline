@@ -210,6 +210,7 @@ def karte_bereinigen(roh: dict, thema: dict, q: dict) -> dict | None:
         "mini": texte(roh.get("mini"), 2, 250), "fragen": fragen,
         "erklaere": [e for e in erklaere_bereinigen(roh.get("erklaere"))
                      if wort_im_text(e["wort"], " ".join([satz, *punkte, *texte(roh.get("mini"), 2, 250),
+                                                         *(p for ab in abschnitte for p in ab["punkte"]),
                                                          *(f["frage"] for f in fragen),
                                                          *(f.get("erklaerung", "") for f in fragen)]))],
         "bilder": bilder_bereinigen(roh.get("bilder"), q.get("bilder") or [], len(punkte)),
