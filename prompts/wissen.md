@@ -8,7 +8,8 @@ Du bekommst je Thema den Titel, die Stufe, das Modul, den Text des deutschen Wik
 - **3 Vertiefung = Experte:** Streitfragen, Geschichte, Sonderfälle.
 
 ## Die Karte
-- `titel`: höchstens 8 Wörter. Kein Schema „Begriff: Beschreibung“ (also nicht „Der Bundesrat: Stimme der Länder“). Stattdessen ein Titel, der neugierig macht und trotzdem stimmt: eine überraschende Zahl, ein Kontrast oder eine Frage, die die Karte beantwortet. Beispiele: „69 Stimmen, die Gesetze stoppen können“, „Warum der Kanzler nicht direkt gewählt wird“, „Ein Provisorium, das seit 1949 hält“. Kein Clickbait, nichts Übertriebenes.
+- Den Titel setzt das Programm: das Thema selbst („Der Bundestag“, „Wie funktioniert ein Verbrennungsmotor?“).
+- `untertitel`: höchstens 8 Wörter, sagt sachlich, **was man auf dieser Karte lernt** („Wer in Deutschland die Gesetze beschließt“, „Vier Takte, die ein Auto antreiben“). Keine Wortspiele, keine Rätsel, keine Kuriositäten im Untertitel (Feedback 10.11.2026: „630 Sitze und ein Adler namens Fette Henne“ sagt nicht, worum es geht). Kuriositäten gehören in `mini`.
 - `satz`: ein Satz, höchstens 25 Wörter: das Wichtigste in einfachen Worten.
 - `punkte`: 3–4 Kernaussagen, je höchstens 25 Wörter: das Wichtigste auf einen Blick. Konkret, mit Zahlen.
 - `abschnitte`: 2–4 Abschnitte für die **Tiefe** (Feedback: „man weiß immer noch nicht, was die Exekutive macht“). Je {"titel": "höchstens 5 Wörter", "punkte": [3–5 Punkte, je höchstens 35 Wörter]}. Typische Abschnitte, je nach Thema: „So funktioniert es“, „Die Teile im Einzelnen“, „Ein Beispiel“, „Warum das wichtig ist“, „Wie es dazu kam“, „Worum gestritten wird“.
@@ -28,4 +29,4 @@ Du bekommst je Thema den Titel, die Stufe, das Modul, den Text des deutschen Wik
 
 ## Antwort
 Nur JSON:
-{"karten": [{"thema": "<Kennung>", "titel": "…", "satz": "…", "punkte": ["…"], "abschnitte": [{"titel": "…", "punkte": ["…"]}], "bilder": [{"nr": 1, "punkt": 0, "unterschrift": "…"}], "mini": ["…"], "erklaere": [{"wort": "…", "art": "begriff", "text": "…", "wiki": "…"}], "fragen": [ … ]}]}
+{"karten": [{"thema": "<Kennung>", "untertitel": "…", "satz": "…", "punkte": ["…"], "abschnitte": [{"titel": "…", "punkte": ["…"]}], "bilder": [{"nr": 1, "punkt": 0, "unterschrift": "…"}], "mini": ["…"], "erklaere": [{"wort": "…", "art": "begriff", "text": "…", "wiki": "…"}], "fragen": [ … ]}]}

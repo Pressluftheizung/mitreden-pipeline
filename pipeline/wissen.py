@@ -202,7 +202,10 @@ def karte_bereinigen(roh: dict, thema: dict, q: dict) -> dict | None:
     return {
         "id": thema["id"], "modul": thema["modul"], "modul_titel": thema["modul_titel"], "bereich": thema["bereich"],
         "auch": thema.get("auch", []), "stufe": thema["stufe"], "braucht": thema["braucht"],
-        "titel": str(roh.get("titel") or thema["titel"]).strip()[:120], "satz": satz, "punkte": punkte,
+        # Feedback 10.11.2026: Der Titel sagt, was man lernt (Thema aus dem Lehrplan), keine Rätsel-Überschrift;
+        # der Untertitel sagt sachlich, worum es geht.
+        "titel": thema["titel"], "untertitel": str(roh.get("untertitel") or "").strip()[:100] or None,
+        "satz": satz, "punkte": punkte,
         "abschnitte": abschnitte,
         "mini": texte(roh.get("mini"), 2, 250), "fragen": fragen,
         "erklaere": [e for e in erklaere_bereinigen(roh.get("erklaere"))
@@ -285,6 +288,11 @@ def baue(daten: Path, config: Path, ki, jetzt: datetime, anzahl: int, pro_anfrag
     pfad = daten / "wissen" / "wissen.json"
     db = json.loads(pfad.read_text(encoding="utf-8")) if pfad.exists() else {"karten": {}}
     themen = lehrplan(config)
+    # Vorhandene Karten: Titel immer das Thema aus dem Lehrplan (alte Rätsel-Titel ersetzen)
+    titel_je_thema = {t["id"]: t["titel"] for t in themen}
+    for kid, k in db["karten"].items():
+        if kid in titel_je_thema:
+            k["titel"] = titel_je_thema[kid]
     offen = offene_themen(themen, db["karten"], anzahl)
     stat = {"versucht": len(offen), "gebaut": 0, "ohne_quelle": 0, "verworfen": 0, "fehler": []}
     for start in range(0, len(offen), pro_anfrage):
