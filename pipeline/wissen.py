@@ -29,7 +29,7 @@ PRUEF_EN_ZEICHEN = 3000
 # Dateien, die nichts erklären (Symbole der Schwesterprojekte, Flaggen, Logos)
 KEIN_ERKLAERBILD = re.compile(r"commons-logo|wiki(books|quote|source|versity|data|species|voyage|tionary|news)|wiktfavicon|"
                               r"icon|flag|flagge|disambig|symbol_|pictogram|stub|logo|ambox|question_book|edit-clear|"
-                              r"wappen|coat.of.arms|briefmarke|stamp|signatur|signature|unterschrift", re.I)
+                              r"wappen|coat.of.arms|[ _]coa[ _.]|briefmarke|stamp|signatur|signature|unterschrift", re.I)
 
 
 # ---------- Lehrplan ----------
