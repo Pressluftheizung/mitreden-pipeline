@@ -28,7 +28,7 @@ Du bekommst je Thema den Titel, die Stufe, das Modul, den Text des deutschen Wik
 - Neutral, keine Parteinahme, Streitfragen mit beiden Seiten.
 
 ## Vorbild
-Falls die Anfrage ein Feld  enthält: Das ist eine gelungene Karte zu einem anderen Thema. Orientiere dich an ihrer Tiefe, ihrem Ton und ihrem Aufbau (Abschnitte, Pop-up-Texte, Fragen). Übernimm nie ihren Inhalt.
+Falls die Anfrage ein Feld `beispiel` enthält: Das ist eine gelungene Karte zu einem anderen Thema. Orientiere dich an ihrer Tiefe, ihrem Ton und ihrem Aufbau (Abschnitte, Pop-up-Texte, Fragen). Übernimm nie ihren Inhalt.
 
 ## Antwort
 Nur JSON:
