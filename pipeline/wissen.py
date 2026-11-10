@@ -44,6 +44,7 @@ def lehrplan(config: Path) -> list[dict]:
             themen.append({**t, "id": f"{m['id']}.{t['id']}", "modul": m["id"], "modul_titel": m["titel"],
                            "bereich": t.get("bereich") or m["bereich"],
                            "braucht": [b if "." in b else f"{m['id']}.{b}" for b in t.get("braucht", [])],
+                           "vorrang": bool(m.get("vorrang")),
                            "_rang": (t["stufe"], m_nr, t_nr)})
     return sorted(themen, key=lambda t: t["_rang"])
 
@@ -51,13 +52,15 @@ def lehrplan(config: Path) -> list[dict]:
 # Bauversion der Regeln: Karten mit kleinerer Version werden neu gebaut (vor neuen Themen).
 # 2 = 10.11.2026: mehr Bilder (Seitenbild als Kandidat), Überschriften ohne „X: Y“-Schema, Mini-Fakten nur zum Thema.
 # 3 = 10.11.2026: Pop-up-Wörter (Begriffe wie „Bundesversammlung“ oder „Parlament“ antippbar).
-BAU = 3
+# 4 = 10.11.2026: Abschnitte für Tiefe (jeder genannte Teil wird erklärt, mit Beispiel).
+BAU = 4
 
 
 def offene_themen(themen: list[dict], fertig: dict, anzahl: int) -> list[dict]:
     veraltet = [t for t in themen if t["id"] in fertig and fertig[t["id"]].get("bau", 1) < BAU]
     neu = [t for t in themen if t["id"] not in fertig]
-    return (veraltet + neu)[:anzahl]
+    vorrang = [t for t in neu if t.get("vorrang")]  # z. B. Testauswahl zum Anschauen
+    return (vorrang + veraltet + [t for t in neu if not t.get("vorrang")])[:anzahl]
 
 
 # ---------- Quelle ----------
@@ -192,6 +195,7 @@ def karte_bereinigen(roh: dict, thema: dict, q: dict) -> dict | None:
     texte = lambda xs, n, z: [str(x).strip()[:z] for x in xs if str(x).strip()][:n] if isinstance(xs, list) else []
     satz = str(roh.get("satz") or "").strip()[:400]
     punkte = texte(roh.get("punkte"), 6, 300)
+    abschnitte = abschnitte_bereinigen(roh.get("abschnitte"))
     fragen = fragen_bereinigen(roh.get("fragen"), q["text"], (q.get("en") or {}).get("text", ""))
     if not satz or len(punkte) < 2 or not fragen:
         return None
@@ -199,6 +203,7 @@ def karte_bereinigen(roh: dict, thema: dict, q: dict) -> dict | None:
         "id": thema["id"], "modul": thema["modul"], "modul_titel": thema["modul_titel"], "bereich": thema["bereich"],
         "auch": thema.get("auch", []), "stufe": thema["stufe"], "braucht": thema["braucht"],
         "titel": str(roh.get("titel") or thema["titel"]).strip()[:120], "satz": satz, "punkte": punkte,
+        "abschnitte": abschnitte,
         "mini": texte(roh.get("mini"), 2, 250), "fragen": fragen,
         "erklaere": [e for e in erklaere_bereinigen(roh.get("erklaere"))
                      if wort_im_text(e["wort"], " ".join([satz, *punkte, *texte(roh.get("mini"), 2, 250),
@@ -209,6 +214,18 @@ def karte_bereinigen(roh: dict, thema: dict, q: dict) -> dict | None:
         "quelle": {"name": "Wikipedia", "titel": q["titel"], "url": q["url"]},
         "quelle_2": {"name": "Wikipedia (englisch)", "titel": q["en"]["titel"], "url": q["en"]["url"]} if q.get("en") else None,
     }
+
+
+def abschnitte_bereinigen(roh) -> list[dict]:
+    """Tiefe (Feedback 10.11.2026): 2–4 Abschnitte je {titel, punkte}, z. B. „So funktioniert es“, „Ein Beispiel“."""
+    abschnitte = []
+    for a in roh if isinstance(roh, list) else []:
+        if not isinstance(a, dict) or not isinstance(a.get("titel"), str):
+            continue
+        punkte = [str(p).strip()[:400] for p in a.get("punkte") or [] if str(p).strip()][:6]
+        if a["titel"].strip() and len(punkte) >= 2:
+            abschnitte.append({"titel": a["titel"].strip()[:60], "punkte": punkte})
+    return abschnitte[:4]
 
 
 def bilder_bereinigen(roh, kandidaten: list[dict], anzahl_punkte: int) -> list[dict]:
@@ -234,6 +251,7 @@ def pruefung_anwenden(karte: dict, urteil: dict) -> dict | None:
     """Was die Prüf-KI nicht in der Quelle findet, fliegt raus; ohne Fragen oder mit falschem Satz keine Karte."""
     falsche_fragen = {i for i in urteil.get("fragen_falsch") or [] if isinstance(i, int)}
     falsche_punkte = {i for i in urteil.get("punkte_falsch") or [] if isinstance(i, int)}
+    falsche_abschnitte = {str(i) for i in urteil.get("abschnitte_falsch") or [] if isinstance(i, (str, int))}
     falsche_mini = {i for i in urteil.get("mini_falsch") or [] if isinstance(i, int)}
     falsche_bilder = {i for i in urteil.get("bilder_falsch") or [] if isinstance(i, int)}
     falsche_woerter = {i for i in urteil.get("erklaere_falsch") or [] if isinstance(i, int)}
@@ -242,6 +260,8 @@ def pruefung_anwenden(karte: dict, urteil: dict) -> dict | None:
     karte = {**karte,
              "fragen": [f for i, f in enumerate(karte["fragen"]) if i not in falsche_fragen],
              "punkte": [p for i, p in enumerate(karte["punkte"]) if i not in falsche_punkte],
+             "abschnitte": [a for a in ({"titel": a["titel"], "punkte": [p for j, p in enumerate(a["punkte"]) if f"{i}.{j}" not in falsche_abschnitte]}
+                                        for i, a in enumerate(karte.get("abschnitte") or [])) if len(a["punkte"]) >= 2],
              "mini": [m for i, m in enumerate(karte["mini"]) if i not in falsche_mini],
              "bilder": [b for i, b in enumerate(karte.get("bilder") or []) if i not in falsche_bilder],
              "erklaere": [e for i, e in enumerate(karte.get("erklaere") or []) if i not in falsche_woerter]}
@@ -295,6 +315,8 @@ def baue(daten: Path, config: Path, ki, jetzt: datetime, anzahl: int, pro_anfrag
                 continue
             pruef = {"quelle": q["text"][:PRUEF_ZEICHEN], "quelle_en": (q.get("en") or {}).get("text", "")[:PRUEF_EN_ZEICHEN],
                      "satz": karte["satz"], "punkte": karte["punkte"], "mini": karte["mini"], "fragen": karte["fragen"],
+                     "abschnitte": {f"{i}.{j}": f"{a['titel']}: {p}" for i, a in enumerate(karte["abschnitte"])
+                                    for j, p in enumerate(a["punkte"])},
                      "bilder": [b["unterschrift"] for b in karte["bilder"]],
                      "erklaere": [f"{e['wort']}: {e['text']}" for e in karte["erklaere"]]}
             try:

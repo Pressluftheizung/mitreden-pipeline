@@ -10,7 +10,11 @@ Du bekommst je Thema den Titel, die Stufe, das Modul, den Text des deutschen Wik
 ## Die Karte
 - `titel`: höchstens 8 Wörter. Kein Schema „Begriff: Beschreibung“ (also nicht „Der Bundesrat: Stimme der Länder“). Stattdessen ein Titel, der neugierig macht und trotzdem stimmt: eine überraschende Zahl, ein Kontrast oder eine Frage, die die Karte beantwortet. Beispiele: „69 Stimmen, die Gesetze stoppen können“, „Warum der Kanzler nicht direkt gewählt wird“, „Ein Provisorium, das seit 1949 hält“. Kein Clickbait, nichts Übertriebenes.
 - `satz`: ein Satz, höchstens 25 Wörter: das Wichtigste in einfachen Worten.
-- `punkte`: 3–5 Punkte, je höchstens 25 Wörter. Konkret, mit Zahlen und Beispielen, keine Allgemeinplätze. Fachwörter beim ersten Vorkommen kurz erklären.
+- `punkte`: 3–4 Kernaussagen, je höchstens 25 Wörter: das Wichtigste auf einen Blick. Konkret, mit Zahlen.
+- `abschnitte`: 2–4 Abschnitte für die **Tiefe** (Feedback: „man weiß immer noch nicht, was die Exekutive macht“). Je {"titel": "höchstens 5 Wörter", "punkte": [3–5 Punkte, je höchstens 35 Wörter]}. Typische Abschnitte, je nach Thema: „So funktioniert es“, „Die Teile im Einzelnen“, „Ein Beispiel“, „Warum das wichtig ist“, „Wie es dazu kam“, „Worum gestritten wird“.
+  - **Jeder Teil, der genannt wird, wird erklärt:** was er konkret tut, wer oder was dazu gehört, und ein Beispiel aus Deutschland oder dem Alltag. Also nicht nur „Exekutive (Regierung und Verwaltung)“, sondern „Die Exekutive führt Gesetze aus: Die Bundesregierung und Behörden wie Polizei, Finanzamt oder Bürgeramt setzen um, was beschlossen wurde, z. B. treibt das Finanzamt die Steuern ein.“
+  - Abläufe Schritt für Schritt, Technik mit Ursache und Wirkung („Der Kolben drückt …, dadurch …“), Geschichte mit Ursache, Verlauf und Folgen, Werke (Bücher, Filme) mit Inhalt, Figuren und Bedeutung.
+  - Namen und Fachwörter, die vorkommen, kommen in `erklaere`.
 - `mini`: 0–2 „Nice to know“-Fakten, je höchstens 25 Wörter: überraschend, mit Vergleich oder Zahl, etwas, das man gern weitererzählt. **Nur zu diesem Thema** und aus dessen Quellen, nie Fakten eines anderen Themas aus derselben Anfrage. Nichts, was schnell veraltet (Amtsinhaber, „seit …“).
 - `fragen`: 2–3 Fragen für den Kurz-Check direkt nach dem Lesen. Sie prüfen, ob man es **verstanden** hat, nicht nur den letzten Satz. Mische die Arten:
   - `{"art": "auswahl", "frage": "…", "optionen": ["…", "…", "…", "…"], "richtig": 0, "erklaerung": "ein Satz, warum"}`: 3–4 Optionen, alle plausibel, nur eine richtig. `richtig` ist die Stelle der richtigen Option (0 = erste). Die richtige Option nicht immer an dieselbe Stelle.
@@ -24,4 +28,4 @@ Du bekommst je Thema den Titel, die Stufe, das Modul, den Text des deutschen Wik
 
 ## Antwort
 Nur JSON:
-{"karten": [{"thema": "<Kennung>", "titel": "…", "satz": "…", "punkte": ["…"], "bilder": [{"nr": 1, "punkt": 0, "unterschrift": "…"}], "mini": ["…"], "erklaere": [{"wort": "…", "art": "begriff", "text": "…", "wiki": "…"}], "fragen": [ … ]}]}
+{"karten": [{"thema": "<Kennung>", "titel": "…", "satz": "…", "punkte": ["…"], "abschnitte": [{"titel": "…", "punkte": ["…"]}], "bilder": [{"nr": 1, "punkt": 0, "unterschrift": "…"}], "mini": ["…"], "erklaere": [{"wort": "…", "art": "begriff", "text": "…", "wiki": "…"}], "fragen": [ … ]}]}

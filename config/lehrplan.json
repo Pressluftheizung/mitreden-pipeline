@@ -21,6 +21,105 @@
   },
   "module": [
     {
+      "id": "querbeet",
+      "titel": "Querbeet",
+      "bereich": "wissen",
+      "vorrang": true,
+      "_hinweis": "Testauswahl verschiedenster Gebiete (Nutzer 10.11.2026), wird vor allem anderen gebaut",
+      "themen": [
+        {
+          "id": "viertaktmotor",
+          "titel": "Wie funktioniert ein Verbrennungsmotor?",
+          "stufe": 1,
+          "braucht": [],
+          "auch": [
+            "mobilitaet"
+          ],
+          "bereich": "tech",
+          "wiki": "Viertaktmotor",
+          "grafik": "schaubild"
+        },
+        {
+          "id": "nil",
+          "titel": "Der Nil",
+          "stufe": 1,
+          "braucht": [],
+          "auch": [
+            "geschichte"
+          ],
+          "bereich": "geografie",
+          "wiki": "Nil",
+          "grafik": "karte"
+        },
+        {
+          "id": "photosynthese",
+          "titel": "Photosynthese",
+          "stufe": 1,
+          "braucht": [],
+          "auch": [],
+          "bereich": "wissen",
+          "wiki": "Photosynthese",
+          "grafik": "schaubild"
+        },
+        {
+          "id": "zweiter-weltkrieg",
+          "titel": "Der Zweite Weltkrieg",
+          "stufe": 1,
+          "braucht": [],
+          "auch": [
+            "politik"
+          ],
+          "bereich": "geschichte",
+          "wiki": "Zweiter Weltkrieg",
+          "grafik": "karte"
+        },
+        {
+          "id": "faust",
+          "titel": "Goethes Faust",
+          "stufe": 1,
+          "braucht": [],
+          "auch": [
+            "sprache"
+          ],
+          "bereich": "kultur",
+          "wiki": "Faust. Eine Tragödie.",
+          "grafik": null
+        },
+        {
+          "id": "impfung",
+          "titel": "Wie eine Impfung wirkt",
+          "stufe": 1,
+          "braucht": [],
+          "auch": [],
+          "bereich": "gesundheit",
+          "wiki": "Impfung",
+          "grafik": "schaubild"
+        },
+        {
+          "id": "schwarzes-loch",
+          "titel": "Schwarze Löcher",
+          "stufe": 1,
+          "braucht": [],
+          "auch": [],
+          "bereich": "wissen",
+          "wiki": "Schwarzes Loch",
+          "grafik": null
+        },
+        {
+          "id": "mount-everest",
+          "titel": "Der Mount Everest",
+          "stufe": 1,
+          "braucht": [],
+          "auch": [
+            "reisen"
+          ],
+          "bereich": "geografie",
+          "wiki": "Mount Everest",
+          "grafik": null
+        }
+      ]
+    },
+    {
       "id": "grundbegriffe",
       "titel": "Grundbegriffe der Politik",
       "bereich": "politik",

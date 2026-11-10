@@ -18,7 +18,7 @@ class Wissen(unittest.TestCase):
         ids = {t["id"] for t in themen}
         for t in themen:
             self.assertTrue(set(t["braucht"]) <= ids, t["id"])
-        self.assertEqual(themen[0]["id"], "grundbegriffe.demokratie")  # Grundbegriffe als Fundament zuerst
+        self.assertEqual(themen[0]["id"], "querbeet.viertaktmotor")  # Testauswahl, dann Grundbegriffe
 
     def test_zahlen(self):
         self.assertEqual(wissen.zahlen("8.849 Meter, 630 Abgeordnete, 2,5 Prozent, im Jahr 1949."), {8849.0, 630.0, 2.5, 1949.0})
@@ -46,6 +46,14 @@ class Wissen(unittest.TestCase):
         f = wissen.fragen_bereinigen([{"art": "schaetzen", "frage": "Wie hoch?", "wert": 8849}], "kein Wert hier " * 40,
                                      "Mount Everest is 8,849 metres high.")
         self.assertEqual(len(f), 1)  # Zahl steht nur in der englischen Quelle
+
+    def test_abschnitte(self):
+        roh = [{"titel": "So funktioniert es", "punkte": ["a", "b", "c"]}, {"titel": "Zu kurz", "punkte": ["x"]}, "kaputt"]
+        self.assertEqual(wissen.abschnitte_bereinigen(roh), [{"titel": "So funktioniert es", "punkte": ["a", "b", "c"]}])
+        karte = {"satz": "s", "punkte": ["a", "b"], "mini": [], "fragen": [{"art": "x"}],
+                 "abschnitte": [{"titel": "T", "punkte": ["eins", "zwei", "drei"]}, {"titel": "U", "punkte": ["vier", "fünf"]}]}
+        neu = wissen.pruefung_anwenden(karte, {"fragen_falsch": [], "abschnitte_falsch": ["0.1", "1.0"]})
+        self.assertEqual(neu["abschnitte"], [{"titel": "T", "punkte": ["eins", "drei"]}])  # U hat nur noch einen Punkt
 
     def test_pruefung_anwenden(self):
         karte = {"satz": "s", "punkte": ["a", "b", "c"], "mini": ["m"], "fragen": [{"art": "x"}, {"art": "y"}]}
@@ -76,7 +84,7 @@ class Wissen(unittest.TestCase):
             stat = wissen.baue(Path(tmp), Path("config"), FalscheKI(), jetzt, 3)
             self.assertEqual(stat["gebaut"], 3)
             db = json.loads((Path(tmp) / "wissen" / "wissen.json").read_text(encoding="utf-8"))
-            self.assertIn("grundbegriffe.demokratie", db["karten"])
+            self.assertIn("querbeet.viertaktmotor", db["karten"])
             # zweiter Lauf baut die nächsten, nicht dieselben noch einmal
             wissen.baue(Path(tmp), Path("config"), FalscheKI(), jetzt, 3)
             db = json.loads((Path(tmp) / "wissen" / "wissen.json").read_text(encoding="utf-8"))
