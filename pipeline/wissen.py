@@ -17,6 +17,7 @@ import urllib.parse
 from datetime import datetime
 from pathlib import Path
 
+from .bauen import erklaere_bereinigen, wiki_ergaenzen, wort_im_text
 from .daten import _json
 from .ki import KeinModellFrei
 
@@ -49,7 +50,8 @@ def lehrplan(config: Path) -> list[dict]:
 
 # Bauversion der Regeln: Karten mit kleinerer Version werden neu gebaut (vor neuen Themen).
 # 2 = 10.11.2026: mehr Bilder (Seitenbild als Kandidat), Überschriften ohne „X: Y“-Schema, Mini-Fakten nur zum Thema.
-BAU = 2
+# 3 = 10.11.2026: Pop-up-Wörter (Begriffe wie „Bundesversammlung“ oder „Parlament“ antippbar).
+BAU = 3
 
 
 def offene_themen(themen: list[dict], fertig: dict, anzahl: int) -> list[dict]:
@@ -198,6 +200,10 @@ def karte_bereinigen(roh: dict, thema: dict, q: dict) -> dict | None:
         "auch": thema.get("auch", []), "stufe": thema["stufe"], "braucht": thema["braucht"],
         "titel": str(roh.get("titel") or thema["titel"]).strip()[:120], "satz": satz, "punkte": punkte,
         "mini": texte(roh.get("mini"), 2, 250), "fragen": fragen,
+        "erklaere": [e for e in erklaere_bereinigen(roh.get("erklaere"))
+                     if wort_im_text(e["wort"], " ".join([satz, *punkte, *texte(roh.get("mini"), 2, 250),
+                                                         *(f["frage"] for f in fragen),
+                                                         *(f.get("erklaerung", "") for f in fragen)]))],
         "bilder": bilder_bereinigen(roh.get("bilder"), q.get("bilder") or [], len(punkte)),
         "bild": {"url": q["bild"], "alt": thema["titel"], "art": "frei"} if q.get("bild") else None,
         "quelle": {"name": "Wikipedia", "titel": q["titel"], "url": q["url"]},
@@ -230,13 +236,15 @@ def pruefung_anwenden(karte: dict, urteil: dict) -> dict | None:
     falsche_punkte = {i for i in urteil.get("punkte_falsch") or [] if isinstance(i, int)}
     falsche_mini = {i for i in urteil.get("mini_falsch") or [] if isinstance(i, int)}
     falsche_bilder = {i for i in urteil.get("bilder_falsch") or [] if isinstance(i, int)}
+    falsche_woerter = {i for i in urteil.get("erklaere_falsch") or [] if isinstance(i, int)}
     if urteil.get("satz_falsch") is True:
         return None
     karte = {**karte,
              "fragen": [f for i, f in enumerate(karte["fragen"]) if i not in falsche_fragen],
              "punkte": [p for i, p in enumerate(karte["punkte"]) if i not in falsche_punkte],
              "mini": [m for i, m in enumerate(karte["mini"]) if i not in falsche_mini],
-             "bilder": [b for i, b in enumerate(karte.get("bilder") or []) if i not in falsche_bilder]}
+             "bilder": [b for i, b in enumerate(karte.get("bilder") or []) if i not in falsche_bilder],
+             "erklaere": [e for i, e in enumerate(karte.get("erklaere") or []) if i not in falsche_woerter]}
     return karte if karte["fragen"] and len(karte["punkte"]) >= 2 else None
 
 
@@ -287,13 +295,16 @@ def baue(daten: Path, config: Path, ki, jetzt: datetime, anzahl: int, pro_anfrag
                 continue
             pruef = {"quelle": q["text"][:PRUEF_ZEICHEN], "quelle_en": (q.get("en") or {}).get("text", "")[:PRUEF_EN_ZEICHEN],
                      "satz": karte["satz"], "punkte": karte["punkte"], "mini": karte["mini"], "fragen": karte["fragen"],
-                     "bilder": [b["unterschrift"] for b in karte["bilder"]]}
+                     "bilder": [b["unterschrift"] for b in karte["bilder"]],
+                     "erklaere": [f"{e['wort']}: {e['text']}" for e in karte["erklaere"]]}
             try:
                 urteil, pruefer = ki.frage("wissen_pruefen", json.dumps(pruef, ensure_ascii=False), pruefe_urteil)
             except KeinModellFrei as e:  # ohne Prüfung nichts speichern; das Thema kommt im nächsten Lauf wieder
                 stat["fehler"].append(f"wissen_pruefen: {e}")
                 continue
             karte = pruefung_anwenden(karte, urteil)
+            if karte:
+                wiki_ergaenzen([karte])  # Pop-ups: Wikipedia-Link, Auszug und Bild
             if not karte:
                 stat["verworfen"] += 1
                 continue

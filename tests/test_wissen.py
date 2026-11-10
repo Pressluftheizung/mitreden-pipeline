@@ -18,7 +18,7 @@ class Wissen(unittest.TestCase):
         ids = {t["id"] for t in themen}
         for t in themen:
             self.assertTrue(set(t["braucht"]) <= ids, t["id"])
-        self.assertEqual(themen[0]["id"], "deutschland.grundgesetz")
+        self.assertEqual(themen[0]["id"], "grundbegriffe.demokratie")  # Grundbegriffe als Fundament zuerst
 
     def test_zahlen(self):
         self.assertEqual(wissen.zahlen("8.849 Meter, 630 Abgeordnete, 2,5 Prozent, im Jahr 1949."), {8849.0, 630.0, 2.5, 1949.0})
@@ -76,7 +76,7 @@ class Wissen(unittest.TestCase):
             stat = wissen.baue(Path(tmp), Path("config"), FalscheKI(), jetzt, 3)
             self.assertEqual(stat["gebaut"], 3)
             db = json.loads((Path(tmp) / "wissen" / "wissen.json").read_text(encoding="utf-8"))
-            self.assertIn("deutschland.grundgesetz", db["karten"])
+            self.assertIn("grundbegriffe.demokratie", db["karten"])
             # zweiter Lauf baut die nächsten, nicht dieselben noch einmal
             wissen.baue(Path(tmp), Path("config"), FalscheKI(), jetzt, 3)
             db = json.loads((Path(tmp) / "wissen" / "wissen.json").read_text(encoding="utf-8"))
