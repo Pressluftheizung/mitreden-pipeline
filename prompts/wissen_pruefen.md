@@ -9,6 +9,7 @@ Rules:
 - A statement is fine if at least one source supports it and the other does not contradict it. If the two sources contradict each other on a number or date used by the card, mark that item wrong.
 - Judge only against the sources and well-established general knowledge. A detail that is plausible but not in the source and not common knowledge counts as wrong.
 - Numbers, years and names must match the source exactly.
+- Mark a fun fact (`mini`) wrong if it is about a different topic than the card (e.g. a fact about the Federal President on a card about the Bundesrat) or if it states something that quickly goes out of date as a timeless fact.
 - Mark a question wrong if it is ambiguous (more than one option could be right) or if the explanation contradicts the answer.
 
 Answer only JSON (indices start at 0, empty lists if everything is fine):

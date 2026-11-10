@@ -28,7 +28,8 @@ PRUEF_ZEICHEN = 4500
 PRUEF_EN_ZEICHEN = 3000
 # Dateien, die nichts erklären (Symbole der Schwesterprojekte, Flaggen, Logos)
 KEIN_ERKLAERBILD = re.compile(r"commons-logo|wiki(books|quote|source|versity|data|species|voyage|tionary|news)|wiktfavicon|"
-                              r"icon|flag|flagge|disambig|symbol_|pictogram|stub|logo|ambox|question_book|edit-clear", re.I)
+                              r"icon|flag|flagge|disambig|symbol_|pictogram|stub|logo|ambox|question_book|edit-clear|"
+                              r"wappen|coat.of.arms|briefmarke|stamp|signatur|signature|unterschrift", re.I)
 
 
 # ---------- Lehrplan ----------
@@ -46,8 +47,15 @@ def lehrplan(config: Path) -> list[dict]:
     return sorted(themen, key=lambda t: t["_rang"])
 
 
-def offene_themen(themen: list[dict], fertig: set[str], anzahl: int) -> list[dict]:
-    return [t for t in themen if t["id"] not in fertig][:anzahl]
+# Bauversion der Regeln: Karten mit kleinerer Version werden neu gebaut (vor neuen Themen).
+# 2 = 10.11.2026: mehr Bilder (Seitenbild als Kandidat), Überschriften ohne „X: Y“-Schema, Mini-Fakten nur zum Thema.
+BAU = 2
+
+
+def offene_themen(themen: list[dict], fertig: dict, anzahl: int) -> list[dict]:
+    veraltet = [t for t in themen if t["id"] in fertig and fertig[t["id"]].get("bau", 1) < BAU]
+    neu = [t for t in themen if t["id"] not in fertig]
+    return (veraltet + neu)[:anzahl]
 
 
 # ---------- Quelle ----------
@@ -58,7 +66,7 @@ def quelle(titel: str) -> dict | None:
         d = _json(WIKI + urllib.parse.urlencode({
             "action": "query", "format": "json", "titles": titel, "redirects": 1,
             "prop": "extracts|pageimages|info|images|langlinks", "explaintext": 1, "exsectionformat": "plain",
-            "piprop": "thumbnail", "pithumbsize": 800, "inprop": "url", "imlimit": 50, "lllang": "en"}))
+            "piprop": "thumbnail|name", "pithumbsize": 800, "inprop": "url", "imlimit": 80, "lllang": "en"}))
     except Exception:
         return None
     for s in ((d.get("query") or {}).get("pages") or {}).values():
@@ -68,10 +76,15 @@ def quelle(titel: str) -> dict | None:
         bild = ((s.get("thumbnail") or {}).get("source") or "").split("?")[0]
         en_titel = ((s.get("langlinks") or [{}])[0]).get("*")
         dateien = [i["title"] for i in s.get("images") or [] if not KEIN_ERKLAERBILD.search(i.get("title", ""))]
+        # Seitenbild zuerst (oft Karte, Diagramm oder das Gebäude), dann Schemata/Animationen (svg, gif, png) vor Fotos
+        seite_bild = s.get("pageimage")
+        if seite_bild:
+            dateien = [f"Datei:{seite_bild}"] + [d for d in dateien if d.split(":", 1)[-1].replace(" ", "_") != seite_bild]
+        dateien = dateien[:1] + sorted(dateien[1:], key=lambda d: 0 if re.search(r"\.(svg|gif|png)$", d, re.I) else 1)
         return {"titel": s.get("title") or titel, "url": s.get("fullurl") or "", "text": text[:QUELLE_ZEICHEN],
                 "bild": bild if WIKIMEDIA.match(bild) else None,
                 "en": englisch(en_titel) if en_titel else None,
-                "bilder": erklaerbilder(dateien[:12])}
+                "bilder": erklaerbilder(dateien[:15])}
     return None
 
 
@@ -208,7 +221,7 @@ def bilder_bereinigen(roh, kandidaten: list[dict], anzahl_punkte: int) -> list[d
         schon.add(nr)
         bilder.append({"url": k["url"], "seite": k["seite"], "unterschrift": unterschrift,
                        "punkt": punkt if isinstance(punkt, int) and 0 <= punkt < anzahl_punkte else None})
-    return bilder[:2]
+    return bilder[:3]
 
 
 def pruefung_anwenden(karte: dict, urteil: dict) -> dict | None:
@@ -244,7 +257,7 @@ def baue(daten: Path, config: Path, ki, jetzt: datetime, anzahl: int, pro_anfrag
     pfad = daten / "wissen" / "wissen.json"
     db = json.loads(pfad.read_text(encoding="utf-8")) if pfad.exists() else {"karten": {}}
     themen = lehrplan(config)
-    offen = offene_themen(themen, set(db["karten"]), anzahl)
+    offen = offene_themen(themen, db["karten"], anzahl)
     stat = {"versucht": len(offen), "gebaut": 0, "ohne_quelle": 0, "verworfen": 0, "fehler": []}
     for start in range(0, len(offen), pro_anfrage):
         portion = []
@@ -284,7 +297,8 @@ def baue(daten: Path, config: Path, ki, jetzt: datetime, anzahl: int, pro_anfrag
             if not karte:
                 stat["verworfen"] += 1
                 continue
-            karte.update({"erstellt": jetzt.isoformat(timespec="seconds"), "version": 1,
+            alt = db["karten"].get(t["id"]) or {}
+            karte.update({"erstellt": jetzt.isoformat(timespec="seconds"), "version": alt.get("version", 0) + 1, "bau": BAU,
                           "_ki": {"modell": modell, "pruefer": pruefer}})
             db["karten"][t["id"]] = karte
             stat["gebaut"] += 1
