@@ -17,6 +17,7 @@ Du bekommst je Karte den ganzen Text (Titel, Satz, Punkte, Mitreden, Vorgeschich
 
 ## Wie erklären
 - "text": höchstens 45 Wörter, bei Verfahren, Ämtern und Institutionen bis 70 Wörter.
+- **Was hier besonders ist (Feedback 12.11.2026):** Steht in der Karte etwas, das an diesem Begriff in **dieser** Meldung umstritten, neu oder überraschend ist, gehört es in den Pop-up-Text. Beispiel: Soll eine Zuckersteuer auch zuckerfreie Getränke treffen und wird genau das kritisiert, dann sagt das Pop-up „Zuckersteuer“ genau das, statt nur die Steuer allgemein zu erklären. Das Allgemeine liefert schon der Wikipedia-Auszug.
 - Bei Personen: Amt oder Rolle, wofür bekannt, welche Rolle in **dieser** Geschichte.
 - Bei Ämtern, Institutionen, Behörden: die **Funktion** konkret, nicht umschreiben. Nicht „leitet den Stab“, sondern was die Stelle tut, was sie entscheiden darf, warum sie wichtig oder mächtig ist.
 - Bei Verfahren: Voraussetzungen, Ablauf, Hürden (z. B. wer stimmt ab, welche Mehrheit braucht es, was passiert danach).
