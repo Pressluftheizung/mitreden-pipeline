@@ -51,16 +51,23 @@ KEIN_ERKLAERBILD = re.compile(r"commons-logo|wiki(books|quote|source|versity|dat
 # ---------- Lehrplan ----------
 
 def lehrplan(config: Path) -> list[dict]:
-    """Alle Themen in Bau-Reihenfolge: Stufe, dann Modul, dann Position im Modul."""
+    """Alle Themen in Bau-Reihenfolge: erst der eigene Lehrplan (Stufe, Modul, Position), dann der Kanon aus den
+    Vital Articles (config/lehrplan_kanon.json, 14.11.2026), dort die Gebiete reihum, damit es abwechslungsreich bleibt."""
     plan = json.loads((config / "lehrplan.json").read_text(encoding="utf-8"))
-    themen = []
-    for m_nr, m in enumerate(plan["module"]):
-        for t_nr, t in enumerate(m["themen"]):
-            themen.append({**t, "id": f"{m['id']}.{t['id']}", "modul": m["id"], "modul_titel": m["titel"],
-                           "bereich": t.get("bereich") or m["bereich"],
-                           "braucht": [b if "." in b else f"{m['id']}.{b}" for b in t.get("braucht", [])],
-                           "vorrang": bool(m.get("vorrang")),
-                           "_rang": (t["stufe"], m_nr, t_nr)})
+    kanon_datei = config / "lehrplan_kanon.json"
+    kanon = json.loads(kanon_datei.read_text(encoding="utf-8")) if kanon_datei.exists() else {"module": []}
+    themen, wikis = [], set()
+    for teil, module in ((0, plan["module"]), (1, kanon["module"])):
+        for m_nr, m in enumerate(module):
+            for t_nr, t in enumerate(m["themen"]):
+                if teil and t["wiki"] in wikis:
+                    continue  # steht schon im eigenen Lehrplan
+                wikis.add(t["wiki"])
+                themen.append({**t, "id": f"{m['id']}.{t['id']}", "modul": m["id"], "modul_titel": m["titel"],
+                               "bereich": t.get("bereich") or m["bereich"],
+                               "braucht": [b if "." in b else f"{m['id']}.{b}" for b in t.get("braucht", [])],
+                               "vorrang": bool(m.get("vorrang")),
+                               "_rang": (teil, t["stufe"], m_nr, t_nr) if not teil else (teil, t["stufe"], t_nr, m_nr)})
     return sorted(themen, key=lambda t: t["_rang"])
 
 
@@ -75,7 +82,16 @@ def offene_themen(themen: list[dict], fertig: dict, anzahl: int) -> list[dict]:
     veraltet = [t for t in themen if t["id"] in fertig and fertig[t["id"]].get("bau", 1) < BAU]
     neu = [t for t in themen if t["id"] not in fertig]
     vorrang = [t for t in neu if t.get("vorrang")]  # z. B. Testauswahl zum Anschauen
-    return (vorrang + veraltet + [t for t in neu if not t.get("vorrang")])[:anzahl]
+    # Abwechslung (14.11.2026): auf ein Thema des eigenen Lehrplans kommen drei aus dem Kanon
+    eigen = [t for t in neu if not t.get("vorrang") and not t["modul"].startswith("kanon-")]
+    kanon = [t for t in neu if t["modul"].startswith("kanon-")]
+    gemischt = []
+    while eigen or kanon:
+        if eigen:
+            gemischt.append(eigen.pop(0))
+        gemischt.extend(kanon[:3])
+        kanon = kanon[3:]
+    return (vorrang + veraltet + gemischt)[:anzahl]
 
 
 # ---------- Quelle ----------

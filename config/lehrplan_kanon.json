@@ -1,0 +1,8034 @@
+{
+ "_hinweis": "Automatisch aus „Wikipedia:Vital articles/Level 3“ (en.wikipedia) erzeugt von tools/kanon.py. Nur Titel, keine Inhalte.",
+ "module": [
+  {
+   "id": "kanon-geld",
+   "titel": "Weltwissen: Wirtschaft",
+   "bereich": "geld",
+   "themen": [
+    {
+     "id": "henry-ford",
+     "titel": "Henry Ford",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Henry Ford",
+     "grafik": null
+    },
+    {
+     "id": "gewerbebetrieb",
+     "titel": "Gewerbebetrieb",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gewerbebetrieb",
+     "grafik": null
+    },
+    {
+     "id": "koerperschaft",
+     "titel": "Körperschaft",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Körperschaft",
+     "grafik": null
+    },
+    {
+     "id": "management",
+     "titel": "Management",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Management",
+     "grafik": null
+    },
+    {
+     "id": "marketing",
+     "titel": "Marketing",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Marketing",
+     "grafik": null
+    },
+    {
+     "id": "einzelhandel",
+     "titel": "Einzelhandel",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Einzelhandel",
+     "grafik": null
+    },
+    {
+     "id": "gewerkschaft",
+     "titel": "Gewerkschaft",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gewerkschaft",
+     "grafik": null
+    },
+    {
+     "id": "finanzen",
+     "titel": "Finanzen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Finanzen",
+     "grafik": null
+    },
+    {
+     "id": "bank",
+     "titel": "Bank",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Bank",
+     "grafik": null
+    },
+    {
+     "id": "geld",
+     "titel": "Geld",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Geld",
+     "grafik": null
+    },
+    {
+     "id": "gut-wirtschaftswissenschaft",
+     "titel": "Gut",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gut (Wirtschaftswissenschaft)",
+     "grafik": null
+    },
+    {
+     "id": "versicherung-kollektiv",
+     "titel": "Versicherung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Versicherung (Kollektiv)",
+     "grafik": null
+    },
+    {
+     "id": "makrooekonomie",
+     "titel": "Makroökonomie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Makroökonomie",
+     "grafik": null
+    },
+    {
+     "id": "mikrooekonomie",
+     "titel": "Mikroökonomie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mikroökonomie",
+     "grafik": null
+    },
+    {
+     "id": "dienstleistung",
+     "titel": "Dienstleistung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Dienstleistung",
+     "grafik": null
+    },
+    {
+     "id": "steuer",
+     "titel": "Steuer",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Steuer",
+     "grafik": null
+    },
+    {
+     "id": "arbeit-sozialwissenschaften",
+     "titel": "Arbeit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Arbeit (Sozialwissenschaften)",
+     "grafik": null
+    },
+    {
+     "id": "wirtschaft",
+     "titel": "Wirtschaft",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wirtschaft",
+     "grafik": null
+    },
+    {
+     "id": "bauausfuehrung",
+     "titel": "Bauausführung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Bauausführung",
+     "grafik": null
+    },
+    {
+     "id": "fischfang",
+     "titel": "Fischfang",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Fischfang",
+     "grafik": null
+    },
+    {
+     "id": "jagd",
+     "titel": "Jagd",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Jagd",
+     "grafik": null
+    },
+    {
+     "id": "bergbau",
+     "titel": "Bergbau",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Bergbau",
+     "grafik": null
+    }
+   ]
+  },
+  {
+   "id": "kanon-geografie",
+   "titel": "Weltwissen: Geografie",
+   "bereich": "geografie",
+   "themen": [
+    {
+     "id": "geschichte-afrikas",
+     "titel": "Geschichte Afrikas",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Geschichte Afrikas",
+     "grafik": null
+    },
+    {
+     "id": "geschichte-asiens",
+     "titel": "Geschichte Asiens",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Geschichte Asiens",
+     "grafik": null
+    },
+    {
+     "id": "geschichte-europas",
+     "titel": "Geschichte Europas",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Geschichte Europas",
+     "grafik": null
+    },
+    {
+     "id": "geschichte-nordamerikas",
+     "titel": "Geschichte Nordamerikas",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Geschichte Nordamerikas",
+     "grafik": null
+    },
+    {
+     "id": "geschichte-suedamerikas",
+     "titel": "Geschichte Südamerikas",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Geschichte Südamerikas",
+     "grafik": null
+    },
+    {
+     "id": "kontinent",
+     "titel": "Kontinent",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kontinent",
+     "grafik": null
+    },
+    {
+     "id": "subsahara-afrika",
+     "titel": "Subsahara-Afrika",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Subsahara-Afrika",
+     "grafik": null
+    },
+    {
+     "id": "antarktika",
+     "titel": "Antarktika",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Antarktika",
+     "grafik": null
+    },
+    {
+     "id": "ostasien",
+     "titel": "Ostasien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Ostasien",
+     "grafik": null
+    },
+    {
+     "id": "suedasien",
+     "titel": "Südasien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Südasien",
+     "grafik": null
+    },
+    {
+     "id": "suedostasien",
+     "titel": "Südostasien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Südostasien",
+     "grafik": null
+    },
+    {
+     "id": "karibik",
+     "titel": "Karibik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Karibik",
+     "grafik": null
+    },
+    {
+     "id": "zentralamerika",
+     "titel": "Zentralamerika",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Zentralamerika",
+     "grafik": null
+    },
+    {
+     "id": "arktis",
+     "titel": "Arktis",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Arktis",
+     "grafik": null
+    },
+    {
+     "id": "polynesien",
+     "titel": "Polynesien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Polynesien",
+     "grafik": null
+    },
+    {
+     "id": "land-geographie",
+     "titel": "Land",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Land (Geographie)",
+     "grafik": null
+    },
+    {
+     "id": "algerien",
+     "titel": "Algerien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Algerien",
+     "grafik": null
+    },
+    {
+     "id": "demokratische-republik-kongo",
+     "titel": "Demokratische Republik Kongo",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Demokratische Republik Kongo",
+     "grafik": null
+    },
+    {
+     "id": "aegypten",
+     "titel": "Ägypten",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Ägypten",
+     "grafik": null
+    },
+    {
+     "id": "aethiopien",
+     "titel": "Äthiopien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Äthiopien",
+     "grafik": null
+    },
+    {
+     "id": "kenia",
+     "titel": "Kenia",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kenia",
+     "grafik": null
+    },
+    {
+     "id": "marokko",
+     "titel": "Marokko",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Marokko",
+     "grafik": null
+    },
+    {
+     "id": "nigeria",
+     "titel": "Nigeria",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Nigeria",
+     "grafik": null
+    },
+    {
+     "id": "suedafrika",
+     "titel": "Südafrika",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Südafrika",
+     "grafik": null
+    },
+    {
+     "id": "tansania",
+     "titel": "Tansania",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Tansania",
+     "grafik": null
+    },
+    {
+     "id": "volksrepublik-china",
+     "titel": "Volksrepublik China",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Volksrepublik China",
+     "grafik": null
+    },
+    {
+     "id": "japan",
+     "titel": "Japan",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Japan",
+     "grafik": null
+    },
+    {
+     "id": "suedkorea",
+     "titel": "Südkorea",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Südkorea",
+     "grafik": null
+    },
+    {
+     "id": "bangladesch",
+     "titel": "Bangladesch",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Bangladesch",
+     "grafik": null
+    },
+    {
+     "id": "indien",
+     "titel": "Indien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Indien",
+     "grafik": null
+    },
+    {
+     "id": "pakistan",
+     "titel": "Pakistan",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Pakistan",
+     "grafik": null
+    },
+    {
+     "id": "indonesien",
+     "titel": "Indonesien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Indonesien",
+     "grafik": null
+    },
+    {
+     "id": "malaysia",
+     "titel": "Malaysia",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Malaysia",
+     "grafik": null
+    },
+    {
+     "id": "myanmar",
+     "titel": "Myanmar",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Myanmar",
+     "grafik": null
+    },
+    {
+     "id": "philippinen",
+     "titel": "Philippinen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Philippinen",
+     "grafik": null
+    },
+    {
+     "id": "thailand",
+     "titel": "Thailand",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Thailand",
+     "grafik": null
+    },
+    {
+     "id": "vietnam",
+     "titel": "Vietnam",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Vietnam",
+     "grafik": null
+    },
+    {
+     "id": "iran",
+     "titel": "Iran",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Iran",
+     "grafik": null
+    },
+    {
+     "id": "israel",
+     "titel": "Israel",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Israel",
+     "grafik": null
+    },
+    {
+     "id": "saudi-arabien",
+     "titel": "Saudi-Arabien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Saudi-Arabien",
+     "grafik": null
+    },
+    {
+     "id": "tuerkei",
+     "titel": "Türkei",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Türkei",
+     "grafik": null
+    },
+    {
+     "id": "frankreich",
+     "titel": "Frankreich",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Frankreich",
+     "grafik": null
+    },
+    {
+     "id": "deutschland",
+     "titel": "Deutschland",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Deutschland",
+     "grafik": null
+    },
+    {
+     "id": "italien",
+     "titel": "Italien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Italien",
+     "grafik": null
+    },
+    {
+     "id": "polen",
+     "titel": "Polen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Polen",
+     "grafik": null
+    },
+    {
+     "id": "russland",
+     "titel": "Russland",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Russland",
+     "grafik": null
+    },
+    {
+     "id": "spanien",
+     "titel": "Spanien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Spanien",
+     "grafik": null
+    },
+    {
+     "id": "vereinigtes-koenigreich",
+     "titel": "Vereinigtes Königreich",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Vereinigtes Königreich",
+     "grafik": null
+    },
+    {
+     "id": "kanada",
+     "titel": "Kanada",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kanada",
+     "grafik": null
+    },
+    {
+     "id": "mexiko",
+     "titel": "Mexiko",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mexiko",
+     "grafik": null
+    },
+    {
+     "id": "vereinigte-staaten",
+     "titel": "Vereinigte Staaten",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Vereinigte Staaten",
+     "grafik": null
+    },
+    {
+     "id": "australien",
+     "titel": "Australien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Australien",
+     "grafik": null
+    },
+    {
+     "id": "argentinien",
+     "titel": "Argentinien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Argentinien",
+     "grafik": null
+    },
+    {
+     "id": "brasilien",
+     "titel": "Brasilien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Brasilien",
+     "grafik": null
+    },
+    {
+     "id": "kolumbien",
+     "titel": "Kolumbien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kolumbien",
+     "grafik": null
+    },
+    {
+     "id": "wueste",
+     "titel": "Wüste",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wüste",
+     "grafik": null
+    },
+    {
+     "id": "sahara",
+     "titel": "Sahara",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sahara",
+     "grafik": null
+    },
+    {
+     "id": "wald",
+     "titel": "Wald",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wald",
+     "grafik": null
+    },
+    {
+     "id": "amazonas-regenwald",
+     "titel": "Amazonas-Regenwald",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Amazonas-Regenwald",
+     "grafik": null
+    },
+    {
+     "id": "grasland",
+     "titel": "Grasland",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Grasland",
+     "grafik": null
+    },
+    {
+     "id": "insel",
+     "titel": "Insel",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Insel",
+     "grafik": null
+    },
+    {
+     "id": "java-insel",
+     "titel": "Java",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Java (Insel)",
+     "grafik": null
+    },
+    {
+     "id": "berg",
+     "titel": "Berg",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Berg",
+     "grafik": null
+    },
+    {
+     "id": "anden",
+     "titel": "Anden",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Anden",
+     "grafik": null
+    },
+    {
+     "id": "himalaya",
+     "titel": "Himalaya",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Himalaya",
+     "grafik": null
+    },
+    {
+     "id": "rocky-mountains",
+     "titel": "Rocky Mountains",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Rocky Mountains",
+     "grafik": null
+    },
+    {
+     "id": "meer",
+     "titel": "Meer",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Meer",
+     "grafik": null
+    },
+    {
+     "id": "arktischer-ozean",
+     "titel": "Arktischer Ozean",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Arktischer Ozean",
+     "grafik": null
+    },
+    {
+     "id": "atlantischer-ozean",
+     "titel": "Atlantischer Ozean",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Atlantischer Ozean",
+     "grafik": null
+    },
+    {
+     "id": "mittelmeer",
+     "titel": "Mittelmeer",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mittelmeer",
+     "grafik": null
+    },
+    {
+     "id": "indischer-ozean",
+     "titel": "Indischer Ozean",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Indischer Ozean",
+     "grafik": null
+    },
+    {
+     "id": "pazifischer-ozean",
+     "titel": "Pazifischer Ozean",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Pazifischer Ozean",
+     "grafik": null
+    },
+    {
+     "id": "see",
+     "titel": "See",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "See",
+     "grafik": null
+    },
+    {
+     "id": "kaspisches-meer",
+     "titel": "Kaspisches Meer",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kaspisches Meer",
+     "grafik": null
+    },
+    {
+     "id": "fluss",
+     "titel": "Fluss",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Fluss",
+     "grafik": null
+    },
+    {
+     "id": "amazonas",
+     "titel": "Amazonas",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Amazonas",
+     "grafik": null
+    },
+    {
+     "id": "ganges",
+     "titel": "Ganges",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Ganges",
+     "grafik": null
+    },
+    {
+     "id": "mississippi-river",
+     "titel": "Mississippi River",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mississippi River",
+     "grafik": null
+    },
+    {
+     "id": "nil",
+     "titel": "Nil",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Nil",
+     "grafik": null
+    },
+    {
+     "id": "jangtsekiang",
+     "titel": "Jangtsekiang",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Jangtsekiang",
+     "grafik": null
+    },
+    {
+     "id": "stadt",
+     "titel": "Stadt",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Stadt",
+     "grafik": null
+    },
+    {
+     "id": "kleinstadt",
+     "titel": "Kleinstadt",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kleinstadt",
+     "grafik": null
+    },
+    {
+     "id": "urbanisierung",
+     "titel": "Urbanisierung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Urbanisierung",
+     "grafik": null
+    },
+    {
+     "id": "dorf",
+     "titel": "Dorf",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Dorf",
+     "grafik": null
+    },
+    {
+     "id": "kairo",
+     "titel": "Kairo",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kairo",
+     "grafik": null
+    },
+    {
+     "id": "lagos",
+     "titel": "Lagos",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Lagos",
+     "grafik": null
+    },
+    {
+     "id": "peking",
+     "titel": "Peking",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Peking",
+     "grafik": null
+    },
+    {
+     "id": "hongkong",
+     "titel": "Hongkong",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Hongkong",
+     "grafik": null
+    },
+    {
+     "id": "praefektur-tokio",
+     "titel": "Präfektur Tokio",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Präfektur Tokio",
+     "grafik": null
+    },
+    {
+     "id": "bangkok",
+     "titel": "Bangkok",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Bangkok",
+     "grafik": null
+    },
+    {
+     "id": "jakarta",
+     "titel": "Jakarta",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Jakarta",
+     "grafik": null
+    },
+    {
+     "id": "singapur",
+     "titel": "Singapur",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Singapur",
+     "grafik": null
+    },
+    {
+     "id": "delhi",
+     "titel": "Delhi",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Delhi",
+     "grafik": null
+    },
+    {
+     "id": "mumbai",
+     "titel": "Mumbai",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mumbai",
+     "grafik": null
+    },
+    {
+     "id": "istanbul",
+     "titel": "Istanbul",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Istanbul",
+     "grafik": null
+    },
+    {
+     "id": "jerusalem",
+     "titel": "Jerusalem",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Jerusalem",
+     "grafik": null
+    },
+    {
+     "id": "mekka",
+     "titel": "Mekka",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mekka",
+     "grafik": null
+    },
+    {
+     "id": "london",
+     "titel": "London",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "London",
+     "grafik": null
+    },
+    {
+     "id": "moskau",
+     "titel": "Moskau",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Moskau",
+     "grafik": null
+    },
+    {
+     "id": "paris",
+     "titel": "Paris",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Paris",
+     "grafik": null
+    },
+    {
+     "id": "rom",
+     "titel": "Rom",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Rom",
+     "grafik": null
+    },
+    {
+     "id": "mexiko-stadt",
+     "titel": "Mexiko-Stadt",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mexiko-Stadt",
+     "grafik": null
+    },
+    {
+     "id": "new-york-city",
+     "titel": "New York City",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "New York City",
+     "grafik": null
+    },
+    {
+     "id": "s-o-paulo",
+     "titel": "São Paulo",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "São Paulo",
+     "grafik": null
+    }
+   ]
+  },
+  {
+   "id": "kanon-geschichte",
+   "titel": "Weltwissen: Geschichte",
+   "bereich": "geschichte",
+   "themen": [
+    {
+     "id": "christoph-kolumbus",
+     "titel": "Christoph Kolumbus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Christoph Kolumbus",
+     "grafik": null
+    },
+    {
+     "id": "archaeologie",
+     "titel": "Archäologie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Archäologie",
+     "grafik": null
+    },
+    {
+     "id": "wissenschaftsgeschichte",
+     "titel": "Wissenschaftsgeschichte",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wissenschaftsgeschichte",
+     "grafik": null
+    },
+    {
+     "id": "geschichte-der-kunst",
+     "titel": "Geschichte der Kunst",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Geschichte der Kunst",
+     "grafik": null
+    },
+    {
+     "id": "geschichte-der-landwirtschaft",
+     "titel": "Geschichte der Landwirtschaft",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Geschichte der Landwirtschaft",
+     "grafik": null
+    },
+    {
+     "id": "architekturgeschichte",
+     "titel": "Architekturgeschichte",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Architekturgeschichte",
+     "grafik": null
+    },
+    {
+     "id": "literaturgeschichte",
+     "titel": "Literaturgeschichte",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Literaturgeschichte",
+     "grafik": null
+    },
+    {
+     "id": "geschichte-der-mathematik",
+     "titel": "Geschichte der Mathematik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Geschichte der Mathematik",
+     "grafik": null
+    },
+    {
+     "id": "geschichte-der-medizin",
+     "titel": "Geschichte der Medizin",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Geschichte der Medizin",
+     "grafik": null
+    },
+    {
+     "id": "geschichte-der-musik",
+     "titel": "Geschichte der Musik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Geschichte der Musik",
+     "grafik": null
+    },
+    {
+     "id": "geschichte-der-philosophie",
+     "titel": "Geschichte der Philosophie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Geschichte der Philosophie",
+     "grafik": null
+    },
+    {
+     "id": "geschichte-der-religion",
+     "titel": "Geschichte der Religion",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Geschichte der Religion",
+     "grafik": null
+    },
+    {
+     "id": "technikgeschichte",
+     "titel": "Technikgeschichte",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Technikgeschichte",
+     "grafik": null
+    },
+    {
+     "id": "militaergeschichte",
+     "titel": "Militärgeschichte",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Militärgeschichte",
+     "grafik": null
+    },
+    {
+     "id": "steinzeit",
+     "titel": "Steinzeit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Steinzeit",
+     "grafik": null
+    },
+    {
+     "id": "neolithische-revolution",
+     "titel": "Neolithische Revolution",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Neolithische Revolution",
+     "grafik": null
+    },
+    {
+     "id": "bronzezeit",
+     "titel": "Bronzezeit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Bronzezeit",
+     "grafik": null
+    },
+    {
+     "id": "altes-aegypten",
+     "titel": "Altes Ägypten",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Altes Ägypten",
+     "grafik": null
+    },
+    {
+     "id": "indus-kultur",
+     "titel": "Indus-Kultur",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Indus-Kultur",
+     "grafik": null
+    },
+    {
+     "id": "mesopotamien",
+     "titel": "Mesopotamien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mesopotamien",
+     "grafik": null
+    },
+    {
+     "id": "sumer",
+     "titel": "Sumer",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sumer",
+     "grafik": null
+    },
+    {
+     "id": "phoenizien",
+     "titel": "Phönizien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Phönizien",
+     "grafik": null
+    },
+    {
+     "id": "antike",
+     "titel": "Antike",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Antike",
+     "grafik": null
+    },
+    {
+     "id": "eisenzeit",
+     "titel": "Eisenzeit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Eisenzeit",
+     "grafik": null
+    },
+    {
+     "id": "antikes-griechenland",
+     "titel": "Antikes Griechenland",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Antikes Griechenland",
+     "grafik": null
+    },
+    {
+     "id": "roemisches-reich",
+     "titel": "Römisches Reich",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Römisches Reich",
+     "grafik": null
+    },
+    {
+     "id": "achaemenidenreich",
+     "titel": "Achämenidenreich",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Achämenidenreich",
+     "grafik": null
+    },
+    {
+     "id": "gupta-reich",
+     "titel": "Gupta-Reich",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gupta-Reich",
+     "grafik": null
+    },
+    {
+     "id": "han-dynastie",
+     "titel": "Han-Dynastie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Han-Dynastie",
+     "grafik": null
+    },
+    {
+     "id": "seidenstrasse",
+     "titel": "Seidenstraße",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Seidenstraße",
+     "grafik": null
+    },
+    {
+     "id": "praekolumbisch",
+     "titel": "Präkolumbisch",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Präkolumbisch",
+     "grafik": null
+    },
+    {
+     "id": "andenzivilisation",
+     "titel": "Andenzivilisation",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Andenzivilisation",
+     "grafik": null
+    },
+    {
+     "id": "mesoamerika",
+     "titel": "Mesoamerika",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mesoamerika",
+     "grafik": null
+    },
+    {
+     "id": "maya-zivilisation",
+     "titel": "Maya-Zivilisation",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Maya-Zivilisation",
+     "grafik": null
+    },
+    {
+     "id": "azteken",
+     "titel": "Azteken",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Azteken",
+     "grafik": null
+    },
+    {
+     "id": "inkareich",
+     "titel": "Inkareich",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Inkareich",
+     "grafik": null
+    },
+    {
+     "id": "bluetezeit-des-islam",
+     "titel": "Blütezeit des Islam",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Blütezeit des Islam",
+     "grafik": null
+    },
+    {
+     "id": "malireich",
+     "titel": "Malireich",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Malireich",
+     "grafik": null
+    },
+    {
+     "id": "mittelalter",
+     "titel": "Mittelalter",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mittelalter",
+     "grafik": null
+    },
+    {
+     "id": "schwarzer-tod",
+     "titel": "Schwarzer Tod",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Schwarzer Tod",
+     "grafik": null
+    },
+    {
+     "id": "byzantinisches-reich",
+     "titel": "Byzantinisches Reich",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Byzantinisches Reich",
+     "grafik": null
+    },
+    {
+     "id": "kreuzzug",
+     "titel": "Kreuzzug",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kreuzzug",
+     "grafik": null
+    },
+    {
+     "id": "heiliges-roemisches-reich",
+     "titel": "Heiliges Römisches Reich",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Heiliges Römisches Reich",
+     "grafik": null
+    },
+    {
+     "id": "wikingerzeit",
+     "titel": "Wikingerzeit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wikingerzeit",
+     "grafik": null
+    },
+    {
+     "id": "mongolisches-reich",
+     "titel": "Mongolisches Reich",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mongolisches Reich",
+     "grafik": null
+    },
+    {
+     "id": "osmanisches-reich",
+     "titel": "Osmanisches Reich",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Osmanisches Reich",
+     "grafik": null
+    },
+    {
+     "id": "tang-dynastie",
+     "titel": "Tang-Dynastie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Tang-Dynastie",
+     "grafik": null
+    },
+    {
+     "id": "renaissance",
+     "titel": "Renaissance",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Renaissance",
+     "grafik": null
+    },
+    {
+     "id": "zeitalter-der-entdeckungen",
+     "titel": "Zeitalter der Entdeckungen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Zeitalter der Entdeckungen",
+     "grafik": null
+    },
+    {
+     "id": "europaeische-kolonisierung-amerikas",
+     "titel": "Europäische Kolonisierung Amerikas",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Europäische Kolonisierung Amerikas",
+     "grafik": null
+    },
+    {
+     "id": "spanisches-kolonialreich",
+     "titel": "Spanisches Kolonialreich",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Spanisches Kolonialreich",
+     "grafik": null
+    },
+    {
+     "id": "reformation",
+     "titel": "Reformation",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Reformation",
+     "grafik": null
+    },
+    {
+     "id": "mogulreich",
+     "titel": "Mogulreich",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mogulreich",
+     "grafik": null
+    },
+    {
+     "id": "wissenschaftliche-revolution",
+     "titel": "Wissenschaftliche Revolution",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wissenschaftliche Revolution",
+     "grafik": null
+    },
+    {
+     "id": "aufklaerung",
+     "titel": "Aufklärung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Aufklärung",
+     "grafik": null
+    },
+    {
+     "id": "britisches-weltreich",
+     "titel": "Britisches Weltreich",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Britisches Weltreich",
+     "grafik": null
+    },
+    {
+     "id": "amerikanische-revolution",
+     "titel": "Amerikanische Revolution",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Amerikanische Revolution",
+     "grafik": null
+    },
+    {
+     "id": "franzoesische-revolution",
+     "titel": "Französische Revolution",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Französische Revolution",
+     "grafik": null
+    },
+    {
+     "id": "industrielle-revolution",
+     "titel": "Industrielle Revolution",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Industrielle Revolution",
+     "grafik": null
+    },
+    {
+     "id": "wettlauf-um-afrika",
+     "titel": "Wettlauf um Afrika",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wettlauf um Afrika",
+     "grafik": null
+    },
+    {
+     "id": "erster-weltkrieg",
+     "titel": "Erster Weltkrieg",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Erster Weltkrieg",
+     "grafik": null
+    },
+    {
+     "id": "sowjetunion",
+     "titel": "Sowjetunion",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sowjetunion",
+     "grafik": null
+    },
+    {
+     "id": "weltwirtschaftskrise",
+     "titel": "Weltwirtschaftskrise",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Weltwirtschaftskrise",
+     "grafik": null
+    },
+    {
+     "id": "zweiter-weltkrieg",
+     "titel": "Zweiter Weltkrieg",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Zweiter Weltkrieg",
+     "grafik": null
+    },
+    {
+     "id": "dekolonisation",
+     "titel": "Dekolonisation",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Dekolonisation",
+     "grafik": null
+    },
+    {
+     "id": "kalter-krieg",
+     "titel": "Kalter Krieg",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kalter Krieg",
+     "grafik": null
+    },
+    {
+     "id": "informationszeitalter",
+     "titel": "Informationszeitalter",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Informationszeitalter",
+     "grafik": null
+    },
+    {
+     "id": "globalisierung",
+     "titel": "Globalisierung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Globalisierung",
+     "grafik": null
+    }
+   ]
+  },
+  {
+   "id": "kanon-gesundheit",
+   "titel": "Weltwissen: Mensch und Gesundheit",
+   "bereich": "gesundheit",
+   "themen": [
+    {
+     "id": "kochen",
+     "titel": "Kochen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kochen",
+     "grafik": null
+    },
+    {
+     "id": "brot",
+     "titel": "Brot",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Brot",
+     "grafik": null
+    },
+    {
+     "id": "getreide",
+     "titel": "Getreide",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Getreide",
+     "grafik": null
+    },
+    {
+     "id": "mais",
+     "titel": "Mais",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mais",
+     "grafik": null
+    },
+    {
+     "id": "reis",
+     "titel": "Reis",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Reis",
+     "grafik": null
+    },
+    {
+     "id": "weizen",
+     "titel": "Weizen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Weizen",
+     "grafik": null
+    },
+    {
+     "id": "kaese",
+     "titel": "Käse",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Käse",
+     "grafik": null
+    },
+    {
+     "id": "obst",
+     "titel": "Obst",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Obst",
+     "grafik": null
+    },
+    {
+     "id": "fleisch",
+     "titel": "Fleisch",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Fleisch",
+     "grafik": null
+    },
+    {
+     "id": "speisesalz",
+     "titel": "Speisesalz",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Speisesalz",
+     "grafik": null
+    },
+    {
+     "id": "gewuerz",
+     "titel": "Gewürz",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gewürz",
+     "grafik": null
+    },
+    {
+     "id": "zucker",
+     "titel": "Zucker",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Zucker",
+     "grafik": null
+    },
+    {
+     "id": "gemuese",
+     "titel": "Gemüse",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gemüse",
+     "grafik": null
+    },
+    {
+     "id": "bohne",
+     "titel": "Bohne",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Bohne",
+     "grafik": null
+    },
+    {
+     "id": "kartoffel",
+     "titel": "Kartoffel",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kartoffel",
+     "grafik": null
+    },
+    {
+     "id": "getraenk",
+     "titel": "Getränk",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Getränk",
+     "grafik": null
+    },
+    {
+     "id": "alkoholisches-getraenk",
+     "titel": "Alkoholisches Getränk",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Alkoholisches Getränk",
+     "grafik": null
+    },
+    {
+     "id": "kaffee",
+     "titel": "Kaffee",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kaffee",
+     "grafik": null
+    },
+    {
+     "id": "trinkwasser",
+     "titel": "Trinkwasser",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Trinkwasser",
+     "grafik": null
+    },
+    {
+     "id": "milch",
+     "titel": "Milch",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Milch",
+     "grafik": null
+    },
+    {
+     "id": "tee",
+     "titel": "Tee",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Tee",
+     "grafik": null
+    },
+    {
+     "id": "krankenhaus",
+     "titel": "Krankenhaus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Krankenhaus",
+     "grafik": null
+    },
+    {
+     "id": "pflege",
+     "titel": "Pflege",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Pflege",
+     "grafik": null
+    },
+    {
+     "id": "chirurgie",
+     "titel": "Chirurgie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Chirurgie",
+     "grafik": null
+    },
+    {
+     "id": "schwangerschaftsabbruch",
+     "titel": "Schwangerschaftsabbruch",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Schwangerschaftsabbruch",
+     "grafik": null
+    },
+    {
+     "id": "altern",
+     "titel": "Altern",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Altern",
+     "grafik": null
+    },
+    {
+     "id": "gesundheit",
+     "titel": "Gesundheit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gesundheit",
+     "grafik": null
+    },
+    {
+     "id": "gesundheitsversorgung",
+     "titel": "Gesundheitsversorgung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gesundheitsversorgung",
+     "grafik": null
+    },
+    {
+     "id": "psychische-gesundheit",
+     "titel": "Psychische Gesundheit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Psychische Gesundheit",
+     "grafik": null
+    },
+    {
+     "id": "hygiene",
+     "titel": "Hygiene",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Hygiene",
+     "grafik": null
+    },
+    {
+     "id": "sanitaere-anlage",
+     "titel": "Sanitäre Anlage",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sanitäre Anlage",
+     "grafik": null
+    },
+    {
+     "id": "ernaehrung",
+     "titel": "Ernährung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Ernährung",
+     "grafik": null
+    },
+    {
+     "id": "vitamin",
+     "titel": "Vitamin",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Vitamin",
+     "grafik": null
+    },
+    {
+     "id": "adipositas",
+     "titel": "Adipositas",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Adipositas",
+     "grafik": null
+    },
+    {
+     "id": "droge",
+     "titel": "Droge",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Droge",
+     "grafik": null
+    },
+    {
+     "id": "arzneimittel",
+     "titel": "Arzneimittel",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Arzneimittel",
+     "grafik": null
+    },
+    {
+     "id": "anaesthesie",
+     "titel": "Anästhesie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Anästhesie",
+     "grafik": null
+    },
+    {
+     "id": "antibiotikum",
+     "titel": "Antibiotikum",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Antibiotikum",
+     "grafik": null
+    },
+    {
+     "id": "empfaengnisverhuetung",
+     "titel": "Empfängnisverhütung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Empfängnisverhütung",
+     "grafik": null
+    },
+    {
+     "id": "impfstoff",
+     "titel": "Impfstoff",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Impfstoff",
+     "grafik": null
+    },
+    {
+     "id": "abhaengigkeit-medizin",
+     "titel": "Abhängigkeit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Abhängigkeit (Medizin)",
+     "grafik": null
+    },
+    {
+     "id": "anatomie",
+     "titel": "Anatomie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Anatomie",
+     "grafik": null
+    },
+    {
+     "id": "menschlicher-koerper",
+     "titel": "Menschlicher Körper",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Menschlicher Körper",
+     "grafik": null
+    },
+    {
+     "id": "blutkreislauf",
+     "titel": "Blutkreislauf",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Blutkreislauf",
+     "grafik": null
+    },
+    {
+     "id": "blut",
+     "titel": "Blut",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Blut",
+     "grafik": null
+    },
+    {
+     "id": "herz",
+     "titel": "Herz",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Herz",
+     "grafik": null
+    },
+    {
+     "id": "ohr",
+     "titel": "Ohr",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Ohr",
+     "grafik": null
+    },
+    {
+     "id": "auge",
+     "titel": "Auge",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Auge",
+     "grafik": null
+    },
+    {
+     "id": "haar",
+     "titel": "Haar",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Haar",
+     "grafik": null
+    },
+    {
+     "id": "immunsystem",
+     "titel": "Immunsystem",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Immunsystem",
+     "grafik": null
+    },
+    {
+     "id": "leber",
+     "titel": "Leber",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Leber",
+     "grafik": null
+    },
+    {
+     "id": "muskel",
+     "titel": "Muskel",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Muskel",
+     "grafik": null
+    },
+    {
+     "id": "nervensystem",
+     "titel": "Nervensystem",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Nervensystem",
+     "grafik": null
+    },
+    {
+     "id": "gehirn",
+     "titel": "Gehirn",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gehirn",
+     "grafik": null
+    },
+    {
+     "id": "atemtrakt",
+     "titel": "Atemtrakt",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Atemtrakt",
+     "grafik": null
+    },
+    {
+     "id": "lunge",
+     "titel": "Lunge",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Lunge",
+     "grafik": null
+    },
+    {
+     "id": "sinn-wahrnehmung",
+     "titel": "Sinn",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sinn (Wahrnehmung)",
+     "grafik": null
+    },
+    {
+     "id": "skelett",
+     "titel": "Skelett",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Skelett",
+     "grafik": null
+    },
+    {
+     "id": "knochen",
+     "titel": "Knochen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Knochen",
+     "grafik": null
+    },
+    {
+     "id": "haut",
+     "titel": "Haut",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Haut",
+     "grafik": null
+    },
+    {
+     "id": "bluete",
+     "titel": "Blüte",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Blüte",
+     "grafik": null
+    },
+    {
+     "id": "same-pflanze",
+     "titel": "Same",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Same (Pflanze)",
+     "grafik": null
+    },
+    {
+     "id": "tierhaltung",
+     "titel": "Tierhaltung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Tierhaltung",
+     "grafik": null
+    },
+    {
+     "id": "domestizierung",
+     "titel": "Domestizierung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Domestizierung",
+     "grafik": null
+    },
+    {
+     "id": "biotechnologie",
+     "titel": "Biotechnologie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Biotechnologie",
+     "grafik": null
+    },
+    {
+     "id": "duenger",
+     "titel": "Dünger",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Dünger",
+     "grafik": null
+    },
+    {
+     "id": "lebensmittelkonservierung",
+     "titel": "Lebensmittelkonservierung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Lebensmittelkonservierung",
+     "grafik": null
+    },
+    {
+     "id": "garten",
+     "titel": "Garten",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Garten",
+     "grafik": null
+    },
+    {
+     "id": "bewaesserung",
+     "titel": "Bewässerung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Bewässerung",
+     "grafik": null
+    }
+   ]
+  },
+  {
+   "id": "kanon-kultur",
+   "titel": "Weltwissen: Kunst, Literatur und Musik",
+   "bereich": "kultur",
+   "themen": [
+    {
+     "id": "leonardo-da-vinci",
+     "titel": "Leonardo da Vinci",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Leonardo da Vinci",
+     "grafik": null
+    },
+    {
+     "id": "michelangelo",
+     "titel": "Michelangelo",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Michelangelo",
+     "grafik": null
+    },
+    {
+     "id": "rembrandt-van-rijn",
+     "titel": "Rembrandt van Rijn",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Rembrandt van Rijn",
+     "grafik": null
+    },
+    {
+     "id": "katsushika-hokusai",
+     "titel": "Katsushika Hokusai",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Katsushika Hokusai",
+     "grafik": null
+    },
+    {
+     "id": "vincent-van-gogh",
+     "titel": "Vincent van Gogh",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Vincent van Gogh",
+     "grafik": null
+    },
+    {
+     "id": "pablo-picasso",
+     "titel": "Pablo Picasso",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Pablo Picasso",
+     "grafik": null
+    },
+    {
+     "id": "homer",
+     "titel": "Homer",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Homer",
+     "grafik": null
+    },
+    {
+     "id": "vergil",
+     "titel": "Vergil",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Vergil",
+     "grafik": null
+    },
+    {
+     "id": "li-bai",
+     "titel": "Li Bai",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Li Bai",
+     "grafik": null
+    },
+    {
+     "id": "murasaki-shikibu",
+     "titel": "Murasaki Shikibu",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Murasaki Shikibu",
+     "grafik": null
+    },
+    {
+     "id": "rumi-dichter",
+     "titel": "Rumi",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Rumi (Dichter)",
+     "grafik": null
+    },
+    {
+     "id": "dante-alighieri",
+     "titel": "Dante Alighieri",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Dante Alighieri",
+     "grafik": null
+    },
+    {
+     "id": "miguel-de-cervantes",
+     "titel": "Miguel de Cervantes",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Miguel de Cervantes",
+     "grafik": null
+    },
+    {
+     "id": "william-shakespeare",
+     "titel": "William Shakespeare",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "William Shakespeare",
+     "grafik": null
+    },
+    {
+     "id": "lew-nikolajewitsch-tolstoi",
+     "titel": "Lew Nikolajewitsch Tolstoi",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Lew Nikolajewitsch Tolstoi",
+     "grafik": null
+    },
+    {
+     "id": "rabindranath-tagore",
+     "titel": "Rabindranath Tagore",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Rabindranath Tagore",
+     "grafik": null
+    },
+    {
+     "id": "johann-sebastian-bach",
+     "titel": "Johann Sebastian Bach",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Johann Sebastian Bach",
+     "grafik": null
+    },
+    {
+     "id": "wolfgang-amadeus-mozart",
+     "titel": "Wolfgang Amadeus Mozart",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wolfgang Amadeus Mozart",
+     "grafik": null
+    },
+    {
+     "id": "ludwig-van-beethoven",
+     "titel": "Ludwig van Beethoven",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Ludwig van Beethoven",
+     "grafik": null
+    },
+    {
+     "id": "louis-armstrong",
+     "titel": "Louis Armstrong",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Louis Armstrong",
+     "grafik": null
+    },
+    {
+     "id": "the-beatles",
+     "titel": "The Beatles",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "The Beatles",
+     "grafik": null
+    },
+    {
+     "id": "michael-jackson",
+     "titel": "Michael Jackson",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Michael Jackson",
+     "grafik": null
+    },
+    {
+     "id": "charlie-chaplin",
+     "titel": "Charlie Chaplin",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Charlie Chaplin",
+     "grafik": null
+    },
+    {
+     "id": "walt-disney",
+     "titel": "Walt Disney",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Walt Disney",
+     "grafik": null
+    },
+    {
+     "id": "kunst",
+     "titel": "Kunst",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kunst",
+     "grafik": null
+    },
+    {
+     "id": "mode",
+     "titel": "Mode",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mode",
+     "grafik": null
+    },
+    {
+     "id": "museum",
+     "titel": "Museum",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Museum",
+     "grafik": null
+    },
+    {
+     "id": "abstrakte-kunst",
+     "titel": "Abstrakte Kunst",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Abstrakte Kunst",
+     "grafik": null
+    },
+    {
+     "id": "realismus-kunst",
+     "titel": "Realismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Realismus (Kunst)",
+     "grafik": null
+    },
+    {
+     "id": "romantik",
+     "titel": "Romantik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Romantik",
+     "grafik": null
+    },
+    {
+     "id": "erzaehlung",
+     "titel": "Erzählung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Erzählung",
+     "grafik": null
+    },
+    {
+     "id": "fiktion",
+     "titel": "Fiktion",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Fiktion",
+     "grafik": null
+    },
+    {
+     "id": "roman",
+     "titel": "Roman",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Roman",
+     "grafik": null
+    },
+    {
+     "id": "kurzgeschichte",
+     "titel": "Kurzgeschichte",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kurzgeschichte",
+     "grafik": null
+    },
+    {
+     "id": "sachtext",
+     "titel": "Sachtext",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sachtext",
+     "grafik": null
+    },
+    {
+     "id": "poesie",
+     "titel": "Poesie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Poesie",
+     "grafik": null
+    },
+    {
+     "id": "musikinstrument",
+     "titel": "Musikinstrument",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Musikinstrument",
+     "grafik": null
+    },
+    {
+     "id": "orchester",
+     "titel": "Orchester",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Orchester",
+     "grafik": null
+    },
+    {
+     "id": "rhythmus-musik",
+     "titel": "Rhythmus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Rhythmus (Musik)",
+     "grafik": null
+    },
+    {
+     "id": "gesang",
+     "titel": "Gesang",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gesang",
+     "grafik": null
+    },
+    {
+     "id": "klassische-musik",
+     "titel": "Klassische Musik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Klassische Musik",
+     "grafik": null
+    },
+    {
+     "id": "folk",
+     "titel": "Folk",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Folk",
+     "grafik": null
+    },
+    {
+     "id": "jazz",
+     "titel": "Jazz",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Jazz",
+     "grafik": null
+    },
+    {
+     "id": "popmusik",
+     "titel": "Popmusik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Popmusik",
+     "grafik": null
+    },
+    {
+     "id": "rockmusik",
+     "titel": "Rockmusik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Rockmusik",
+     "grafik": null
+    },
+    {
+     "id": "tanz",
+     "titel": "Tanz",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Tanz",
+     "grafik": null
+    },
+    {
+     "id": "theater",
+     "titel": "Theater",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Theater",
+     "grafik": null
+    },
+    {
+     "id": "animation",
+     "titel": "Animation",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Animation",
+     "grafik": null
+    },
+    {
+     "id": "kalligrafie",
+     "titel": "Kalligrafie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kalligrafie",
+     "grafik": null
+    },
+    {
+     "id": "comic",
+     "titel": "Comic",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Comic",
+     "grafik": null
+    },
+    {
+     "id": "design",
+     "titel": "Design",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Design",
+     "grafik": null
+    },
+    {
+     "id": "zeichnung-kunst",
+     "titel": "Zeichnung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Zeichnung (Kunst)",
+     "grafik": null
+    },
+    {
+     "id": "malerei",
+     "titel": "Malerei",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Malerei",
+     "grafik": null
+    },
+    {
+     "id": "fotografie",
+     "titel": "Fotografie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Fotografie",
+     "grafik": null
+    },
+    {
+     "id": "toepferei",
+     "titel": "Töpferei",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Töpferei",
+     "grafik": null
+    },
+    {
+     "id": "bildhauerkunst",
+     "titel": "Bildhauerkunst",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Bildhauerkunst",
+     "grafik": null
+    }
+   ]
+  },
+  {
+   "id": "kanon-politik",
+   "titel": "Weltwissen: Gesellschaft und Politik",
+   "bereich": "politik",
+   "themen": [
+    {
+     "id": "hammurapi-i-babylon",
+     "titel": "Hammurapi I.",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Hammurapi I. (Babylon)",
+     "grafik": null
+    },
+    {
+     "id": "ramses-ii",
+     "titel": "Ramses II.",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Ramses II.",
+     "grafik": null
+    },
+    {
+     "id": "kyros-ii",
+     "titel": "Kyros II.",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kyros II.",
+     "grafik": null
+    },
+    {
+     "id": "alexander-der-grosse",
+     "titel": "Alexander der Große",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Alexander der Große",
+     "grafik": null
+    },
+    {
+     "id": "ashoka",
+     "titel": "Ashoka",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Ashoka",
+     "grafik": null
+    },
+    {
+     "id": "qin-shihuangdi",
+     "titel": "Qin Shihuangdi",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Qin Shihuangdi",
+     "grafik": null
+    },
+    {
+     "id": "gaius-iulius-caesar",
+     "titel": "Gaius Iulius Caesar",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gaius Iulius Caesar",
+     "grafik": null
+    },
+    {
+     "id": "kleopatra-vii",
+     "titel": "Kleopatra VII.",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kleopatra VII.",
+     "grafik": null
+    },
+    {
+     "id": "augustus",
+     "titel": "Augustus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Augustus",
+     "grafik": null
+    },
+    {
+     "id": "karl-der-grosse",
+     "titel": "Karl der Große",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Karl der Große",
+     "grafik": null
+    },
+    {
+     "id": "dschingis-khan",
+     "titel": "Dschingis Khan",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Dschingis Khan",
+     "grafik": null
+    },
+    {
+     "id": "mansa-musa",
+     "titel": "Mansa Musa",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mansa Musa",
+     "grafik": null
+    },
+    {
+     "id": "timur",
+     "titel": "Timur",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Timur",
+     "grafik": null
+    },
+    {
+     "id": "sueleyman-i",
+     "titel": "Süleyman I.",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Süleyman I.",
+     "grafik": null
+    },
+    {
+     "id": "akbar",
+     "titel": "Akbar",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Akbar",
+     "grafik": null
+    },
+    {
+     "id": "elisabeth-i",
+     "titel": "Elisabeth I.",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Elisabeth I.",
+     "grafik": null
+    },
+    {
+     "id": "katharina-ii",
+     "titel": "Katharina II.",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Katharina II.",
+     "grafik": null
+    },
+    {
+     "id": "george-washington",
+     "titel": "George Washington",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "George Washington",
+     "grafik": null
+    },
+    {
+     "id": "napoleon-bonaparte",
+     "titel": "Napoleon Bonaparte",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Napoleon Bonaparte",
+     "grafik": null
+    },
+    {
+     "id": "sim-n-bol-var",
+     "titel": "Simón Bolívar",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Simón Bolívar",
+     "grafik": null
+    },
+    {
+     "id": "abraham-lincoln",
+     "titel": "Abraham Lincoln",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Abraham Lincoln",
+     "grafik": null
+    },
+    {
+     "id": "mohandas-karamchand-gandhi",
+     "titel": "Mohandas Karamchand Gandhi",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mohandas Karamchand Gandhi",
+     "grafik": null
+    },
+    {
+     "id": "josef-stalin",
+     "titel": "Josef Stalin",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Josef Stalin",
+     "grafik": null
+    },
+    {
+     "id": "adolf-hitler",
+     "titel": "Adolf Hitler",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Adolf Hitler",
+     "grafik": null
+    },
+    {
+     "id": "mao-zedong",
+     "titel": "Mao Zedong",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mao Zedong",
+     "grafik": null
+    },
+    {
+     "id": "nelson-mandela",
+     "titel": "Nelson Mandela",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Nelson Mandela",
+     "grafik": null
+    },
+    {
+     "id": "festival",
+     "titel": "Festival",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Festival",
+     "grafik": null
+    },
+    {
+     "id": "popkultur",
+     "titel": "Popkultur",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Popkultur",
+     "grafik": null
+    },
+    {
+     "id": "tradition",
+     "titel": "Tradition",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Tradition",
+     "grafik": null
+    },
+    {
+     "id": "muendliche-ueberlieferung",
+     "titel": "Mündliche Überlieferung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mündliche Überlieferung",
+     "grafik": null
+    },
+    {
+     "id": "gemeinschaft",
+     "titel": "Gemeinschaft",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gemeinschaft",
+     "grafik": null
+    },
+    {
+     "id": "macht",
+     "titel": "Macht",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Macht",
+     "grafik": null
+    },
+    {
+     "id": "soziale-klasse",
+     "titel": "Soziale Klasse",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Soziale Klasse",
+     "grafik": null
+    },
+    {
+     "id": "information",
+     "titel": "Information",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Information",
+     "grafik": null
+    },
+    {
+     "id": "sozialwissenschaften",
+     "titel": "Sozialwissenschaften",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sozialwissenschaften",
+     "grafik": null
+    },
+    {
+     "id": "anthropologie",
+     "titel": "Anthropologie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Anthropologie",
+     "grafik": null
+    },
+    {
+     "id": "soziologie",
+     "titel": "Soziologie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Soziologie",
+     "grafik": null
+    },
+    {
+     "id": "indigene-voelker",
+     "titel": "Indigene Völker",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Indigene Völker",
+     "grafik": null
+    },
+    {
+     "id": "politische-partei",
+     "titel": "Politische Partei",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Politische Partei",
+     "grafik": null
+    },
+    {
+     "id": "politikwissenschaft",
+     "titel": "Politikwissenschaft",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Politikwissenschaft",
+     "grafik": null
+    },
+    {
+     "id": "kolonialismus",
+     "titel": "Kolonialismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kolonialismus",
+     "grafik": null
+    },
+    {
+     "id": "imperialismus",
+     "titel": "Imperialismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Imperialismus",
+     "grafik": null
+    },
+    {
+     "id": "demokratie",
+     "titel": "Demokratie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Demokratie",
+     "grafik": null
+    },
+    {
+     "id": "diktatur",
+     "titel": "Diktatur",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Diktatur",
+     "grafik": null
+    },
+    {
+     "id": "monarchie",
+     "titel": "Monarchie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Monarchie",
+     "grafik": null
+    },
+    {
+     "id": "ideologie",
+     "titel": "Ideologie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Ideologie",
+     "grafik": null
+    },
+    {
+     "id": "anarchismus",
+     "titel": "Anarchismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Anarchismus",
+     "grafik": null
+    },
+    {
+     "id": "autoritarismus",
+     "titel": "Autoritarismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Autoritarismus",
+     "grafik": null
+    },
+    {
+     "id": "kapitalismus",
+     "titel": "Kapitalismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kapitalismus",
+     "grafik": null
+    },
+    {
+     "id": "kommunismus",
+     "titel": "Kommunismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kommunismus",
+     "grafik": null
+    },
+    {
+     "id": "konservatismus",
+     "titel": "Konservatismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Konservatismus",
+     "grafik": null
+    },
+    {
+     "id": "faschismus",
+     "titel": "Faschismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Faschismus",
+     "grafik": null
+    },
+    {
+     "id": "liberalismus",
+     "titel": "Liberalismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Liberalismus",
+     "grafik": null
+    },
+    {
+     "id": "nationalismus",
+     "titel": "Nationalismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Nationalismus",
+     "grafik": null
+    },
+    {
+     "id": "sozialismus",
+     "titel": "Sozialismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sozialismus",
+     "grafik": null
+    },
+    {
+     "id": "nation",
+     "titel": "Nation",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Nation",
+     "grafik": null
+    },
+    {
+     "id": "diplomatie",
+     "titel": "Diplomatie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Diplomatie",
+     "grafik": null
+    },
+    {
+     "id": "militaer",
+     "titel": "Militär",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Militär",
+     "grafik": null
+    },
+    {
+     "id": "europaeische-union",
+     "titel": "Europäische Union",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Europäische Union",
+     "grafik": null
+    },
+    {
+     "id": "internationale-rotkreuz-und-rothalbmond-bewegung",
+     "titel": "Internationale Rotkreuz- und Rothalbmond-Bewegung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Internationale Rotkreuz- und Rothalbmond-Bewegung",
+     "grafik": null
+    },
+    {
+     "id": "vereinte-nationen",
+     "titel": "Vereinte Nationen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Vereinte Nationen",
+     "grafik": null
+    },
+    {
+     "id": "voelkermord",
+     "titel": "Völkermord",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Völkermord",
+     "grafik": null
+    },
+    {
+     "id": "frieden",
+     "titel": "Frieden",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Frieden",
+     "grafik": null
+    },
+    {
+     "id": "terrorismus",
+     "titel": "Terrorismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Terrorismus",
+     "grafik": null
+    },
+    {
+     "id": "schule",
+     "titel": "Schule",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Schule",
+     "grafik": null
+    },
+    {
+     "id": "bibliothek",
+     "titel": "Bibliothek",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Bibliothek",
+     "grafik": null
+    },
+    {
+     "id": "universitaet",
+     "titel": "Universität",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Universität",
+     "grafik": null
+    },
+    {
+     "id": "behinderung",
+     "titel": "Behinderung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Behinderung",
+     "grafik": null
+    },
+    {
+     "id": "geistige-behinderung",
+     "titel": "Geistige Behinderung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Geistige Behinderung",
+     "grafik": null
+    },
+    {
+     "id": "koerperbehinderung",
+     "titel": "Körperbehinderung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Körperbehinderung",
+     "grafik": null
+    },
+    {
+     "id": "diskriminierung",
+     "titel": "Diskriminierung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Diskriminierung",
+     "grafik": null
+    },
+    {
+     "id": "rassismus",
+     "titel": "Rassismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Rassismus",
+     "grafik": null
+    },
+    {
+     "id": "sexismus",
+     "titel": "Sexismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sexismus",
+     "grafik": null
+    },
+    {
+     "id": "hungersnot",
+     "titel": "Hungersnot",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Hungersnot",
+     "grafik": null
+    },
+    {
+     "id": "feminismus",
+     "titel": "Feminismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Feminismus",
+     "grafik": null
+    },
+    {
+     "id": "migration",
+     "titel": "Migration",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Migration",
+     "grafik": null
+    },
+    {
+     "id": "menschenrechte",
+     "titel": "Menschenrechte",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Menschenrechte",
+     "grafik": null
+    },
+    {
+     "id": "freiheit",
+     "titel": "Freiheit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Freiheit",
+     "grafik": null
+    },
+    {
+     "id": "privatsphaere",
+     "titel": "Privatsphäre",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Privatsphäre",
+     "grafik": null
+    },
+    {
+     "id": "sklaverei",
+     "titel": "Sklaverei",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sklaverei",
+     "grafik": null
+    },
+    {
+     "id": "gleichberechtigung",
+     "titel": "Gleichberechtigung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gleichberechtigung",
+     "grafik": null
+    },
+    {
+     "id": "umweltverschmutzung",
+     "titel": "Umweltverschmutzung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Umweltverschmutzung",
+     "grafik": null
+    },
+    {
+     "id": "armut",
+     "titel": "Armut",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Armut",
+     "grafik": null
+    },
+    {
+     "id": "gewalt",
+     "titel": "Gewalt",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gewalt",
+     "grafik": null
+    },
+    {
+     "id": "zorn",
+     "titel": "Zorn",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Zorn",
+     "grafik": null
+    },
+    {
+     "id": "furcht",
+     "titel": "Furcht",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Furcht",
+     "grafik": null
+    },
+    {
+     "id": "glueck",
+     "titel": "Glück",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Glück",
+     "grafik": null
+    },
+    {
+     "id": "humor",
+     "titel": "Humor",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Humor",
+     "grafik": null
+    },
+    {
+     "id": "liebe",
+     "titel": "Liebe",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Liebe",
+     "grafik": null
+    },
+    {
+     "id": "traurigkeit",
+     "titel": "Traurigkeit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Traurigkeit",
+     "grafik": null
+    },
+    {
+     "id": "kognition",
+     "titel": "Kognition",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kognition",
+     "grafik": null
+    },
+    {
+     "id": "bewusstsein",
+     "titel": "Bewusstsein",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Bewusstsein",
+     "grafik": null
+    },
+    {
+     "id": "traum",
+     "titel": "Traum",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Traum",
+     "grafik": null
+    },
+    {
+     "id": "imagination",
+     "titel": "Imagination",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Imagination",
+     "grafik": null
+    },
+    {
+     "id": "gedaechtnis",
+     "titel": "Gedächtnis",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gedächtnis",
+     "grafik": null
+    },
+    {
+     "id": "denken",
+     "titel": "Denken",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Denken",
+     "grafik": null
+    },
+    {
+     "id": "menschliches-verhalten",
+     "titel": "Menschliches Verhalten",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Menschliches Verhalten",
+     "grafik": null
+    },
+    {
+     "id": "intelligenz",
+     "titel": "Intelligenz",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Intelligenz",
+     "grafik": null
+    },
+    {
+     "id": "lernen",
+     "titel": "Lernen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Lernen",
+     "grafik": null
+    },
+    {
+     "id": "persoenlichkeit",
+     "titel": "Persönlichkeit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Persönlichkeit",
+     "grafik": null
+    },
+    {
+     "id": "wahrnehmung",
+     "titel": "Wahrnehmung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wahrnehmung",
+     "grafik": null
+    },
+    {
+     "id": "alphabet",
+     "titel": "Alphabet",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Alphabet",
+     "grafik": null
+    },
+    {
+     "id": "arabische-zahlschrift",
+     "titel": "Arabische Zahlschrift",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Arabische Zahlschrift",
+     "grafik": null
+    },
+    {
+     "id": "logogramm",
+     "titel": "Logogramm",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Logogramm",
+     "grafik": null
+    },
+    {
+     "id": "schrift",
+     "titel": "Schrift",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Schrift",
+     "grafik": null
+    },
+    {
+     "id": "rundfunk",
+     "titel": "Rundfunk",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Rundfunk",
+     "grafik": null
+    },
+    {
+     "id": "journalismus",
+     "titel": "Journalismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Journalismus",
+     "grafik": null
+    }
+   ]
+  },
+  {
+   "id": "kanon-recht",
+   "titel": "Weltwissen: Recht",
+   "bereich": "recht",
+   "themen": [
+    {
+     "id": "verbrechen",
+     "titel": "Verbrechen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Verbrechen",
+     "grafik": null
+    },
+    {
+     "id": "diebstahl",
+     "titel": "Diebstahl",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Diebstahl",
+     "grafik": null
+    },
+    {
+     "id": "verfassung",
+     "titel": "Verfassung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Verfassung",
+     "grafik": null
+    },
+    {
+     "id": "toetungsdelikt",
+     "titel": "Tötungsdelikt",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Tötungsdelikt",
+     "grafik": null
+    },
+    {
+     "id": "gerechtigkeit",
+     "titel": "Gerechtigkeit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gerechtigkeit",
+     "grafik": null
+    },
+    {
+     "id": "polizei",
+     "titel": "Polizei",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Polizei",
+     "grafik": null
+    },
+    {
+     "id": "eigentum",
+     "titel": "Eigentum",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Eigentum",
+     "grafik": null
+    }
+   ]
+  },
+  {
+   "id": "kanon-religion",
+   "titel": "Weltwissen: Religion und Philosophie",
+   "bereich": "religion",
+   "themen": [
+    {
+     "id": "siddhartha-gautama",
+     "titel": "Siddhartha Gautama",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Siddhartha Gautama",
+     "grafik": null
+    },
+    {
+     "id": "jesus-christus",
+     "titel": "Jesus Christus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Jesus Christus",
+     "grafik": null
+    },
+    {
+     "id": "mohammed",
+     "titel": "Mohammed",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mohammed",
+     "grafik": null
+    },
+    {
+     "id": "al-ibn-ab-t-lib",
+     "titel": "ʿAlī ibn Abī Tālib",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "ʿAlī ibn Abī Tālib",
+     "grafik": null
+    },
+    {
+     "id": "shankara",
+     "titel": "Shankara",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Shankara",
+     "grafik": null
+    },
+    {
+     "id": "martin-luther",
+     "titel": "Martin Luther",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Martin Luther",
+     "grafik": null
+    },
+    {
+     "id": "aesthetik",
+     "titel": "Ästhetik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Ästhetik",
+     "grafik": null
+    },
+    {
+     "id": "schoenheit",
+     "titel": "Schönheit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Schönheit",
+     "grafik": null
+    },
+    {
+     "id": "erkenntnistheorie",
+     "titel": "Erkenntnistheorie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Erkenntnistheorie",
+     "grafik": null
+    },
+    {
+     "id": "glauben",
+     "titel": "Glauben",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Glauben",
+     "grafik": null
+    },
+    {
+     "id": "vernunft",
+     "titel": "Vernunft",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Vernunft",
+     "grafik": null
+    },
+    {
+     "id": "wahrheit",
+     "titel": "Wahrheit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wahrheit",
+     "grafik": null
+    },
+    {
+     "id": "moral",
+     "titel": "Moral",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Moral",
+     "grafik": null
+    },
+    {
+     "id": "metaphysik",
+     "titel": "Metaphysik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Metaphysik",
+     "grafik": null
+    },
+    {
+     "id": "freier-wille",
+     "titel": "Freier Wille",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Freier Wille",
+     "grafik": null
+    },
+    {
+     "id": "ontologie",
+     "titel": "Ontologie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Ontologie",
+     "grafik": null
+    },
+    {
+     "id": "realitaet",
+     "titel": "Realität",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Realität",
+     "grafik": null
+    },
+    {
+     "id": "oestliche-philosophie",
+     "titel": "Östliche Philosophie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Östliche Philosophie",
+     "grafik": null
+    },
+    {
+     "id": "konfuzianismus",
+     "titel": "Konfuzianismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Konfuzianismus",
+     "grafik": null
+    },
+    {
+     "id": "mythos",
+     "titel": "Mythos",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mythos",
+     "grafik": null
+    },
+    {
+     "id": "griechische-mythologie",
+     "titel": "Griechische Mythologie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Griechische Mythologie",
+     "grafik": null
+    },
+    {
+     "id": "leben-nach-dem-tod",
+     "titel": "Leben nach dem Tod",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Leben nach dem Tod",
+     "grafik": null
+    },
+    {
+     "id": "gott",
+     "titel": "Gott",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gott",
+     "grafik": null
+    },
+    {
+     "id": "meditation",
+     "titel": "Meditation",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Meditation",
+     "grafik": null
+    },
+    {
+     "id": "gebet",
+     "titel": "Gebet",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gebet",
+     "grafik": null
+    },
+    {
+     "id": "ritual",
+     "titel": "Ritual",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Ritual",
+     "grafik": null
+    },
+    {
+     "id": "schamanismus",
+     "titel": "Schamanismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Schamanismus",
+     "grafik": null
+    },
+    {
+     "id": "seele",
+     "titel": "Seele",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Seele",
+     "grafik": null
+    },
+    {
+     "id": "spiritualitaet",
+     "titel": "Spiritualität",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Spiritualität",
+     "grafik": null
+    },
+    {
+     "id": "theologie",
+     "titel": "Theologie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Theologie",
+     "grafik": null
+    },
+    {
+     "id": "atheismus",
+     "titel": "Atheismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Atheismus",
+     "grafik": null
+    },
+    {
+     "id": "saekularismus",
+     "titel": "Säkularismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Säkularismus",
+     "grafik": null
+    },
+    {
+     "id": "abraham",
+     "titel": "Abraham",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Abraham",
+     "grafik": null
+    },
+    {
+     "id": "bibel",
+     "titel": "Bibel",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Bibel",
+     "grafik": null
+    },
+    {
+     "id": "christentum",
+     "titel": "Christentum",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Christentum",
+     "grafik": null
+    },
+    {
+     "id": "roemisch-katholische-kirche",
+     "titel": "Römisch-katholische Kirche",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Römisch-katholische Kirche",
+     "grafik": null
+    },
+    {
+     "id": "orthodoxe-kirchen",
+     "titel": "Orthodoxe Kirchen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Orthodoxe Kirchen",
+     "grafik": null
+    },
+    {
+     "id": "protestantismus",
+     "titel": "Protestantismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Protestantismus",
+     "grafik": null
+    },
+    {
+     "id": "islam",
+     "titel": "Islam",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Islam",
+     "grafik": null
+    },
+    {
+     "id": "schia",
+     "titel": "Schia",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Schia",
+     "grafik": null
+    },
+    {
+     "id": "sunniten",
+     "titel": "Sunniten",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sunniten",
+     "grafik": null
+    },
+    {
+     "id": "koran",
+     "titel": "Koran",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Koran",
+     "grafik": null
+    },
+    {
+     "id": "judentum",
+     "titel": "Judentum",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Judentum",
+     "grafik": null
+    },
+    {
+     "id": "mose",
+     "titel": "Mose",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mose",
+     "grafik": null
+    },
+    {
+     "id": "chinesischer-volksglaube",
+     "titel": "Chinesischer Volksglaube",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Chinesischer Volksglaube",
+     "grafik": null
+    },
+    {
+     "id": "shint",
+     "titel": "Shintō",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Shintō",
+     "grafik": null
+    },
+    {
+     "id": "daoismus",
+     "titel": "Daoismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Daoismus",
+     "grafik": null
+    },
+    {
+     "id": "buddhismus",
+     "titel": "Buddhismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Buddhismus",
+     "grafik": null
+    },
+    {
+     "id": "mahayana",
+     "titel": "Mahayana",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mahayana",
+     "grafik": null
+    },
+    {
+     "id": "theravada",
+     "titel": "Theravada",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Theravada",
+     "grafik": null
+    },
+    {
+     "id": "hinduismus",
+     "titel": "Hinduismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Hinduismus",
+     "grafik": null
+    },
+    {
+     "id": "veda",
+     "titel": "Veda",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Veda",
+     "grafik": null
+    },
+    {
+     "id": "jainismus",
+     "titel": "Jainismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Jainismus",
+     "grafik": null
+    },
+    {
+     "id": "sikhismus",
+     "titel": "Sikhismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sikhismus",
+     "grafik": null
+    },
+    {
+     "id": "afrikanische-religionen",
+     "titel": "Afrikanische Religionen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Afrikanische Religionen",
+     "grafik": null
+    },
+    {
+     "id": "zoroastrismus",
+     "titel": "Zoroastrismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Zoroastrismus",
+     "grafik": null
+    }
+   ]
+  },
+  {
+   "id": "kanon-sonstiges",
+   "titel": "Weltwissen: Alltag",
+   "bereich": "sonstiges",
+   "themen": [
+    {
+     "id": "moebel",
+     "titel": "Möbel",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Möbel",
+     "grafik": null
+    },
+    {
+     "id": "schmuck",
+     "titel": "Schmuck",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Schmuck",
+     "grafik": null
+    },
+    {
+     "id": "ehe",
+     "titel": "Ehe",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Ehe",
+     "grafik": null
+    },
+    {
+     "id": "freundschaft",
+     "titel": "Freundschaft",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Freundschaft",
+     "grafik": null
+    },
+    {
+     "id": "saeugling",
+     "titel": "Säugling",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Säugling",
+     "grafik": null
+    },
+    {
+     "id": "kind",
+     "titel": "Kind",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kind",
+     "grafik": null
+    },
+    {
+     "id": "adoleszenz",
+     "titel": "Adoleszenz",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Adoleszenz",
+     "grafik": null
+    },
+    {
+     "id": "erwachsener",
+     "titel": "Erwachsener",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Erwachsener",
+     "grafik": null
+    },
+    {
+     "id": "alter",
+     "titel": "Alter",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Alter",
+     "grafik": null
+    },
+    {
+     "id": "sexualitaet-des-menschen",
+     "titel": "Sexualität des Menschen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sexualität des Menschen",
+     "grafik": null
+    },
+    {
+     "id": "geschlechtsverkehr",
+     "titel": "Geschlechtsverkehr",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Geschlechtsverkehr",
+     "grafik": null
+    },
+    {
+     "id": "sexuelle-orientierung",
+     "titel": "Sexuelle Orientierung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sexuelle Orientierung",
+     "grafik": null
+    },
+    {
+     "id": "gender",
+     "titel": "Gender",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gender",
+     "grafik": null
+    },
+    {
+     "id": "mann",
+     "titel": "Mann",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mann",
+     "grafik": null
+    },
+    {
+     "id": "frau",
+     "titel": "Frau",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Frau",
+     "grafik": null
+    },
+    {
+     "id": "allergie",
+     "titel": "Allergie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Allergie",
+     "grafik": null
+    },
+    {
+     "id": "arthritis",
+     "titel": "Arthritis",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Arthritis",
+     "grafik": null
+    },
+    {
+     "id": "krebs-medizin",
+     "titel": "Krebs",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Krebs (Medizin)",
+     "grafik": null
+    },
+    {
+     "id": "herz-kreislauf-erkrankung",
+     "titel": "Herz-Kreislauf-Erkrankung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Herz-Kreislauf-Erkrankung",
+     "grafik": null
+    },
+    {
+     "id": "herzinfarkt",
+     "titel": "Herzinfarkt",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Herzinfarkt",
+     "grafik": null
+    },
+    {
+     "id": "schlaganfall",
+     "titel": "Schlaganfall",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Schlaganfall",
+     "grafik": null
+    },
+    {
+     "id": "demenz",
+     "titel": "Demenz",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Demenz",
+     "grafik": null
+    },
+    {
+     "id": "diabetes-mellitus",
+     "titel": "Diabetes mellitus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Diabetes mellitus",
+     "grafik": null
+    },
+    {
+     "id": "gastroenteritis",
+     "titel": "Gastroenteritis",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gastroenteritis",
+     "grafik": null
+    },
+    {
+     "id": "infektion",
+     "titel": "Infektion",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Infektion",
+     "grafik": null
+    },
+    {
+     "id": "erkaeltung",
+     "titel": "Erkältung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Erkältung",
+     "grafik": null
+    },
+    {
+     "id": "influenza",
+     "titel": "Influenza",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Influenza",
+     "grafik": null
+    },
+    {
+     "id": "malaria",
+     "titel": "Malaria",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Malaria",
+     "grafik": null
+    },
+    {
+     "id": "lungenentzuendung",
+     "titel": "Lungenentzündung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Lungenentzündung",
+     "grafik": null
+    },
+    {
+     "id": "sexuell-uebertragbare-erkrankung",
+     "titel": "Sexuell übertragbare Erkrankung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sexuell übertragbare Erkrankung",
+     "grafik": null
+    },
+    {
+     "id": "aids",
+     "titel": "AIDS",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "AIDS",
+     "grafik": null
+    },
+    {
+     "id": "pocken",
+     "titel": "Pocken",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Pocken",
+     "grafik": null
+    },
+    {
+     "id": "tuberkulose",
+     "titel": "Tuberkulose",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Tuberkulose",
+     "grafik": null
+    },
+    {
+     "id": "psychische-stoerung",
+     "titel": "Psychische Störung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Psychische Störung",
+     "grafik": null
+    },
+    {
+     "id": "messung",
+     "titel": "Messung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Messung",
+     "grafik": null
+    },
+    {
+     "id": "internationales-einheitensystem",
+     "titel": "Internationales Einheitensystem",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Internationales Einheitensystem",
+     "grafik": null
+    },
+    {
+     "id": "natur",
+     "titel": "Natur",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Natur",
+     "grafik": null
+    },
+    {
+     "id": "forschung",
+     "titel": "Forschung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Forschung",
+     "grafik": null
+    },
+    {
+     "id": "physiologie",
+     "titel": "Physiologie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Physiologie",
+     "grafik": null
+    },
+    {
+     "id": "verdauung",
+     "titel": "Verdauung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Verdauung",
+     "grafik": null
+    },
+    {
+     "id": "stoffwechsel",
+     "titel": "Stoffwechsel",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Stoffwechsel",
+     "grafik": null
+    },
+    {
+     "id": "photosynthese",
+     "titel": "Photosynthese",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Photosynthese",
+     "grafik": null
+    },
+    {
+     "id": "ei",
+     "titel": "Ei",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Ei",
+     "grafik": null
+    },
+    {
+     "id": "geschlecht-biologie",
+     "titel": "Geschlecht",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Geschlecht (Biologie)",
+     "grafik": null
+    },
+    {
+     "id": "schwangerschaft",
+     "titel": "Schwangerschaft",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Schwangerschaft",
+     "grafik": null
+    },
+    {
+     "id": "schlaf",
+     "titel": "Schlaf",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Schlaf",
+     "grafik": null
+    }
+   ]
+  },
+  {
+   "id": "kanon-sport",
+   "titel": "Weltwissen: Sport und Freizeit",
+   "bereich": "sport",
+   "themen": [
+    {
+     "id": "brettspiel",
+     "titel": "Brettspiel",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Brettspiel",
+     "grafik": null
+    },
+    {
+     "id": "kartenspiel",
+     "titel": "Kartenspiel",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kartenspiel",
+     "grafik": null
+    },
+    {
+     "id": "gluecksspiel",
+     "titel": "Glücksspiel",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Glücksspiel",
+     "grafik": null
+    },
+    {
+     "id": "computerspiel",
+     "titel": "Computerspiel",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Computerspiel",
+     "grafik": null
+    },
+    {
+     "id": "sport",
+     "titel": "Sport",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sport",
+     "grafik": null
+    },
+    {
+     "id": "fussball",
+     "titel": "Fußball",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Fußball",
+     "grafik": null
+    },
+    {
+     "id": "leichtathletik",
+     "titel": "Leichtathletik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Leichtathletik",
+     "grafik": null
+    },
+    {
+     "id": "spielzeug",
+     "titel": "Spielzeug",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Spielzeug",
+     "grafik": null
+    },
+    {
+     "id": "kampfkunst",
+     "titel": "Kampfkunst",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kampfkunst",
+     "grafik": null
+    },
+    {
+     "id": "schwimmen-beim-menschen",
+     "titel": "Schwimmen beim Menschen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Schwimmen beim Menschen",
+     "grafik": null
+    },
+    {
+     "id": "tourismus",
+     "titel": "Tourismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Tourismus",
+     "grafik": null
+    },
+    {
+     "id": "fahrzeug",
+     "titel": "Fahrzeug",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Fahrzeug",
+     "grafik": null
+    },
+    {
+     "id": "luftfahrzeug",
+     "titel": "Luftfahrzeug",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Luftfahrzeug",
+     "grafik": null
+    },
+    {
+     "id": "fahrrad",
+     "titel": "Fahrrad",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Fahrrad",
+     "grafik": null
+    },
+    {
+     "id": "automobil",
+     "titel": "Automobil",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Automobil",
+     "grafik": null
+    },
+    {
+     "id": "schiff",
+     "titel": "Schiff",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Schiff",
+     "grafik": null
+    },
+    {
+     "id": "zug-schienenverkehr",
+     "titel": "Zug",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Zug (Schienenverkehr)",
+     "grafik": null
+    },
+    {
+     "id": "bruecke",
+     "titel": "Brücke",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Brücke",
+     "grafik": null
+    },
+    {
+     "id": "kanal-wasserbau",
+     "titel": "Kanal",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kanal (Wasserbau)",
+     "grafik": null
+    },
+    {
+     "id": "strasse",
+     "titel": "Straße",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Straße",
+     "grafik": null
+    }
+   ]
+  },
+  {
+   "id": "kanon-sprache",
+   "titel": "Weltwissen: Sprache",
+   "bereich": "sprache",
+   "themen": [
+    {
+     "id": "sprachwissenschaft",
+     "titel": "Sprachwissenschaft",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sprachwissenschaft",
+     "grafik": null
+    },
+    {
+     "id": "grammatik",
+     "titel": "Grammatik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Grammatik",
+     "grafik": null
+    },
+    {
+     "id": "wort",
+     "titel": "Wort",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wort",
+     "grafik": null
+    },
+    {
+     "id": "alphabetisierung-lesefaehigkeit",
+     "titel": "Alphabetisierung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Alphabetisierung (Lesefähigkeit)",
+     "grafik": null
+    },
+    {
+     "id": "realname",
+     "titel": "Realname",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Realname",
+     "grafik": null
+    },
+    {
+     "id": "sprechen",
+     "titel": "Sprechen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sprechen",
+     "grafik": null
+    },
+    {
+     "id": "englische-sprache",
+     "titel": "Englische Sprache",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Englische Sprache",
+     "grafik": null
+    },
+    {
+     "id": "deutsche-sprache",
+     "titel": "Deutsche Sprache",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Deutsche Sprache",
+     "grafik": null
+    },
+    {
+     "id": "franzoesische-sprache",
+     "titel": "Französische Sprache",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Französische Sprache",
+     "grafik": null
+    },
+    {
+     "id": "spanische-sprache",
+     "titel": "Spanische Sprache",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Spanische Sprache",
+     "grafik": null
+    },
+    {
+     "id": "portugiesische-sprache",
+     "titel": "Portugiesische Sprache",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Portugiesische Sprache",
+     "grafik": null
+    },
+    {
+     "id": "latein",
+     "titel": "Latein",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Latein",
+     "grafik": null
+    },
+    {
+     "id": "bengalische-sprache",
+     "titel": "Bengalische Sprache",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Bengalische Sprache",
+     "grafik": null
+    },
+    {
+     "id": "hindustani",
+     "titel": "Hindustani",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Hindustani",
+     "grafik": null
+    },
+    {
+     "id": "sanskrit",
+     "titel": "Sanskrit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sanskrit",
+     "grafik": null
+    },
+    {
+     "id": "griechische-sprache",
+     "titel": "Griechische Sprache",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Griechische Sprache",
+     "grafik": null
+    },
+    {
+     "id": "russische-sprache",
+     "titel": "Russische Sprache",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Russische Sprache",
+     "grafik": null
+    },
+    {
+     "id": "chinesische-sprachen",
+     "titel": "Chinesische Sprachen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Chinesische Sprachen",
+     "grafik": null
+    },
+    {
+     "id": "arabische-sprache",
+     "titel": "Arabische Sprache",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Arabische Sprache",
+     "grafik": null
+    },
+    {
+     "id": "japanische-sprache",
+     "titel": "Japanische Sprache",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Japanische Sprache",
+     "grafik": null
+    },
+    {
+     "id": "malaiische-sprache",
+     "titel": "Malaiische Sprache",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Malaiische Sprache",
+     "grafik": null
+    },
+    {
+     "id": "swahili-sprache",
+     "titel": "Swahili",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Swahili (Sprache)",
+     "grafik": null
+    }
+   ]
+  },
+  {
+   "id": "kanon-tech",
+   "titel": "Weltwissen: Technik",
+   "bereich": "tech",
+   "themen": [
+    {
+     "id": "bauingenieurwesen",
+     "titel": "Bauingenieurwesen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Bauingenieurwesen",
+     "grafik": null
+    },
+    {
+     "id": "elektrotechnik",
+     "titel": "Elektrotechnik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Elektrotechnik",
+     "grafik": null
+    },
+    {
+     "id": "maschinenbau",
+     "titel": "Maschinenbau",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Maschinenbau",
+     "grafik": null
+    },
+    {
+     "id": "abfall",
+     "titel": "Abfall",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Abfall",
+     "grafik": null
+    },
+    {
+     "id": "batterie-elektrotechnik",
+     "titel": "Batterie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Batterie (Elektrotechnik)",
+     "grafik": null
+    },
+    {
+     "id": "sprengstoff",
+     "titel": "Sprengstoff",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sprengstoff",
+     "grafik": null
+    },
+    {
+     "id": "schwarzpulver",
+     "titel": "Schwarzpulver",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Schwarzpulver",
+     "grafik": null
+    },
+    {
+     "id": "fossile-energie",
+     "titel": "Fossile Energie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Fossile Energie",
+     "grafik": null
+    },
+    {
+     "id": "kohle",
+     "titel": "Kohle",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kohle",
+     "grafik": null
+    },
+    {
+     "id": "erdgas",
+     "titel": "Erdgas",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Erdgas",
+     "grafik": null
+    },
+    {
+     "id": "erdoel",
+     "titel": "Erdöl",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Erdöl",
+     "grafik": null
+    },
+    {
+     "id": "kernenergie",
+     "titel": "Kernenergie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kernenergie",
+     "grafik": null
+    },
+    {
+     "id": "erneuerbare-energien",
+     "titel": "Erneuerbare Energien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Erneuerbare Energien",
+     "grafik": null
+    },
+    {
+     "id": "wasserkraft",
+     "titel": "Wasserkraft",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wasserkraft",
+     "grafik": null
+    },
+    {
+     "id": "sonnenenergie",
+     "titel": "Sonnenenergie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sonnenenergie",
+     "grafik": null
+    },
+    {
+     "id": "windenergie",
+     "titel": "Windenergie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Windenergie",
+     "grafik": null
+    },
+    {
+     "id": "waffe",
+     "titel": "Waffe",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Waffe",
+     "grafik": null
+    },
+    {
+     "id": "feuerwaffe",
+     "titel": "Feuerwaffe",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Feuerwaffe",
+     "grafik": null
+    },
+    {
+     "id": "messer",
+     "titel": "Messer",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Messer",
+     "grafik": null
+    },
+    {
+     "id": "panzerung",
+     "titel": "Panzerung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Panzerung",
+     "grafik": null
+    },
+    {
+     "id": "einfache-maschine",
+     "titel": "Einfache Maschine",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Einfache Maschine",
+     "grafik": null
+    },
+    {
+     "id": "hebel-physik",
+     "titel": "Hebel",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Hebel (Physik)",
+     "grafik": null
+    },
+    {
+     "id": "rad",
+     "titel": "Rad",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Rad",
+     "grafik": null
+    },
+    {
+     "id": "motor",
+     "titel": "Motor",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Motor",
+     "grafik": null
+    },
+    {
+     "id": "elektromotor",
+     "titel": "Elektromotor",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Elektromotor",
+     "grafik": null
+    },
+    {
+     "id": "verbrennungsmotor",
+     "titel": "Verbrennungsmotor",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Verbrennungsmotor",
+     "grafik": null
+    },
+    {
+     "id": "dampfmaschine",
+     "titel": "Dampfmaschine",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Dampfmaschine",
+     "grafik": null
+    },
+    {
+     "id": "roboter",
+     "titel": "Roboter",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Roboter",
+     "grafik": null
+    },
+    {
+     "id": "buchdruck",
+     "titel": "Buchdruck",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Buchdruck",
+     "grafik": null
+    },
+    {
+     "id": "buch",
+     "titel": "Buch",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Buch",
+     "grafik": null
+    },
+    {
+     "id": "post",
+     "titel": "Post",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Post",
+     "grafik": null
+    },
+    {
+     "id": "telekommunikation",
+     "titel": "Telekommunikation",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Telekommunikation",
+     "grafik": null
+    },
+    {
+     "id": "internet",
+     "titel": "Internet",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Internet",
+     "grafik": null
+    },
+    {
+     "id": "funktechnik",
+     "titel": "Funktechnik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Funktechnik",
+     "grafik": null
+    },
+    {
+     "id": "telefon",
+     "titel": "Telefon",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Telefon",
+     "grafik": null
+    },
+    {
+     "id": "mobiltelefon",
+     "titel": "Mobiltelefon",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mobiltelefon",
+     "grafik": null
+    },
+    {
+     "id": "fernsehen",
+     "titel": "Fernsehen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Fernsehen",
+     "grafik": null
+    },
+    {
+     "id": "videotechnik",
+     "titel": "Videotechnik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Videotechnik",
+     "grafik": null
+    },
+    {
+     "id": "informatik",
+     "titel": "Informatik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Informatik",
+     "grafik": null
+    },
+    {
+     "id": "computer",
+     "titel": "Computer",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Computer",
+     "grafik": null
+    },
+    {
+     "id": "kuenstliche-intelligenz",
+     "titel": "Künstliche Intelligenz",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Künstliche Intelligenz",
+     "grafik": null
+    },
+    {
+     "id": "kryptographie",
+     "titel": "Kryptographie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kryptographie",
+     "grafik": null
+    },
+    {
+     "id": "elektronik",
+     "titel": "Elektronik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Elektronik",
+     "grafik": null
+    },
+    {
+     "id": "halbleiter",
+     "titel": "Halbleiter",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Halbleiter",
+     "grafik": null
+    },
+    {
+     "id": "rakete",
+     "titel": "Rakete",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Rakete",
+     "grafik": null
+    },
+    {
+     "id": "satellit-raumfahrt",
+     "titel": "Satellit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Satellit (Raumfahrt)",
+     "grafik": null
+    },
+    {
+     "id": "weltraumforschung",
+     "titel": "Weltraumforschung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Weltraumforschung",
+     "grafik": null
+    },
+    {
+     "id": "raumfahrt",
+     "titel": "Raumfahrt",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Raumfahrt",
+     "grafik": null
+    },
+    {
+     "id": "navigation",
+     "titel": "Navigation",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Navigation",
+     "grafik": null
+    },
+    {
+     "id": "kompass",
+     "titel": "Kompass",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kompass",
+     "grafik": null
+    },
+    {
+     "id": "karte-kartografie",
+     "titel": "Karte",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Karte (Kartografie)",
+     "grafik": null
+    },
+    {
+     "id": "radar",
+     "titel": "Radar",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Radar",
+     "grafik": null
+    },
+    {
+     "id": "kalender",
+     "titel": "Kalender",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kalender",
+     "grafik": null
+    },
+    {
+     "id": "uhr",
+     "titel": "Uhr",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Uhr",
+     "grafik": null
+    },
+    {
+     "id": "befestigung",
+     "titel": "Befestigung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Befestigung",
+     "grafik": null
+    },
+    {
+     "id": "infrastruktur",
+     "titel": "Infrastruktur",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Infrastruktur",
+     "grafik": null
+    },
+    {
+     "id": "gebaeude",
+     "titel": "Gebäude",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gebäude",
+     "grafik": null
+    },
+    {
+     "id": "talsperre",
+     "titel": "Talsperre",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Talsperre",
+     "grafik": null
+    },
+    {
+     "id": "beton",
+     "titel": "Beton",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Beton",
+     "grafik": null
+    },
+    {
+     "id": "glas",
+     "titel": "Glas",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Glas",
+     "grafik": null
+    },
+    {
+     "id": "mauerwerk",
+     "titel": "Mauerwerk",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mauerwerk",
+     "grafik": null
+    },
+    {
+     "id": "metallurgie",
+     "titel": "Metallurgie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Metallurgie",
+     "grafik": null
+    },
+    {
+     "id": "naturkautschuk",
+     "titel": "Naturkautschuk",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Naturkautschuk",
+     "grafik": null
+    },
+    {
+     "id": "papier",
+     "titel": "Papier",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Papier",
+     "grafik": null
+    },
+    {
+     "id": "kunststoff",
+     "titel": "Kunststoff",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kunststoff",
+     "grafik": null
+    },
+    {
+     "id": "textilie",
+     "titel": "Textilie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Textilie",
+     "grafik": null
+    },
+    {
+     "id": "baumwollfaser",
+     "titel": "Baumwollfaser",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Baumwollfaser",
+     "grafik": null
+    },
+    {
+     "id": "holz",
+     "titel": "Holz",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Holz",
+     "grafik": null
+    },
+    {
+     "id": "kamera",
+     "titel": "Kamera",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kamera",
+     "grafik": null
+    },
+    {
+     "id": "laser",
+     "titel": "Laser",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Laser",
+     "grafik": null
+    },
+    {
+     "id": "linse-optik",
+     "titel": "Linse",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Linse (Optik)",
+     "grafik": null
+    },
+    {
+     "id": "mikroskop",
+     "titel": "Mikroskop",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mikroskop",
+     "grafik": null
+    },
+    {
+     "id": "teleskop",
+     "titel": "Teleskop",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Teleskop",
+     "grafik": null
+    }
+   ]
+  },
+  {
+   "id": "kanon-wissen",
+   "titel": "Weltwissen: Naturwissenschaften",
+   "bereich": "wissen",
+   "themen": [
+    {
+     "id": "konfuzius",
+     "titel": "Konfuzius",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Konfuzius",
+     "grafik": null
+    },
+    {
+     "id": "laozi",
+     "titel": "Laozi",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Laozi",
+     "grafik": null
+    },
+    {
+     "id": "sokrates",
+     "titel": "Sokrates",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sokrates",
+     "grafik": null
+    },
+    {
+     "id": "platon",
+     "titel": "Platon",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Platon",
+     "grafik": null
+    },
+    {
+     "id": "aristoteles",
+     "titel": "Aristoteles",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Aristoteles",
+     "grafik": null
+    },
+    {
+     "id": "marcus-tullius-cicero",
+     "titel": "Marcus Tullius Cicero",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Marcus Tullius Cicero",
+     "grafik": null
+    },
+    {
+     "id": "ibn-chald-n",
+     "titel": "Ibn Chaldūn",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Ibn Chaldūn",
+     "grafik": null
+    },
+    {
+     "id": "niccol-machiavelli",
+     "titel": "Niccolò Machiavelli",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Niccolò Machiavelli",
+     "grafik": null
+    },
+    {
+     "id": "ren-descartes",
+     "titel": "René Descartes",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "René Descartes",
+     "grafik": null
+    },
+    {
+     "id": "john-locke",
+     "titel": "John Locke",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "John Locke",
+     "grafik": null
+    },
+    {
+     "id": "adam-smith",
+     "titel": "Adam Smith",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Adam Smith",
+     "grafik": null
+    },
+    {
+     "id": "immanuel-kant",
+     "titel": "Immanuel Kant",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Immanuel Kant",
+     "grafik": null
+    },
+    {
+     "id": "mary-wollstonecraft",
+     "titel": "Mary Wollstonecraft",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mary Wollstonecraft",
+     "grafik": null
+    },
+    {
+     "id": "karl-marx",
+     "titel": "Karl Marx",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Karl Marx",
+     "grafik": null
+    },
+    {
+     "id": "sigmund-freud",
+     "titel": "Sigmund Freud",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sigmund Freud",
+     "grafik": null
+    },
+    {
+     "id": "hippokrates-von-kos",
+     "titel": "Hippokrates von Kos",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Hippokrates von Kos",
+     "grafik": null
+    },
+    {
+     "id": "avicenna",
+     "titel": "Avicenna",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Avicenna",
+     "grafik": null
+    },
+    {
+     "id": "shen-kuo",
+     "titel": "Shen Kuo",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Shen Kuo",
+     "grafik": null
+    },
+    {
+     "id": "johannes-gutenberg",
+     "titel": "Johannes Gutenberg",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Johannes Gutenberg",
+     "grafik": null
+    },
+    {
+     "id": "nikolaus-kopernikus",
+     "titel": "Nikolaus Kopernikus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Nikolaus Kopernikus",
+     "grafik": null
+    },
+    {
+     "id": "galileo-galilei",
+     "titel": "Galileo Galilei",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Galileo Galilei",
+     "grafik": null
+    },
+    {
+     "id": "isaac-newton",
+     "titel": "Isaac Newton",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Isaac Newton",
+     "grafik": null
+    },
+    {
+     "id": "antoine-laurent-de-lavoisier",
+     "titel": "Antoine Laurent de Lavoisier",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Antoine Laurent de Lavoisier",
+     "grafik": null
+    },
+    {
+     "id": "michael-faraday",
+     "titel": "Michael Faraday",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Michael Faraday",
+     "grafik": null
+    },
+    {
+     "id": "charles-darwin",
+     "titel": "Charles Darwin",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Charles Darwin",
+     "grafik": null
+    },
+    {
+     "id": "florence-nightingale",
+     "titel": "Florence Nightingale",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Florence Nightingale",
+     "grafik": null
+    },
+    {
+     "id": "louis-pasteur",
+     "titel": "Louis Pasteur",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Louis Pasteur",
+     "grafik": null
+    },
+    {
+     "id": "james-clerk-maxwell",
+     "titel": "James Clerk Maxwell",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "James Clerk Maxwell",
+     "grafik": null
+    },
+    {
+     "id": "dmitri-iwanowitsch-mendelejew",
+     "titel": "Dmitri Iwanowitsch Mendelejew",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Dmitri Iwanowitsch Mendelejew",
+     "grafik": null
+    },
+    {
+     "id": "thomas-alva-edison",
+     "titel": "Thomas Alva Edison",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Thomas Alva Edison",
+     "grafik": null
+    },
+    {
+     "id": "marie-curie",
+     "titel": "Marie Curie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Marie Curie",
+     "grafik": null
+    },
+    {
+     "id": "albert-einstein",
+     "titel": "Albert Einstein",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Albert Einstein",
+     "grafik": null
+    },
+    {
+     "id": "euklid",
+     "titel": "Euklid",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Euklid",
+     "grafik": null
+    },
+    {
+     "id": "archimedes",
+     "titel": "Archimedes",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Archimedes",
+     "grafik": null
+    },
+    {
+     "id": "al-chwarizmi",
+     "titel": "Al-Chwarizmi",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Al-Chwarizmi",
+     "grafik": null
+    },
+    {
+     "id": "leonhard-euler",
+     "titel": "Leonhard Euler",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Leonhard Euler",
+     "grafik": null
+    },
+    {
+     "id": "carl-friedrich-gauss",
+     "titel": "Carl Friedrich Gauß",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Carl Friedrich Gauß",
+     "grafik": null
+    },
+    {
+     "id": "alan-turing",
+     "titel": "Alan Turing",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Alan Turing",
+     "grafik": null
+    },
+    {
+     "id": "merkur-planet",
+     "titel": "Merkur",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Merkur (Planet)",
+     "grafik": null
+    },
+    {
+     "id": "venus-planet",
+     "titel": "Venus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Venus (Planet)",
+     "grafik": null
+    },
+    {
+     "id": "mars-planet",
+     "titel": "Mars",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mars (Planet)",
+     "grafik": null
+    },
+    {
+     "id": "jupiter-planet",
+     "titel": "Jupiter",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Jupiter (Planet)",
+     "grafik": null
+    },
+    {
+     "id": "saturn-planet",
+     "titel": "Saturn",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Saturn (Planet)",
+     "grafik": null
+    },
+    {
+     "id": "uranus-planet",
+     "titel": "Uranus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Uranus (Planet)",
+     "grafik": null
+    },
+    {
+     "id": "neptun-planet",
+     "titel": "Neptun",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Neptun (Planet)",
+     "grafik": null
+    },
+    {
+     "id": "asteroid",
+     "titel": "Asteroid",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Asteroid",
+     "grafik": null
+    },
+    {
+     "id": "urknall",
+     "titel": "Urknall",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Urknall",
+     "grafik": null
+    },
+    {
+     "id": "schwarzes-loch",
+     "titel": "Schwarzes Loch",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Schwarzes Loch",
+     "grafik": null
+    },
+    {
+     "id": "komet",
+     "titel": "Komet",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Komet",
+     "grafik": null
+    },
+    {
+     "id": "galaxie",
+     "titel": "Galaxie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Galaxie",
+     "grafik": null
+    },
+    {
+     "id": "milchstrasse",
+     "titel": "Milchstraße",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Milchstraße",
+     "grafik": null
+    },
+    {
+     "id": "mond-des-sonnensystems",
+     "titel": "Mond des Sonnensystems",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mond des Sonnensystems",
+     "grafik": null
+    },
+    {
+     "id": "weltraum",
+     "titel": "Weltraum",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Weltraum",
+     "grafik": null
+    },
+    {
+     "id": "planet",
+     "titel": "Planet",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Planet",
+     "grafik": null
+    },
+    {
+     "id": "stern",
+     "titel": "Stern",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Stern",
+     "grafik": null
+    },
+    {
+     "id": "supernova",
+     "titel": "Supernova",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Supernova",
+     "grafik": null
+    },
+    {
+     "id": "tag",
+     "titel": "Tag",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Tag",
+     "grafik": null
+    },
+    {
+     "id": "jahr",
+     "titel": "Jahr",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Jahr",
+     "grafik": null
+    },
+    {
+     "id": "klassische-mechanik",
+     "titel": "Klassische Mechanik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Klassische Mechanik",
+     "grafik": null
+    },
+    {
+     "id": "kraft",
+     "titel": "Kraft",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kraft",
+     "grafik": null
+    },
+    {
+     "id": "masse-physik",
+     "titel": "Masse",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Masse (Physik)",
+     "grafik": null
+    },
+    {
+     "id": "bewegung-physik",
+     "titel": "Bewegung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Bewegung (Physik)",
+     "grafik": null
+    },
+    {
+     "id": "newtonsche-gesetze",
+     "titel": "Newtonsche Gesetze",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Newtonsche Gesetze",
+     "grafik": null
+    },
+    {
+     "id": "geschwindigkeit",
+     "titel": "Geschwindigkeit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Geschwindigkeit",
+     "grafik": null
+    },
+    {
+     "id": "elektromagnetismus",
+     "titel": "Elektromagnetismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Elektromagnetismus",
+     "grafik": null
+    },
+    {
+     "id": "gravitation",
+     "titel": "Gravitation",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gravitation",
+     "grafik": null
+    },
+    {
+     "id": "starke-wechselwirkung",
+     "titel": "Starke Wechselwirkung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Starke Wechselwirkung",
+     "grafik": null
+    },
+    {
+     "id": "schwache-wechselwirkung",
+     "titel": "Schwache Wechselwirkung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Schwache Wechselwirkung",
+     "grafik": null
+    },
+    {
+     "id": "magnetismus",
+     "titel": "Magnetismus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Magnetismus",
+     "grafik": null
+    },
+    {
+     "id": "aggregatzustand",
+     "titel": "Aggregatzustand",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Aggregatzustand",
+     "grafik": null
+    },
+    {
+     "id": "festkoerper",
+     "titel": "Festkörper",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Festkörper",
+     "grafik": null
+    },
+    {
+     "id": "fluessigkeit",
+     "titel": "Flüssigkeit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Flüssigkeit",
+     "grafik": null
+    },
+    {
+     "id": "gas",
+     "titel": "Gas",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gas",
+     "grafik": null
+    },
+    {
+     "id": "plasma-physik",
+     "titel": "Plasma",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Plasma (Physik)",
+     "grafik": null
+    },
+    {
+     "id": "atom",
+     "titel": "Atom",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Atom",
+     "grafik": null
+    },
+    {
+     "id": "teilchenphysik",
+     "titel": "Teilchenphysik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Teilchenphysik",
+     "grafik": null
+    },
+    {
+     "id": "standardmodell",
+     "titel": "Standardmodell",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Standardmodell",
+     "grafik": null
+    },
+    {
+     "id": "subatomares-teilchen",
+     "titel": "Subatomares Teilchen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Subatomares Teilchen",
+     "grafik": null
+    },
+    {
+     "id": "elektron",
+     "titel": "Elektron",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Elektron",
+     "grafik": null
+    },
+    {
+     "id": "neutron",
+     "titel": "Neutron",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Neutron",
+     "grafik": null
+    },
+    {
+     "id": "photon",
+     "titel": "Photon",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Photon",
+     "grafik": null
+    },
+    {
+     "id": "proton",
+     "titel": "Proton",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Proton",
+     "grafik": null
+    },
+    {
+     "id": "quantenmechanik",
+     "titel": "Quantenmechanik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Quantenmechanik",
+     "grafik": null
+    },
+    {
+     "id": "radioaktiver-zerfall",
+     "titel": "Radioaktiver Zerfall",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Radioaktiver Zerfall",
+     "grafik": null
+    },
+    {
+     "id": "raum-physik",
+     "titel": "Raum",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Raum (Physik)",
+     "grafik": null
+    },
+    {
+     "id": "vakuum",
+     "titel": "Vakuum",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Vakuum",
+     "grafik": null
+    },
+    {
+     "id": "thermodynamik",
+     "titel": "Thermodynamik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Thermodynamik",
+     "grafik": null
+    },
+    {
+     "id": "waerme",
+     "titel": "Wärme",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wärme",
+     "grafik": null
+    },
+    {
+     "id": "temperatur",
+     "titel": "Temperatur",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Temperatur",
+     "grafik": null
+    },
+    {
+     "id": "relativitaetstheorie",
+     "titel": "Relativitätstheorie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Relativitätstheorie",
+     "grafik": null
+    },
+    {
+     "id": "lichtgeschwindigkeit",
+     "titel": "Lichtgeschwindigkeit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Lichtgeschwindigkeit",
+     "grafik": null
+    },
+    {
+     "id": "welle",
+     "titel": "Welle",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Welle",
+     "grafik": null
+    },
+    {
+     "id": "elektromagnetische-strahlung",
+     "titel": "Elektromagnetische Strahlung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Elektromagnetische Strahlung",
+     "grafik": null
+    },
+    {
+     "id": "licht",
+     "titel": "Licht",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Licht",
+     "grafik": null
+    },
+    {
+     "id": "farbe",
+     "titel": "Farbe",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Farbe",
+     "grafik": null
+    },
+    {
+     "id": "optik",
+     "titel": "Optik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Optik",
+     "grafik": null
+    },
+    {
+     "id": "schall",
+     "titel": "Schall",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Schall",
+     "grafik": null
+    },
+    {
+     "id": "suizid",
+     "titel": "Suizid",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Suizid",
+     "grafik": null
+    },
+    {
+     "id": "biodiversitaet",
+     "titel": "Biodiversität",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Biodiversität",
+     "grafik": null
+    },
+    {
+     "id": "oekosystem",
+     "titel": "Ökosystem",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Ökosystem",
+     "grafik": null
+    },
+    {
+     "id": "aussterben",
+     "titel": "Aussterben",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Aussterben",
+     "grafik": null
+    },
+    {
+     "id": "natuerliche-auslese",
+     "titel": "Natürliche Auslese",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Natürliche Auslese",
+     "grafik": null
+    },
+    {
+     "id": "evolutionsgeschichte",
+     "titel": "Evolutionsgeschichte",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Evolutionsgeschichte",
+     "grafik": null
+    },
+    {
+     "id": "lebewesen",
+     "titel": "Lebewesen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Lebewesen",
+     "grafik": null
+    },
+    {
+     "id": "genetik",
+     "titel": "Genetik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Genetik",
+     "grafik": null
+    },
+    {
+     "id": "gen",
+     "titel": "Gen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gen",
+     "grafik": null
+    },
+    {
+     "id": "vererbung-biologie",
+     "titel": "Vererbung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Vererbung (Biologie)",
+     "grafik": null
+    },
+    {
+     "id": "palaeontologie",
+     "titel": "Paläontologie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Paläontologie",
+     "grafik": null
+    },
+    {
+     "id": "taxonomie-biologie",
+     "titel": "Taxonomie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Taxonomie (Biologie)",
+     "grafik": null
+    },
+    {
+     "id": "art-biologie",
+     "titel": "Art",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Art (Biologie)",
+     "grafik": null
+    },
+    {
+     "id": "archaeen",
+     "titel": "Archaeen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Archaeen",
+     "grafik": null
+    },
+    {
+     "id": "bakterien",
+     "titel": "Bakterien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Bakterien",
+     "grafik": null
+    },
+    {
+     "id": "eukaryoten",
+     "titel": "Eukaryoten",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Eukaryoten",
+     "grafik": null
+    },
+    {
+     "id": "zoologie",
+     "titel": "Zoologie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Zoologie",
+     "grafik": null
+    },
+    {
+     "id": "gliederfuesser",
+     "titel": "Gliederfüßer",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gliederfüßer",
+     "grafik": null
+    },
+    {
+     "id": "krebstiere",
+     "titel": "Krebstiere",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Krebstiere",
+     "grafik": null
+    },
+    {
+     "id": "insekten",
+     "titel": "Insekten",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Insekten",
+     "grafik": null
+    },
+    {
+     "id": "weichtiere",
+     "titel": "Weichtiere",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Weichtiere",
+     "grafik": null
+    },
+    {
+     "id": "wirbeltiere",
+     "titel": "Wirbeltiere",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wirbeltiere",
+     "grafik": null
+    },
+    {
+     "id": "amphibien",
+     "titel": "Amphibien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Amphibien",
+     "grafik": null
+    },
+    {
+     "id": "voegel",
+     "titel": "Vögel",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Vögel",
+     "grafik": null
+    },
+    {
+     "id": "haushuhn",
+     "titel": "Haushuhn",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Haushuhn",
+     "grafik": null
+    },
+    {
+     "id": "fische",
+     "titel": "Fische",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Fische",
+     "grafik": null
+    },
+    {
+     "id": "saeugetiere",
+     "titel": "Säugetiere",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Säugetiere",
+     "grafik": null
+    },
+    {
+     "id": "hauskatze",
+     "titel": "Hauskatze",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Hauskatze",
+     "grafik": null
+    },
+    {
+     "id": "hausrind",
+     "titel": "Hausrind",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Hausrind",
+     "grafik": null
+    },
+    {
+     "id": "haushund",
+     "titel": "Haushund",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Haushund",
+     "grafik": null
+    },
+    {
+     "id": "hauspferd",
+     "titel": "Hauspferd",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Hauspferd",
+     "grafik": null
+    },
+    {
+     "id": "hausschwein",
+     "titel": "Hausschwein",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Hausschwein",
+     "grafik": null
+    },
+    {
+     "id": "primaten",
+     "titel": "Primaten",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Primaten",
+     "grafik": null
+    },
+    {
+     "id": "stammesgeschichte-des-menschen",
+     "titel": "Stammesgeschichte des Menschen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Stammesgeschichte des Menschen",
+     "grafik": null
+    },
+    {
+     "id": "nagetiere",
+     "titel": "Nagetiere",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Nagetiere",
+     "grafik": null
+    },
+    {
+     "id": "hausschaf",
+     "titel": "Hausschaf",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Hausschaf",
+     "grafik": null
+    },
+    {
+     "id": "reptilien",
+     "titel": "Reptilien",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Reptilien",
+     "grafik": null
+    },
+    {
+     "id": "dinosaurier",
+     "titel": "Dinosaurier",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Dinosaurier",
+     "grafik": null
+    },
+    {
+     "id": "alge",
+     "titel": "Alge",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Alge",
+     "grafik": null
+    },
+    {
+     "id": "botanik",
+     "titel": "Botanik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Botanik",
+     "grafik": null
+    },
+    {
+     "id": "baum",
+     "titel": "Baum",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Baum",
+     "grafik": null
+    },
+    {
+     "id": "pilze",
+     "titel": "Pilze",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Pilze",
+     "grafik": null
+    },
+    {
+     "id": "viren",
+     "titel": "Viren",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Viren",
+     "grafik": null
+    },
+    {
+     "id": "analytische-chemie",
+     "titel": "Analytische Chemie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Analytische Chemie",
+     "grafik": null
+    },
+    {
+     "id": "biochemie",
+     "titel": "Biochemie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Biochemie",
+     "grafik": null
+    },
+    {
+     "id": "kohlenhydrate",
+     "titel": "Kohlenhydrate",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kohlenhydrate",
+     "grafik": null
+    },
+    {
+     "id": "desoxyribonukleinsaeure",
+     "titel": "Desoxyribonukleinsäure",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Desoxyribonukleinsäure",
+     "grafik": null
+    },
+    {
+     "id": "hormon",
+     "titel": "Hormon",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Hormon",
+     "grafik": null
+    },
+    {
+     "id": "lipide",
+     "titel": "Lipide",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Lipide",
+     "grafik": null
+    },
+    {
+     "id": "protein",
+     "titel": "Protein",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Protein",
+     "grafik": null
+    },
+    {
+     "id": "ribonukleinsaeure",
+     "titel": "Ribonukleinsäure",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Ribonukleinsäure",
+     "grafik": null
+    },
+    {
+     "id": "anorganische-chemie",
+     "titel": "Anorganische Chemie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Anorganische Chemie",
+     "grafik": null
+    },
+    {
+     "id": "organische-chemie",
+     "titel": "Organische Chemie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Organische Chemie",
+     "grafik": null
+    },
+    {
+     "id": "physikalische-chemie",
+     "titel": "Physikalische Chemie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Physikalische Chemie",
+     "grafik": null
+    },
+    {
+     "id": "stoff-chemie",
+     "titel": "Stoff",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Stoff (Chemie)",
+     "grafik": null
+    },
+    {
+     "id": "periodensystem",
+     "titel": "Periodensystem",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Periodensystem",
+     "grafik": null
+    },
+    {
+     "id": "wasserstoff",
+     "titel": "Wasserstoff",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wasserstoff",
+     "grafik": null
+    },
+    {
+     "id": "kohlenstoff",
+     "titel": "Kohlenstoff",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kohlenstoff",
+     "grafik": null
+    },
+    {
+     "id": "stickstoff",
+     "titel": "Stickstoff",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Stickstoff",
+     "grafik": null
+    },
+    {
+     "id": "sauerstoff",
+     "titel": "Sauerstoff",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sauerstoff",
+     "grafik": null
+    },
+    {
+     "id": "silicium",
+     "titel": "Silicium",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Silicium",
+     "grafik": null
+    },
+    {
+     "id": "eisen",
+     "titel": "Eisen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Eisen",
+     "grafik": null
+    },
+    {
+     "id": "kupfer",
+     "titel": "Kupfer",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kupfer",
+     "grafik": null
+    },
+    {
+     "id": "silber",
+     "titel": "Silber",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Silber",
+     "grafik": null
+    },
+    {
+     "id": "gold",
+     "titel": "Gold",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gold",
+     "grafik": null
+    },
+    {
+     "id": "chemische-verbindung",
+     "titel": "Chemische Verbindung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Chemische Verbindung",
+     "grafik": null
+    },
+    {
+     "id": "saeuren",
+     "titel": "Säuren",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Säuren",
+     "grafik": null
+    },
+    {
+     "id": "basen-chemie",
+     "titel": "Basen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Basen (Chemie)",
+     "grafik": null
+    },
+    {
+     "id": "kohlenstoffdioxid",
+     "titel": "Kohlenstoffdioxid",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kohlenstoffdioxid",
+     "grafik": null
+    },
+    {
+     "id": "chemische-bindung",
+     "titel": "Chemische Bindung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Chemische Bindung",
+     "grafik": null
+    },
+    {
+     "id": "molekuel",
+     "titel": "Molekül",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Molekül",
+     "grafik": null
+    },
+    {
+     "id": "salze",
+     "titel": "Salze",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Salze",
+     "grafik": null
+    },
+    {
+     "id": "chemische-reaktion",
+     "titel": "Chemische Reaktion",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Chemische Reaktion",
+     "grafik": null
+    },
+    {
+     "id": "katalyse",
+     "titel": "Katalyse",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Katalyse",
+     "grafik": null
+    },
+    {
+     "id": "legierung",
+     "titel": "Legierung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Legierung",
+     "grafik": null
+    },
+    {
+     "id": "bronze",
+     "titel": "Bronze",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Bronze",
+     "grafik": null
+    },
+    {
+     "id": "stahl",
+     "titel": "Stahl",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Stahl",
+     "grafik": null
+    },
+    {
+     "id": "geowissenschaften",
+     "titel": "Geowissenschaften",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Geowissenschaften",
+     "grafik": null
+    },
+    {
+     "id": "klimawandel",
+     "titel": "Klimawandel",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Klimawandel",
+     "grafik": null
+    },
+    {
+     "id": "jahreszeit",
+     "titel": "Jahreszeit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Jahreszeit",
+     "grafik": null
+    },
+    {
+     "id": "wetter",
+     "titel": "Wetter",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wetter",
+     "grafik": null
+    },
+    {
+     "id": "wolke",
+     "titel": "Wolke",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wolke",
+     "grafik": null
+    },
+    {
+     "id": "hochwasser",
+     "titel": "Hochwasser",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Hochwasser",
+     "grafik": null
+    },
+    {
+     "id": "blitz",
+     "titel": "Blitz",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Blitz",
+     "grafik": null
+    },
+    {
+     "id": "regen",
+     "titel": "Regen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Regen",
+     "grafik": null
+    },
+    {
+     "id": "schnee",
+     "titel": "Schnee",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Schnee",
+     "grafik": null
+    },
+    {
+     "id": "sturm",
+     "titel": "Sturm",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Sturm",
+     "grafik": null
+    },
+    {
+     "id": "wind",
+     "titel": "Wind",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wind",
+     "grafik": null
+    },
+    {
+     "id": "erdgeschichte",
+     "titel": "Erdgeschichte",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Erdgeschichte",
+     "grafik": null
+    },
+    {
+     "id": "naturkatastrophe",
+     "titel": "Naturkatastrophe",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Naturkatastrophe",
+     "grafik": null
+    },
+    {
+     "id": "natuerliche-ressource",
+     "titel": "Natürliche Ressource",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Natürliche Ressource",
+     "grafik": null
+    },
+    {
+     "id": "erdbeben",
+     "titel": "Erdbeben",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Erdbeben",
+     "grafik": null
+    },
+    {
+     "id": "erosion-geologie",
+     "titel": "Erosion",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Erosion (Geologie)",
+     "grafik": null
+    },
+    {
+     "id": "innerer-aufbau-der-erde",
+     "titel": "Innerer Aufbau der Erde",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Innerer Aufbau der Erde",
+     "grafik": null
+    },
+    {
+     "id": "mineral",
+     "titel": "Mineral",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Mineral",
+     "grafik": null
+    },
+    {
+     "id": "plattentektonik",
+     "titel": "Plattentektonik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Plattentektonik",
+     "grafik": null
+    },
+    {
+     "id": "gestein",
+     "titel": "Gestein",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gestein",
+     "grafik": null
+    },
+    {
+     "id": "boden-bodenkunde",
+     "titel": "Boden",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Boden (Bodenkunde)",
+     "grafik": null
+    },
+    {
+     "id": "vulkan",
+     "titel": "Vulkan",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Vulkan",
+     "grafik": null
+    },
+    {
+     "id": "algorithmus",
+     "titel": "Algorithmus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Algorithmus",
+     "grafik": null
+    },
+    {
+     "id": "diskrete-mathematik",
+     "titel": "Diskrete Mathematik",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Diskrete Mathematik",
+     "grafik": null
+    },
+    {
+     "id": "funktion-mathematik",
+     "titel": "Funktion",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Funktion (Mathematik)",
+     "grafik": null
+    },
+    {
+     "id": "beweis-mathematik",
+     "titel": "Beweis",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Beweis (Mathematik)",
+     "grafik": null
+    },
+    {
+     "id": "menge-mathematik",
+     "titel": "Menge",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Menge (Mathematik)",
+     "grafik": null
+    },
+    {
+     "id": "natuerliche-zahl",
+     "titel": "Natürliche Zahl",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Natürliche Zahl",
+     "grafik": null
+    },
+    {
+     "id": "primzahl",
+     "titel": "Primzahl",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Primzahl",
+     "grafik": null
+    },
+    {
+     "id": "ganze-zahl",
+     "titel": "Ganze Zahl",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Ganze Zahl",
+     "grafik": null
+    },
+    {
+     "id": "null",
+     "titel": "Null",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Null",
+     "grafik": null
+    },
+    {
+     "id": "reelle-zahl",
+     "titel": "Reelle Zahl",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Reelle Zahl",
+     "grafik": null
+    },
+    {
+     "id": "eulersche-zahl",
+     "titel": "Eulersche Zahl",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Eulersche Zahl",
+     "grafik": null
+    },
+    {
+     "id": "kreiszahl",
+     "titel": "Kreiszahl",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kreiszahl",
+     "grafik": null
+    },
+    {
+     "id": "bruchrechnung",
+     "titel": "Bruchrechnung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Bruchrechnung",
+     "grafik": null
+    },
+    {
+     "id": "komplexe-zahl",
+     "titel": "Komplexe Zahl",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Komplexe Zahl",
+     "grafik": null
+    },
+    {
+     "id": "zahlentheorie",
+     "titel": "Zahlentheorie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Zahlentheorie",
+     "grafik": null
+    },
+    {
+     "id": "gleichung",
+     "titel": "Gleichung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gleichung",
+     "grafik": null
+    },
+    {
+     "id": "variable-mathematik",
+     "titel": "Variable",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Variable (Mathematik)",
+     "grafik": null
+    },
+    {
+     "id": "abstrakte-algebra",
+     "titel": "Abstrakte Algebra",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Abstrakte Algebra",
+     "grafik": null
+    },
+    {
+     "id": "lineare-algebra",
+     "titel": "Lineare Algebra",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Lineare Algebra",
+     "grafik": null
+    },
+    {
+     "id": "analysis",
+     "titel": "Analysis",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Analysis",
+     "grafik": null
+    },
+    {
+     "id": "infinitesimalrechnung",
+     "titel": "Infinitesimalrechnung",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Infinitesimalrechnung",
+     "grafik": null
+    },
+    {
+     "id": "unendlich-mathematik",
+     "titel": "Unendlich",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Unendlich (Mathematik)",
+     "grafik": null
+    },
+    {
+     "id": "reihe-mathematik",
+     "titel": "Reihe",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Reihe (Mathematik)",
+     "grafik": null
+    },
+    {
+     "id": "potenz-mathematik",
+     "titel": "Potenz",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Potenz (Mathematik)",
+     "grafik": null
+    },
+    {
+     "id": "logarithmus",
+     "titel": "Logarithmus",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Logarithmus",
+     "grafik": null
+    },
+    {
+     "id": "winkel",
+     "titel": "Winkel",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Winkel",
+     "grafik": null
+    },
+    {
+     "id": "trigonometrie",
+     "titel": "Trigonometrie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Trigonometrie",
+     "grafik": null
+    },
+    {
+     "id": "flaecheninhalt",
+     "titel": "Flächeninhalt",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Flächeninhalt",
+     "grafik": null
+    },
+    {
+     "id": "kreis",
+     "titel": "Kreis",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Kreis",
+     "grafik": null
+    },
+    {
+     "id": "gerade",
+     "titel": "Gerade",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Gerade",
+     "grafik": null
+    },
+    {
+     "id": "polygon",
+     "titel": "Polygon",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Polygon",
+     "grafik": null
+    },
+    {
+     "id": "dreieck",
+     "titel": "Dreieck",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Dreieck",
+     "grafik": null
+    },
+    {
+     "id": "3d",
+     "titel": "3D",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "3D",
+     "grafik": null
+    },
+    {
+     "id": "volumen",
+     "titel": "Volumen",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Volumen",
+     "grafik": null
+    },
+    {
+     "id": "topologie-mathematik",
+     "titel": "Topologie",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Topologie (Mathematik)",
+     "grafik": null
+    },
+    {
+     "id": "wahrscheinlichkeit",
+     "titel": "Wahrscheinlichkeit",
+     "stufe": 1,
+     "braucht": [],
+     "auch": [],
+     "wiki": "Wahrscheinlichkeit",
+     "grafik": null
+    }
+   ]
+  }
+ ]
+}
