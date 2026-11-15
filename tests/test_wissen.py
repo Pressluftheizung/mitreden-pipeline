@@ -36,6 +36,14 @@ class Wissen(unittest.TestCase):
         f = wissen.fragen_bereinigen(roh, QUELLE)
         self.assertEqual([x["art"] for x in f], ["schaetzen", "auswahl", "wahr_falsch"])
         self.assertEqual(f[0]["toleranz_art"], "prozent")
+        self.assertEqual(f[1]["optionen"][f[1]["richtig"]], "Berlin")  # gemischt, Lösung bleibt dieselbe
+
+    def test_optionen_mischen(self):
+        o, r = wissen.optionen_mischen("Frage?", ["A", "B", "C", "D"], 0)
+        self.assertEqual(o[r], "A")
+        self.assertEqual(wissen.optionen_mischen("Frage?", o, r), (o, r))  # zweiter Aufruf ändert nichts
+        lagen = [wissen.optionen_mischen(f"Frage {i}?", ["A", "B", "C", "D"], 0)[1] for i in range(40)]
+        self.assertGreater(len(set(lagen)), 2)  # die Lösung landet an verschiedenen Stellen
 
     def test_bilder_und_englische_zahlen(self):
         kandidaten = [{"url": "https://upload.wikimedia.org/a.gif", "seite": "https://commons.wikimedia.org/wiki/File:A.gif"},

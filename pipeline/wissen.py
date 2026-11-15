@@ -11,6 +11,7 @@ Ablauf je Lauf (läuft nach jeder Ausgabe mit, ein paar Themen pro Lauf):
   6. Speichern in daten/wissen/wissen.json (privat). Fertige Themen werden nie neu gebaut.
 """
 
+import hashlib
 import json
 import re
 import urllib.parse
@@ -193,6 +194,14 @@ def zahlen(text: str) -> set[float]:
     return werte
 
 
+def optionen_mischen(frage: str, optionen: list[str], richtig: int) -> tuple[list[str], int]:
+    """Antworten in feste, aber zufällig wirkende Reihenfolge bringen (Prüfung 15.11.2026: die richtige Antwort
+    stand bei Hand-Karten fast immer vorn, bei KI-Karten meist an zweiter Stelle; das lernt man sonst mit).
+    Die Reihenfolge hängt nur vom Text ab, ein zweiter Aufruf ändert nichts mehr."""
+    reihe = sorted(range(len(optionen)), key=lambda i: hashlib.sha256(f"{frage}|{optionen[i]}".encode()).hexdigest())
+    return [optionen[i] for i in reihe], reihe.index(richtig)
+
+
 def fragen_bereinigen(roh, quelltext: str, quelltext_en: str = "") -> list[dict]:
     """Nur vollständige Fragen; Schätzwerte müssen als Zahl in einer der Quellen stehen (sonst könnte die KI sie erfinden)."""
     in_quelle = zahlen(quelltext) | zahlen_en(quelltext_en)
@@ -207,6 +216,7 @@ def fragen_bereinigen(roh, quelltext: str, quelltext_en: str = "") -> list[dict]
             richtig = f.get("richtig")
             if 3 <= len(optionen) <= 4 and isinstance(richtig, int) and 0 <= richtig < len(optionen) \
                     and len(set(optionen)) == len(optionen):
+                optionen, richtig = optionen_mischen(frage, optionen, richtig)
                 fragen.append({"art": art, "frage": frage, "optionen": optionen, "richtig": richtig, "erklaerung": erklaerung})
         elif art == "schaetzen":
             wert, toleranz = f.get("wert"), f.get("toleranz")
