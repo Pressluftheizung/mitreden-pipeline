@@ -64,9 +64,21 @@ jobs:
             exit 0
           fi
           git commit -q -m "Ausgabe $(date -u +%Y-%m-%dT%H:%MZ)"
+          eigen="$RUNNER_TEMP/wissen-eigen.json"; fremd="$RUNNER_TEMP/wissen-fremd.json"
+          cp wissen/wissen.json "$eigen" 2>/dev/null || true
           for versuch in 1 2 3; do
             git push -q origin HEAD:rohdaten && exit 0
-            git pull -q --rebase origin rohdaten
+            # Wurden während des Baus Wissenskarten von Hand gespeichert, kollidiert wissen.json (Lauf vom 14.11. verloren):
+            # dann unsere Seite nehmen und beide Wissens-Stände vereinen, statt den ganzen Lauf scheitern zu lassen
+            if ! git pull -q --rebase origin rohdaten; then
+              git rebase --abort
+              git pull -q --rebase -X theirs origin rohdaten || { git rebase --abort; exit 1; }
+            fi
+            if [ -f "$eigen" ] && git show FETCH_HEAD:wissen/wissen.json > "$fremd" 2>/dev/null; then
+              python ../tools/wissen_vereinen.py "$fremd" "$eigen" wissen/wissen.json
+              git add wissen/wissen.json
+              git diff --cached --quiet || git commit -q --amend --no-edit
+            fi
           done
           exit 1
 
