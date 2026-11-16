@@ -1,4 +1,4 @@
-"""Wissenskarten als eigener Schritt nach der Ausgabe (Umbau 16.11.2026).
+"""Wissenskarten nur auf Auftrag (.github/workflows/wissen.yml), als Entwurf bis zur Durchsicht.
 
 Früher liefen sie am Ende von pipeline/ausgabe.py mit; weil der Nachrichtenbau gut eine Stunde dauert,
 griff dort eine Zeitgrenze und es entstanden nur 4–6 statt 16 Karten je Lauf. Jetzt speichert der

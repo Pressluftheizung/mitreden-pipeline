@@ -385,8 +385,9 @@ def baue(daten: Path, config: Path, ki, jetzt: datetime, anzahl: int, pro_anfrag
                 stat["verworfen"] += 1
                 continue
             alt = db["karten"].get(t["id"]) or {}
+            # Entwurf: erst nach Durchsicht (Claude) in die App, siehe fuer_app (Entscheidung des Nutzers 16.11.2026)
             karte.update({"erstellt": jetzt.isoformat(timespec="seconds"), "version": alt.get("version", 0) + 1, "bau": BAU,
-                          "_ki": {"modell": modell, "pruefer": pruefer}})
+                          "_ki": {"modell": modell, "pruefer": pruefer}, "_entwurf": True})
             db["karten"][t["id"]] = karte
             stat["gebaut"] += 1
     db["stand"] = jetzt.isoformat(timespec="seconds")
@@ -398,6 +399,7 @@ def baue(daten: Path, config: Path, ki, jetzt: datetime, anzahl: int, pro_anfrag
 
 
 def fuer_app(db: dict) -> dict:
-    """Nur was die App braucht (ohne Modell-Protokoll)."""
+    """Nur was die App braucht (ohne Modell-Protokoll) und nur durchgesehene Karten (ohne `_entwurf`)."""
     return {"stand": db.get("stand"),
-            "karten": [{k: v for k, v in karte.items() if not k.startswith("_")} for karte in db.get("karten", {}).values()]}
+            "karten": [{k: v for k, v in karte.items() if not k.startswith("_")}
+                       for karte in db.get("karten", {}).values() if not karte.get("_entwurf")]}

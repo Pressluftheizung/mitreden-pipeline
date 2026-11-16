@@ -21,7 +21,7 @@ concurrency:
 jobs:
   ausgabe:
     runs-on: ubuntu-latest
-    timeout-minutes: 120 # Nachrichten ~65 Min (15.11.), danach Wissen höchstens 30
+    timeout-minutes: 90 # Nachrichten ~65 Min (15.11.); Wissenskarten nur auf Auftrag: wissen.yml
     steps:
       - name: Code holen
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -77,28 +77,3 @@ jobs:
         if: ${{ !cancelled() }}
         working-directory: app
         run: bash ../tools/app_speichern.sh Karten
-
-      # Allgemeinwissen (PLAN.md 18) als eigener Schritt erst nach dem Speichern der Nachrichten (16.11.2026):
-      # die Ausgabe ist früher fertig, und ohne Zeitgrenze entstehen wieder bis zu 16 Wissenskarten je Lauf.
-      - name: Wissenskarten bauen
-        if: ${{ !cancelled() }}
-        continue-on-error: true
-        timeout-minutes: 30
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          PRUEFER_API_KEY: ${{ secrets.PRUEFER_API_KEY }}
-        run: python -m pipeline.wissen_lauf --daten daten
-
-      - name: Wissen ins private Repo speichern
-        if: ${{ !cancelled() }}
-        working-directory: daten
-        run: bash ../tools/rohdaten_speichern.sh Wissen
-
-      - name: Wissen in die App legen
-        if: ${{ !cancelled() }}
-        run: python -m pipeline.veroeffentlichen --daten daten --app app
-
-      - name: Wissen in der App speichern
-        if: ${{ !cancelled() }}
-        working-directory: app
-        run: bash ../tools/app_speichern.sh Wissen

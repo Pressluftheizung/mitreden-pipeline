@@ -1,0 +1,62 @@
+# Allgemeinwissen (PLAN.md 18): neue Wissenskarten NUR auf Auftrag des Nutzers (Entscheidung 16.11.2026),
+# nicht im festen Takt. Start: in GitHub "Run workflow" oder config/wissenbau.txt ändern und hochladen.
+# Die Karten landen als Entwurf ("_entwurf") im privaten Branch rohdaten; in die App kommen sie erst,
+# wenn Claude sie durchgesehen und freigegeben hat (pipeline/wissen.py fuer_app).
+name: wissen
+
+on:
+  workflow_dispatch:
+    inputs:
+      anzahl:
+        description: "Wie viele neue Karten (höchstens etwa 40 pro Tag wegen der Prüf-KI)"
+        default: "16"
+  push:
+    branches: [main]
+    paths: [config/wissenbau.txt]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rohdaten # schreibt wie Sammeln und Ausgabe in "rohdaten", nie gleichzeitig
+  cancel-in-progress: false
+
+jobs:
+  wissen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Code holen
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Rohdaten aus dem privaten Repo holen
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: Pressluftheizung/mitreden-app
+          ref: rohdaten
+          token: ${{ secrets.APP_REPO_TOKEN }}
+          path: daten
+          fetch-depth: 1
+
+      - name: Python einrichten
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Pakete installieren
+        run: pip install -r requirements.txt
+
+      - name: Wissenskarten bauen (als Entwurf)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PRUEFER_API_KEY: ${{ secrets.PRUEFER_API_KEY }}
+          ANZAHL: ${{ inputs.anzahl || '16' }}
+        run: python -m pipeline.wissen_lauf --daten daten --anzahl "$ANZAHL"
+
+      - name: Entwürfe ins private Repo speichern
+        if: ${{ !cancelled() }}
+        working-directory: daten
+        run: bash ../tools/rohdaten_speichern.sh Wissen-Entwurf

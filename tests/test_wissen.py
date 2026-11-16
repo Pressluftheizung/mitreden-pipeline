@@ -99,7 +99,12 @@ class Wissen(unittest.TestCase):
             wissen.baue(Path(tmp), Path("config"), FalscheKI(), jetzt, 3)
             db = json.loads((Path(tmp) / "wissen" / "wissen.json").read_text(encoding="utf-8"))
             self.assertEqual(len(db["karten"]), 6)
+            # neue KI-Karten sind Entwürfe und kommen erst nach der Durchsicht in die App
+            self.assertTrue(all(k.get("_entwurf") for k in db["karten"].values()))
+            self.assertEqual(wissen.fuer_app(db)["karten"], [])
+            del db["karten"]["querbeet.viertaktmotor"]["_entwurf"]
             app = wissen.fuer_app(db)
+            self.assertEqual(len(app["karten"]), 1)
             self.assertNotIn("_ki", app["karten"][0])
 
 
