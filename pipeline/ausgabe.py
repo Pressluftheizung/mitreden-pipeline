@@ -9,12 +9,11 @@ Aufruf:
 
 import argparse
 import sys
-import time
 import traceback
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import bauen, kontrolle, wissen
+from . import bauen, kontrolle
 from .ki import KI, Zaehler
 from .score import jetzt_utc
 from .werkbank import berechne, schreibe_verteilung
@@ -33,7 +32,6 @@ def main() -> int:
     st = berechne(args.daten, args.config, jetzt, ki=ki)
     schreibe_verteilung(st, args.daten, bauen.ausgabe_id(jetzt)[0])
     bau_ok = True
-    beginn = time.monotonic()
     try:
         bauen.drucke(bauen.bauen(args.daten, args.config, jetzt, ki=ki, st=st))
     except Exception:
@@ -44,18 +42,7 @@ def main() -> int:
         (args.daten / "metriken" / f"bau-fehler-{bauen.ausgabe_id(jetzt)[0]}.txt").write_text(
             traceback.format_exc(), encoding="utf-8")
         ki.zaehler.speichere()  # Anfragen des Dubletten-Schritts trotzdem zählen
-    # Allgemeinwissen (PLAN.md 18): ein paar neue Wissenskarten je Lauf; Fehler hier stoppen nichts
-    try:
-        # Die Ausgabe soll pünktlich fertig sein: hat der Nachrichtenbau schon lange gedauert, weniger Wissenskarten
-        anzahl = ki.k["je_bau"].get("wissen_je_lauf", 6)
-        if time.monotonic() - beginn > 15 * 60:
-            anzahl = min(anzahl, 6)
-        w = wissen.baue(args.daten, args.config, ki, jetzt, anzahl)
-        print(f"Wissen: {w['gebaut']} neu, {w['gesamt']} von {w['lehrplan']} Themen fertig"
-              f" (verworfen {w['verworfen']}, ohne Quelle {w['ohne_quelle']}){' · ' + '; '.join(w['fehler']) if w['fehler'] else ''}")
-        ki.zaehler.speichere()
-    except Exception:
-        traceback.print_exc()
+    # Allgemeinwissen (PLAN.md 18) läuft seit 16.11.2026 als eigener Schritt nach dem Speichern: pipeline/wissen_lauf.py
     b = kontrolle.kontrolle(args.daten, args.config, jetzt, args.daten / "pruefset", st=st)
     if not bau_ok:
         b["ampel"], b["ampel_gruende"] = "rot", ["Kartenbau fehlgeschlagen"] + b["ampel_gruende"]

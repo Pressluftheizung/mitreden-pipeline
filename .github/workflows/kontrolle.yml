@@ -21,7 +21,7 @@ concurrency:
 jobs:
   ausgabe:
     runs-on: ubuntu-latest
-    timeout-minutes: 90 # Probebau 5.11. nach großen Prompt-Änderungen: 56 Minuten
+    timeout-minutes: 120 # Nachrichten ~65 Min (15.11.), danach Wissen höchstens 30
     steps:
       - name: Code holen
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -55,35 +55,10 @@ jobs:
       - name: Ergebnis ins private Repo speichern
         if: ${{ !cancelled() }}
         working-directory: daten
-        run: |
-          git config user.name "mitreden-bot"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A metriken testkarten stories
-          if [ -d wissen ]; then git add -A wissen; fi
-          if git diff --cached --quiet; then
-            exit 0
-          fi
-          git commit -q -m "Ausgabe $(date -u +%Y-%m-%dT%H:%MZ)"
-          eigen="$RUNNER_TEMP/wissen-eigen.json"; fremd="$RUNNER_TEMP/wissen-fremd.json"
-          cp wissen/wissen.json "$eigen" 2>/dev/null || true
-          for versuch in 1 2 3; do
-            git push -q origin HEAD:rohdaten && exit 0
-            # Wurden während des Baus Wissenskarten von Hand gespeichert, kollidiert wissen.json (Lauf vom 14.11. verloren):
-            # dann unsere Seite nehmen und beide Wissens-Stände vereinen, statt den ganzen Lauf scheitern zu lassen
-            if ! git pull -q --rebase origin rohdaten; then
-              git rebase --abort
-              git pull -q --rebase -X theirs origin rohdaten || { git rebase --abort; exit 1; }
-            fi
-            if [ -f "$eigen" ] && git show FETCH_HEAD:wissen/wissen.json > "$fremd" 2>/dev/null; then
-              python ../tools/wissen_vereinen.py "$fremd" "$eigen" wissen/wissen.json
-              git add wissen/wissen.json
-              git diff --cached --quiet || git commit -q --amend --no-edit
-            fi
-          done
-          exit 1
+        run: bash ../tools/rohdaten_speichern.sh Ausgabe
 
       # Früher Prototyp (Entscheidung 04.11.2026, PLAN.md 15): die neueste Ausgabe in die App legen.
-      # Nur karten/karten.json im privaten Branch main; Cloudflare Pages baut die App daraus (hinter Access).
+      # Nur karten/ im privaten Branch main; Cloudflare Pages baut die App daraus (hinter dem Passwortschutz).
       - name: App-Code aus dem privaten Repo holen
         if: ${{ !cancelled() }}
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -101,17 +76,29 @@ jobs:
       - name: App-Karten speichern
         if: ${{ !cancelled() }}
         working-directory: app
-        run: |
-          git config user.name "mitreden-bot"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add karten/karten.json
-          if [ -f karten/wissen.json ]; then git add karten/wissen.json; fi
-          if git diff --cached --quiet; then
-            exit 0
-          fi
-          git commit -q -m "Karten $(date -u +%Y-%m-%dT%H:%MZ)"
-          for versuch in 1 2 3; do
-            git push -q origin HEAD:main && exit 0
-            git pull -q --rebase origin main
-          done
-          exit 1
+        run: bash ../tools/app_speichern.sh Karten
+
+      # Allgemeinwissen (PLAN.md 18) als eigener Schritt erst nach dem Speichern der Nachrichten (16.11.2026):
+      # die Ausgabe ist früher fertig, und ohne Zeitgrenze entstehen wieder bis zu 16 Wissenskarten je Lauf.
+      - name: Wissenskarten bauen
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        timeout-minutes: 30
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PRUEFER_API_KEY: ${{ secrets.PRUEFER_API_KEY }}
+        run: python -m pipeline.wissen_lauf --daten daten
+
+      - name: Wissen ins private Repo speichern
+        if: ${{ !cancelled() }}
+        working-directory: daten
+        run: bash ../tools/rohdaten_speichern.sh Wissen
+
+      - name: Wissen in die App legen
+        if: ${{ !cancelled() }}
+        run: python -m pipeline.veroeffentlichen --daten daten --app app
+
+      - name: Wissen in der App speichern
+        if: ${{ !cancelled() }}
+        working-directory: app
+        run: bash ../tools/app_speichern.sh Wissen
