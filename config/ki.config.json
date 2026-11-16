@@ -24,8 +24,8 @@
     "themen": { "kette": ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemma-4-31b-it"], "prompt": "prompts/themen.md" },
     "zahlen": { "kette": ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite"], "prompt": "prompts/zahlen.md" },
     "popups": { "kette": ["gemma-4-31b-it", "gemini-3.1-flash-lite", "gemini-3.5-flash-lite"], "max_ausgabe": 3000, "prompt": "prompts/popups.md" },
-    "wissen": { "kette": ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemma-4-31b-it"], "prompt": "prompts/wissen.md" },
-    "wissen_pruefen": { "kette": ["qwen/qwen3.8-27b", "openai/gpt-oss-20b", "openai/gpt-oss-120b"], "max_ausgabe": 800, "prompt": "prompts/wissen_pruefen.md" },
+    "wissen": { "kette": ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemma-4-31b-it"], "reserve": { "gemini-3.5-flash-lite": 0.4, "gemini-3.1-flash-lite": 0.4 }, "prompt": "prompts/wissen.md" },
+    "wissen_pruefen": { "kette": ["openai/gpt-oss-20b", "qwen/qwen3.8-27b"], "reserve": { "qwen/qwen3.8-27b": 0.4 }, "max_ausgabe": 800, "prompt": "prompts/wissen_pruefen.md" },
     "pruefen": { "kette": ["openai/gpt-oss-120b", "qwen/qwen3.8-27b"], "max_ausgabe": 1500, "prompt": "prompts/pruefen.md" }
   },
   "je_bau": {

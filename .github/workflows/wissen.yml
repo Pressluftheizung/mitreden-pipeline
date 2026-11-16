@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       anzahl:
-        description: "Wie viele neue Karten (höchstens etwa 40 pro Tag wegen der Prüf-KI)"
+        description: "Wie viele neue Karten (Wissen nutzt nur, was die Nachrichten übrig lassen)"
         default: "16"
   push:
     branches: [main]
@@ -24,7 +24,7 @@ concurrency:
 jobs:
   wissen:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 75 # 60 Karten brauchen etwa 30 Minuten
     steps:
       - name: Code holen
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -53,8 +53,11 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PRUEFER_API_KEY: ${{ secrets.PRUEFER_API_KEY }}
-          ANZAHL: ${{ inputs.anzahl || '16' }}
-        run: python -m pipeline.wissen_lauf --daten daten --anzahl "$ANZAHL"
+          ANZAHL: ${{ inputs.anzahl }}
+        # Beim Start über config/wissenbau.txt gilt die Zahl aus der letzten Zeile („… 40 Karten …“), sonst 16
+        run: |
+          if [ -z "$ANZAHL" ]; then ANZAHL=$(tail -n 1 config/wissenbau.txt | grep -oE '[0-9]+ Karten' | grep -oE '[0-9]+' || true); fi
+          python -m pipeline.wissen_lauf --daten daten --anzahl "${ANZAHL:-16}"
 
       - name: Entwürfe ins private Repo speichern
         if: ${{ !cancelled() }}

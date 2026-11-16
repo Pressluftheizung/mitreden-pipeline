@@ -187,7 +187,9 @@ class KI:
             # Antwortlänge: Aufgabe, höchstens aber die Grenze des Modells (qwen bei Groq: 1000 Tokens pro Minute)
             max_ausgabe = min((x for x in (a.get("max_ausgabe"), grenzen.get("max_ausgabe")) if x), default=None)
             geschaetzt = schaetze_tokens(system + nutzer) + (max_ausgabe or schaetze_tokens(system + nutzer))  # Ein- plus Ausgabe
-            if not self.zaehler.frei(modell, grenzen, self.k["je_bau"]["reserve_anteil"], geschaetzt):
+            # Reserve je Aufgabe und Modell (z. B. Wissen lässt den Nachrichten 40 % von qwen und Gemini übrig)
+            reserve = a.get("reserve", {}).get(modell, self.k["je_bau"]["reserve_anteil"])
+            if not self.zaehler.frei(modell, grenzen, reserve, geschaetzt):
                 letzte = f"{modell}: Tageskontingent erreicht"
                 continue
             if geschaetzt > grenzen["tpm"]:  # passt nie ins Minutenlimit: sonst wartet warte() endlos (15-Uhr-Bau 5.11.)
