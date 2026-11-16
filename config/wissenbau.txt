@@ -1,2 +1,3 @@
 Wissenskarten-Auftrag (startet .github/workflows/wissen.yml beim Hochladen). Neue Karten sind Entwürfe bis zur Durchsicht.
 2026-11-16: angelegt
+2026-11-16T12:19Z: 16 Karten auf Wunsch des Nutzers
