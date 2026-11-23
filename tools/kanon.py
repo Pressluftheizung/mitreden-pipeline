@@ -13,11 +13,12 @@ Aufruf (selten, z. B. wenn die Liste erweitert werden soll):
 import json
 import re
 import sys
+import time
 import urllib.parse
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from pipeline.daten import _json  # noqa: E402
+from pipeline.daten import _json as _roh_json  # noqa: E402
 
 EN = "https://en.wikipedia.org/w/api.php?"
 SEITE = "Wikipedia:Vital articles/Level 3"
@@ -104,6 +105,47 @@ def lade_level4() -> list[tuple[str, str]]:
     return eintraege
 
 
+def _json(url: str) -> dict:
+    """Abfrage mit Pause und Wiederholung; Wikipedia und Wikidata drosseln schnelle Abfragen (HTTP 429)."""
+    for versuch in range(8):
+        try:
+            d = _roh_json(url)
+            time.sleep(0.3)
+            return d
+        except Exception:
+            if versuch == 7:
+                raise
+            time.sleep(15 * (versuch + 1))
+    return {}
+
+
+_geduldig = _json
+
+
+def bekanntheit(titel: list[str]) -> dict[str, int]:
+    """Zahl der Wikipedia-Sprachversionen je englischem Titel (Wikidata-Sitelinks) als Maß, wie bekannt ein Thema ist."""
+    qid = {}
+    for i in range(0, len(titel), 50):
+        d = _geduldig(EN + urllib.parse.urlencode({"action": "query", "format": "json", "titles": "|".join(titel[i:i + 50]),
+                                                    "prop": "pageprops", "ppprop": "wikibase_item", "redirects": 1}))
+        if not d:
+            continue
+        umleitung = {r["to"]: r["from"] for r in d["query"].get("redirects", [])}
+        normal = {n["to"]: n["from"] for n in d["query"].get("normalized", [])}
+        for s in d["query"]["pages"].values():
+            if q := s.get("pageprops", {}).get("wikibase_item"):
+                quelle = umleitung.get(s["title"], s["title"])
+                qid[normal.get(quelle, quelle)] = q
+    zahl, ids = {}, sorted(set(qid.values()))
+    for i in range(0, len(ids), 50):
+        url = "https://www.wikidata.org/w/api.php?" + urllib.parse.urlencode(
+            {"action": "wbgetentities", "format": "json", "ids": "|".join(ids[i:i + 50]), "props": "sitelinks"})
+        d = _geduldig(url)
+        for q, e in d.get("entities", {}).items():
+            zahl[q] = sum(1 for k in e.get("sitelinks", {}) if k.endswith("wiki") and k != "commonswiki")
+    return {t: zahl.get(q, 0) for t, q in qid.items()}
+
+
 def main() -> int:
     level4 = "--level4" in sys.argv
     eintraege = lade_level4() if level4 else lade_liste()
@@ -112,6 +154,9 @@ def main() -> int:
         alt = json.loads((Path(__file__).resolve().parents[1] / "config" / "lehrplan_kanon.json").read_text(encoding="utf-8"))
         schon = {t["wiki"] for m in alt["module"] for t in m["themen"]}
     de = deutsch(sorted({t for t, _ in eintraege}))
+    if level4:  # bekannteste Themen zuerst (Zahl der Sprachversionen), damit es um das geht, worüber man redet
+        zahl = bekanntheit(sorted({t for t, _ in eintraege if t in de}))
+        eintraege.sort(key=lambda e: -zahl.get(e[0], 0))
     module: dict[str, list] = {}
     gesehen = set()
     for en, b in eintraege:
