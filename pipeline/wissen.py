@@ -56,6 +56,19 @@ def _kanon_id(wiki: str) -> str:
                   .replace("ß", "ss")).strip("-")[:50]
 
 
+_TITEL_FEST = {"Antarktis#Geschichte": "Geschichte der Antarktis"}
+
+
+def _kanon_titel(wiki: str) -> str:
+    """Anzeigetitel aus dem Wiki-Titel: Klammerzusatz weg; zeigt der Link auf einen Abschnitt („Essbesteck#Löffel“),
+    ist der Abschnitt das eigentliche Thema (23.11.2026)."""
+    if wiki in _TITEL_FEST:
+        return _TITEL_FEST[wiki]
+    if "#" in wiki:
+        wiki = urllib.parse.unquote(wiki.split("#", 1)[1].replace(".", "%"))
+    return re.sub(r"\s*\(.*\)$", "", wiki)
+
+
 def lehrplan(config: Path) -> list[dict]:
     """Alle Themen in Bau-Reihenfolge: erst der eigene Lehrplan (Stufe, Modul, Position), dann der Kanon aus den
     Vital Articles (config/lehrplan_kanon.json, 14.11.2026), dort die Gebiete reihum, damit es abwechslungsreich bleibt."""
@@ -66,7 +79,7 @@ def lehrplan(config: Path) -> list[dict]:
         module = json.loads(datei.read_text(encoding="utf-8"))["module"] if datei.exists() else []
         for m in module:
             if "wiki" in m:  # kompakte Form (nur Titel), siehe tools/kanon.py --level4
-                m["themen"] = [{"id": _kanon_id(w), "titel": re.sub(r"\s*\(.*\)$", "", w), "stufe": 2, "braucht": [],
+                m["themen"] = [{"id": _kanon_id(w), "titel": _kanon_titel(w), "stufe": 2, "braucht": [],
                                 "auch": [], "wiki": w, "grafik": None} for w in m["wiki"]]
         return module
     # Teil 2 = Erweiterung aus Vital Articles Level 4 (23.11.2026), erst nach dem ganzen Level-3-Kanon.
