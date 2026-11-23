@@ -14,7 +14,7 @@ QUELLE = ("Der Deutsche Bundestag ist das Parlament der Bundesrepublik Deutschla
 class Wissen(unittest.TestCase):
     def test_lehrplan_reihenfolge_und_verweise(self):
         themen = wissen.lehrplan(Path("config"))
-        eigen = [t for t in themen if not t["modul"].startswith("kanon-")]
+        eigen = [t for t in themen if not t["modul"].startswith("kanon")]
         self.assertEqual([t["stufe"] for t in eigen], sorted(t["stufe"] for t in eigen))  # erst Basis
         self.assertGreater(len(themen) - len(eigen), 500)  # Kanon aus den Vital Articles
         ids = {t["id"] for t in themen}

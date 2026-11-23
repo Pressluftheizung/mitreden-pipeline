@@ -51,14 +51,27 @@ KEIN_ERKLAERBILD = re.compile(r"commons-logo|wiki(books|quote|source|versity|dat
 
 # ---------- Lehrplan ----------
 
+def _kanon_id(wiki: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", wiki.lower().replace("ä", "ae").replace("ö", "oe").replace("ü", "ue")
+                  .replace("ß", "ss")).strip("-")[:50]
+
+
 def lehrplan(config: Path) -> list[dict]:
     """Alle Themen in Bau-Reihenfolge: erst der eigene Lehrplan (Stufe, Modul, Position), dann der Kanon aus den
     Vital Articles (config/lehrplan_kanon.json, 14.11.2026), dort die Gebiete reihum, damit es abwechslungsreich bleibt."""
     plan = json.loads((config / "lehrplan.json").read_text(encoding="utf-8"))
-    kanon_datei = config / "lehrplan_kanon.json"
-    kanon = json.loads(kanon_datei.read_text(encoding="utf-8")) if kanon_datei.exists() else {"module": []}
+
+    def kanon(name: str) -> list:
+        datei = config / name
+        module = json.loads(datei.read_text(encoding="utf-8"))["module"] if datei.exists() else []
+        for m in module:
+            if "wiki" in m:  # kompakte Form (nur Titel), siehe tools/kanon.py --level4
+                m["themen"] = [{"id": _kanon_id(w), "titel": re.sub(r"\s*\(.*\)$", "", w), "stufe": 2, "braucht": [],
+                                "auch": [], "wiki": w, "grafik": None} for w in m["wiki"]]
+        return module
+    # Teil 2 = Erweiterung aus Vital Articles Level 4 (23.11.2026), erst nach dem ganzen Level-3-Kanon.
     themen, wikis = [], set()
-    for teil, module in ((0, plan["module"]), (1, kanon["module"])):
+    for teil, module in ((0, plan["module"]), (1, kanon("lehrplan_kanon.json")), (2, kanon("lehrplan_kanon2.json"))):
         for m_nr, m in enumerate(module):
             for t_nr, t in enumerate(m["themen"]):
                 if teil and t["wiki"] in wikis:
