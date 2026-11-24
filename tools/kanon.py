@@ -73,6 +73,8 @@ def lade_liste(seite: str = SEITE, haupt_fest: str = "") -> list[tuple[str, str]
         elif m := re.match(r"^={3,}\s*(.*?)\s*={3,}\s*$", zeile):
             unter = re.sub(r"\s*\(\d+.*$", "", m.group(1)).strip()
         elif m := re.match(r"^[#*]+\s*(?:\{\{[^}]*\}\}\s*)*\[\[([^\]|#]+)", zeile):
+            if re.search(r"compan", unter, re.I):
+                continue  # keine Firmenkarten (VW, Apple, Nestlé …), Entscheidung des Nutzers 24.11.2026
             eintraege.append((m.group(1).strip(), bereich(haupt, unter)))
     return eintraege
 
